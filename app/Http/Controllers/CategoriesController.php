@@ -9,7 +9,7 @@ class CategoriesController extends Controller
 {
     public function index()
     {
-        $title = trans('app.categories');
+        $title = 'Service Categories';
         $categories = Category::orderBy('id', 'desc')->get();
 
         return view('admin.categories', compact('title', 'categories'));
@@ -19,7 +19,7 @@ class CategoriesController extends Controller
 
     public function store(Request $request){
         $rules = [
-            'category_name' => 'required',
+            'category_name' => 'required|string',
         ];
         $this->validate($request, $rules);
 

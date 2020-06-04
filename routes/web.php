@@ -14,36 +14,70 @@
 Auth::routes();
 
 
+
+
 /*########################
     My Routes           ##
  #########################
  */
+Route::get('login', 'UserController@showLoginForm')->name('login');
+Route::post('login', 'UserController@login');
+Route::get('logout', 'UserController@logout')->name('logout');
+
 Route::group(['middleware'=>'auth:web'], function(){
     Route::group(['prefix'=>'u'], function(){
         //Route::get('user-acount', 'UserController@getAccount')->name('user-acount');
         Route::get('account', 'UserController@getAccount')->name('account');
         Route::get('change-password', ['as' => 'change_password', 'uses' => 'UserController@changePassword']);
         Route::post('change-password', 'UserController@changePasswordPost');
-        Route::get('messages', 'JobController@flaggedMessage')->name('messages');
+        Route::get('messages', 'UserController@flaggedMessage')->name('messages');
     });
 
     Route::group(['prefix'=>'service'], function(){
-        Route::get('request', 'JobController@requestService')->name('request');
+        Route::get('request', 'ServiceController@requestService')->name('request');
+        Route::post('request', 'ServiceController@requestServicePost');
     });
+
     Route::group(['prefix'=>'jobs'], function(){
-        Route::get('pending','JobController@pendingJobs')->name('pending');
-        Route::get('completed','JobController@completedJobs')->name('completed');
-        Route::get('cancelled','JobController@cancelledJobs')->name('cancelled');
+        Route::get('new','ServiceController@newJobs')->name('new');
+        Route::get('in-progress','ServiceController@jobsInProgress')->name('in-progress');
+        Route::get('pending','ServiceController@pendingJobs')->name('pending');
+        Route::get('completed','ServiceController@completedJobs')->name('completed');
+        Route::get('cancelled','ServiceController@cancelledJobs')->name('cancelled');
+        Route::get('invoice','ServiceController@invoice')->name('invoice');
     });
+
+    Route::group(['prefix'=>'admin','middleware'=>'only_admin_access'], function(){
+        Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+        Route::get('all-jobs','ServiceController@allJobs')->name('all-jobs');
+        //Route::get('/', ['as'=>'service-categories', 'uses' => 'CategoriesController@index']);
+        //Route::post('/', ['uses' => 'CategoriesController@store']);
+        Route::get('service-categories', 'CategoriesController@index')->name('service-categories');
+        Route::post('service-categories', 'CategoriesController@store');
+        Route::get('edit/{id}', ['as'=>'edit_categories', 'uses' => 'CategoriesController@edit']);
+        Route::post('edit/{id}', ['uses' => 'CategoriesController@update']);
+        Route::post('delete-categories', ['as'=>'delete_categories', 'uses' => 'CategoriesController@destroy']);
+
+        //#####################
+        //INVOICING
+        //#####################
+        Route::get('new-invoice','InvoiceController@create')->name('new-invoice');
+        Route::get('get_account', 'InvoiceController@getAccount')->name('get_account');
+        Route::get('get_services', 'InvoiceController@getServices')->name('get_services');
+        Route::post('store-invoice', 'InvoiceController@store')->name('store-invoice');
+        Route::get('all-invoices', 'InvoiceController@index')->name('all-invoices');
+    });
+
 });
 
 //Ends//
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('search', 'HomeController@search')->name('search');
 Route::get('clear', 'HomeController@clearCache')->name('clear_cache');
 
-Route::get('new-register', 'HomeController@newRegister')->name('new_register');
-Route::get('individual_register', 'UserController@registerIndividual')->name('individual_register');
-Route::post('individual_register', 'UserController@registerIndividualPost');//->name('individual_register');
+Route::get('new-register', 'UserController@register')->name('new_register');
+//Route::get('individual_register', 'UserController@register')->name('register');
+Route::post('new-register', 'UserController@registerPost');//->name('individual_register');
 
 Route::get('employer-register', 'UserController@registerEmployer')->name('register_employer');
 Route::post('employer-register', 'UserController@registerEmployerPost');
@@ -98,7 +132,7 @@ Route::post('payment/{transaction_id}/bank-transfer', 'PaymentController@payment
 
 //Dashboard Route
 Route::group(['prefix'=>'dashboard', 'middleware' => 'dashboard'], function(){
-    Route::get('dashboard', 'DashboardController@dashboard')->name('dashboard');
+    
 
     Route::get('applied-jobs', 'DashboardController@dashboard')->name('applied_jobs');
 
@@ -158,13 +192,7 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'dashboard'], function(){
     Route::group(['middleware'=>'only_admin_access'], function(){
 
         Route::group(['prefix'=>'categories'], function(){
-            Route::get('/', ['as'=>'dashboard_categories', 'uses' => 'CategoriesController@index']);
-            Route::post('/', ['uses' => 'CategoriesController@store']);
-
-            Route::get('edit/{id}', ['as'=>'edit_categories', 'uses' => 'CategoriesController@edit']);
-            Route::post('edit/{id}', ['uses' => 'CategoriesController@update']);
-
-            Route::post('delete-categories', ['as'=>'delete_categories', 'uses' => 'CategoriesController@destroy']);
+            
         });
 
         //Settings
@@ -224,3 +252,4 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'dashboard'], function(){
 
 //Single Sigment View
 Route::get('{slug}', 'JobController@view')->name('job_view');
+

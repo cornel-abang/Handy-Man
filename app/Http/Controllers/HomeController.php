@@ -30,11 +30,8 @@ class HomeController extends Controller
      */
     public function index(){
         $categories = Category::orderBy('category_name', 'asc')->get();
-        $premium_jobs = Job::active()->premium()->orderBy('id', 'desc')->with('employer')->get();
-        $regular_jobs = Job::active()->orderBy('id', 'desc')->with('employer')->take(15)->get();
         $blog_posts = Post::whereType('post')->with('author')->orderBy('id', 'desc')->take(3)->get();
-        $packages = Pricing::all();
-        return view('home', compact('categories', 'premium_jobs','regular_jobs','packages', 'blog_posts'));
+        return view('home', compact('categories', 'blog_posts'));
     }
 
     public function newRegister(){
@@ -87,6 +84,27 @@ class HomeController extends Controller
             exec('rm ' . storage_path('logs/*'));
         }
         return redirect(route('home'));
+    }
+
+    public function search(Request $request){
+
+        if($request->ajax()){
+        $output="";
+        $title=Category::select('category_name','category_slug')
+                            ->where('category_name','LIKE','%'.$request->search."%")
+                            ->get();
+            if($title)
+            {
+            foreach ($title as $tit) {
+            $output.='<tr>'.
+            '<td>'.$tit->category_name.'</td>'.
+            '</tr>';
+            }
+        return Response($output);
+        }
+
+       }
+
     }
 
 }

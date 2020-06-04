@@ -7,7 +7,7 @@
             <table class="table table-bordered">
 
                 <tr>
-                    <th>@lang('app.job_title')</th>
+                    <th>Subject</th>
                     <th>@lang('app.message')</th>
                     <th>@lang('app.job_action')</th>
                 </tr>

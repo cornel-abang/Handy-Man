@@ -93,13 +93,6 @@
             @endif
 
 
-            @if( ! empty($is_user_id_view))
-                <a href="{{route('users_edit', $user->id)}}"><i class="la la-pencil-square-o"></i> @lang('app.edit') </a>
-            @else
-                <a href="{{ route('profile_edit') }}"><i class="la la-pencil-square-o"></i> @lang('app.edit') </a>
-            @endif
-
-
         </div>
     </div>
 

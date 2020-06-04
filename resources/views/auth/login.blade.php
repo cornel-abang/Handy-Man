@@ -8,7 +8,7 @@
             @include('admin.flash_msg')
             
             <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+                <div class="card-header"><i class="la la-sign-in"></i>{{ __('Login') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
@@ -69,7 +69,7 @@
                         <div class="form-group row mt-3 mb-3">
                             <div class="col-md-6 offset-md-4">
                                 <p>
-                                    @lang('app.no_account_msg') <a href="{{route('new_register')}}">@lang('app.register_now')</a>
+                                    @lang('app.no_account_msg') <a href="{{route('register')}}">@lang('app.register_now')</a>
                                 </p>
                             </div>
                         </div>

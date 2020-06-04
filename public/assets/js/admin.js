@@ -67,6 +67,78 @@
         });
     });
 
+    $(document).on('input', '#acct_id', function(e){
+        e.preventDefault();
+        document.querySelector('#loaderImg').removeAttribute('style');
+
+        var acct_id = $(this).val();
+        $.ajax({
+            type : "GET",
+            url : page_data.routes.get_account,
+            data : {acct_id : acct_id, _token : page_data.csrf_token},
+            success: function(data){
+                document.querySelector('#loaderImg').style.display = 'none';
+                //console.log(data.acct);
+                //check for when provided acct_id is empty
+                $('#user_id_area').html(data.acct);
+                findServices(data.id);
+            },
+            error: function(data){
+                $('#user_id_area').html('');
+            }
+        });
+    });
+
+    function findServices(user_id){
+        document.querySelector('#loaderImg2').removeAttribute('style');
+        $.ajax({
+            type : "GET",
+            url : page_data.routes.get_services,
+            data : {user_id : user_id, _token : page_data.csrf_token},
+            success: function(data){
+                document.querySelector('#loaderImg2').style.display = 'none';
+                if (data.acct.length > 0) {
+                    $('#job').empty();
+                    $('#job').attr('disabled',false);
+                    data.acct.forEach(function(val){
+                   $('#job').append('<option value="'+val.id+'">'+val.category+'</option>');
+                    });
+                }else{
+                    $('#job').empty();
+                    $('#job').append('<option value="">No data</option>');
+                    $('#job').attr('disabled',true);
+                }
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        var max_fields      = 100;
+        var wrapper         = $(".newItem");
+        var add_button      = $(".add_form_field");
+     
+        var x = 1;
+        $(add_button).click(function(e){
+            e.preventDefault();
+            if(x < max_fields){
+                x++;
+                $(wrapper).append('<div class="form-group row" ><label class="col-sm-3 control-label" for="item">Item *</label><div class="col-sm-3"><input type="text" name="item_name[]" id="item_name" class="form-control" placeholder="Name - Ex: Rim of Wire" /></div><div class="col-sm-2"><input type="number" name="item_price[]" id="item_price" class="form-control" placeholder="Price/Unit " /></div><div class="col-sm-2"><input type="number" name="item_qty[]" id="item_qty" class="form-control" placeholder="Quantity" /></div><a href="#" class="delete" style="color: red;">Remove</a></div>');
+            }
+      else
+      {
+      alert('You Reached the limits')
+      }
+        });
+     
+        $(wrapper).on("click",".delete", function(e){
+            e.preventDefault(); $(this).parent('div').remove(); x--;
+        })
+    });
+
+     $(document).ready(function() 
+        {     
+          $('#all-invoices').DataTable(); 
+        });
 
     /**
      * Settings Panel

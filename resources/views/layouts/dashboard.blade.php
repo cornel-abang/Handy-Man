@@ -7,15 +7,20 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ !empty($title) ? $title : __('app.dashboard') }}</title>
+    <title>Handy Man - {{ !empty($title) ? $title : __('app.dashboard') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
+    <!--DataTable-->
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">  
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/admin.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/font-awesome-5/css/all.min.css') }}" rel="stylesheet" type="text/css">
 
     @yield('page-css')
 
@@ -31,10 +36,29 @@
 </head>
 <body>
 @php
-$pendingJobCount = \App\Job::pending()->count();
-$approvedJobCount = \App\Job::approved()->count();
-$blockedJobCount = \App\Job::blocked()->count();
-$user = Auth::user();
+$user = auth()->user();
+
+    if($user->user_type === 'admin')
+    {
+
+    $allJobsCount = \App\Http\Controllers\ServiceController::alljobs()->count();
+    $pendingJobCountAll = \App\Http\Controllers\ServiceController::jobsPendingAll()->count();
+    $newJobCountAll = \App\Http\Controllers\ServiceController::newAll()->count();
+    $progressJobCountAll = \App\Http\Controllers\ServiceController::progressAll()->count();
+    $completedJobCountAll = \App\Http\Controllers\ServiceController::jobsCompletedAll()->count();
+    $cancelledJobCountAll = \App\Http\Controllers\ServiceController::jobsCancelledAll()->count();
+    
+    }
+    else
+    {
+
+    $pendingJobCount = \App\Http\Controllers\ServiceController::jobsPending()->count();
+    $newJobCount = \App\Http\Controllers\ServiceController::new()->count();
+    $progressJobCount = \App\Http\Controllers\ServiceController::progress()->count();
+    $completedJobCount = \App\Http\Controllers\ServiceController::jobsCompleted()->count();
+    $cancelledJobCount = \App\Http\Controllers\ServiceController::jobsCancelled()->count();
+
+    }
 @endphp
 
     <div id="app">
@@ -55,10 +79,11 @@ $user = Auth::user();
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-
+                        @if($user->user_type !== 'admin')
                         <li class="nav-item">
                             <a class="nav-link btn btn-success text-white" href="{{ route('request') }}"><i class="la la-save"></i>Request Service </a>
                         </li>
+                        @endif
 
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -94,16 +119,16 @@ $user = Auth::user();
                         <ul class="sidebar-menu list-group">
 
                             <li class="">
-                                <a href="{{route('request')}}" class="list-group-item-action">
-                                    <span class="sidebar-icon"><i class="la la-list-alt"></i> </span>
-                                    <span class="title">Request Service</span>
+                                <a href="{{route('dashboard')}}" class="list-group-item-action">
+                                    <span class="sidebar-icon"><i class="fa fa-toolbox"></i> </span>
+                                    <span class="title">Dashboard</span>
                                 </a>
                             </li>
 
                             @if($user->user_type === "admin")
 
                             <li class="">
-                                <a href="{{route('dashboard_categories')}}" class="list-group-item-action active">
+                                <a href="{{route('service-categories')}}" class="list-group-item-action active">
                                     <span class="sidebar-icon"><i class="la la-th-large"></i> </span>
                                     <span class="title">@lang('app.categories')</span>
                                 </a>
@@ -115,17 +140,17 @@ $user = Auth::user();
 
                             <li class="">
                                 <a href="#" class="list-group-item-action">
-                                    <span class="sidebar-icon"><i class="la la-black-tie"></i> </span>
-                                    <span class="title">@lang('app.employer')</span>
+                                    <span class="sidebar-icon"><i class=""></i>&#8358; </span>
+                                    <span class="title">Invocing</span>
                                     <span class="arrow"><i class="la la-arrow-right"></i> </span>
                                 </a>
 
                                 <ul class="dropdown-menu" style="display: none;">
-                                    <li><a class="sidebar-link" href="">@lang('app.post_new_job')</a></li>
-                                    <li><a class="sidebar-link" href="{{route('posted_jobs')}}">@lang('app.posted_jobs')</a></li>
+                                    <li><a class="sidebar-link" href="{{route('new-invoice')}}">Create New</a></li>
+                                    <li><a class="sidebar-link" href="{{route('all-invoices')}}">All Invoices</a></li>
                                     <li><a class="sidebar-link" href="{{route('employer_applicant')}}">@lang('app.applicants')</a></li>
                                     <li><a class="sidebar-link" href="{{route('shortlisted_applicant')}}">@lang('app.shortlist')</a></li>
-                                    <li><a class="sidebar-link" href="{{route('employer_profile')}}">@lang('app.profile')</a></li>
+                                    <li><a class="sidebar-link" href="">@lang('app.profile')</a></li>
                                 </ul>
                             </li>
 
@@ -136,15 +161,18 @@ $user = Auth::user();
 
                             <li class="">
                                 <a href="#" class="list-group-item-action">
-                                    <span class="sidebar-icon"><i class="la la-briefcase"></i> </span>
+                                    <span class="sidebar-icon"><i class="fa fa-hard-hat"></i> </span>
                                     <span class="title">@lang('app.jobs')</span>
                                     <span class="arrow"><i class="la la-arrow-right"></i> </span>
                                 </a>
 
                                 <ul class="dropdown-menu" style="display: none;">
-                                    <li><a class="sidebar-link" href="{{route('completed')}}">Completed  <span class="badge badge-success float-right">{{$approvedJobCount}}</span> </a></li>
-                                    <li><a class="sidebar-link" href="{{route('pending')}}">@lang('app.pending') <span class="badge badge-warning float-right">{{$pendingJobCount}}</span></a> </li>
-                                    <li><a class="sidebar-link" href="{{route('cancelled')}}">Cancelled Jobs  <span class="badge badge-danger float-right">{{$blockedJobCount}}</span> </a></li>
+                                    <li><a class="sidebar-link" href="{{route('all-jobs')}}">All  <span class="badge badge-success float-right">{{$allJobsCount}}</span> </a></li>
+                                    <li><a class="sidebar-link" href="{{route('new')}}">New  <span class="badge badge-success float-right">{{$newJobCountAll}}</span> </a></li>
+                                    <li><a class="sidebar-link" href="{{route('in-progress')}}">In Progress  <span class="badge badge-info float-right">{{$progressJobCountAll}}</span> </a></li>
+                                    <li><a class="sidebar-link" href="{{route('completed')}}">Completed  <span class="badge badge-success float-right">{{$completedJobCountAll}}</span> </a></li>
+                                    <li><a class="sidebar-link" href="{{route('pending')}}">@lang('app.pending') <span class="badge badge-warning float-right">{{$pendingJobCountAll}}</span></a> </li>
+                                    <li><a class="sidebar-link" href="{{route('cancelled')}}">Cancelled Jobs  <span class="badge badge-danger float-right">{{$cancelledJobCountAll}}</span> </a></li>
                                 </ul>
                             </li>
                             @endif
@@ -195,22 +223,22 @@ $user = Auth::user();
 
                             <li class="">
                                 <a href="{{route('account')}}" class="list-group-item-action ">
-                                    <span class="sidebar-icon"><i class="la la-user"></i> </span>
+                                    <span class="sidebar-icon"><i class="fa fa-user"></i> </span>
                                     <span class="title">@lang('app.profile')</span>
                                 </a>
                             </li>
 
                              <li class="">
                                 <a href="{{route('messages')}}" class="list-group-item-action">
-                                    <span class="sidebar-icon"><i class="la la-envelope-o"></i> </span>
-                                    <span class="title">Messages <span class="badge badge-success float-right">{{$blockedJobCount}}</span></span>
+                                    <span class="sidebar-icon"><i class="fa fa-envelope"></i> </span>
+                                    <span class="title">Messages <span class="badge badge-success float-right">{{$newJobCountAll}}</span></span>
                                 </a>
                             </li>
 
 
                             <li class="">
                                 <a href="{{route('change_password')}}" class="list-group-item-action">
-                                    <span class="sidebar-icon"><i class="la la-lock"></i> </span>
+                                    <span class="sidebar-icon"><i class="fa fa-lock"></i> </span>
                                     <span class="title">@lang('app.change_password')</span>
                                 </a>
                             </li>
@@ -233,8 +261,9 @@ $user = Auth::user();
                     <div class="main-page pr-4">
 
                         <div class="main-page-title mt-3 mb-3 d-flex">
-                            <h3 class="flex-grow-1">{!! ! empty($title) ? $title : __('app.dashboard') !!}</h3>
-
+                            
+                                <img src="{{ asset('assets/font-awesome-5/svgs/solid/angle-double-down.svg') }}" height="50" width="50"> <h3 class="flex-grow-1">{!! ! empty($title) ? $title : __('app.dashboard') !!}</h3>
+                            
                             <div class="action-btn-group">@yield('title_action_btn_gorup')</div>
                         </div>
 
@@ -258,7 +287,18 @@ $user = Auth::user();
 
     <!-- Scripts -->
     @yield('page-js')
+    <script src="{{asset('assets/js/jquery.min.js')}}"></script>
     <script src="{{ asset('assets/js/admin.js') }}" defer></script>
+    <link rel="stylesheet" href="{{asset('assets/DataTable/datatables.css') }}">
+    <script src="{{asset('assets/DataTable/datatables.js') }}"></script>
+
+
+  <script type="text/javascript">
+      $(document).ready(function() 
+        {     
+          $('#categories').DataTable(); 
+        });
+    </script>
 
 </body>
 </html>

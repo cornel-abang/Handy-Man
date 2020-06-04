@@ -7,18 +7,21 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{!! !empty($title) ? $title : 'JobFair' !!}</title>
+    <title>{!! !empty($title) ? $title : 'Handy Man' !!}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" {{ ! request()->is('payment*')? 'defer' : ''}}></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="{{ asset('assets/js/vendor/jquery-1.11.2.min.js') }}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-
+    <link href="{{ asset('assets/font-awesome-5/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+   
 
     <script type='text/javascript'>
         /* <![CDATA[ */
@@ -146,7 +149,7 @@
                         <h4 class="mb-3">@lang('app.job_seeker')</h4>
 
                         <ul class="list-unstyled">
-                            <li><a href="{{route('individual_register')}}">@lang('app.create_account')</a> </li>
+                            <li><a href="{{route('new_register')}}">@lang('app.create_account')</a> </li>
                             <li><a href="{{route('jobs_listing')}}">@lang('app.search_jobs')</a> </li>
                             <li><a href="{{route('applied_jobs')}}">@lang('app.applied_jobs')</a> </li>
                         </ul>
@@ -194,6 +197,9 @@
 <!-- Scripts -->
 @yield('page-js')
 <script src="{{ asset('assets/js/main.js') }}" defer></script>
+
+
+
 
 </body>
 </html>

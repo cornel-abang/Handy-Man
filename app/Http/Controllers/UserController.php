@@ -6,6 +6,7 @@ use App\Country;
 use App\JobApplication;
 use App\State;
 use App\User;
+use App\FlagJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -14,6 +15,37 @@ use Intervention\Image\Facades\Image;
 
 class UserController extends Controller
 {
+
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+
+    public function login(Request $request)
+    {
+
+        if (Auth::attempt(['email'=>$request->email, 
+                           'password'=>$request->password])) {
+           
+                return redirect()->intended();
+                //return redirect(route('account'));
+          
+        }
+        //session()->flash('msg','Incorrect Login Credentials.');
+        return redirect()->back()->with('error','Incorrect Login Credentials');
+    }
+
+     public function logout()
+    {
+        if (auth()->logout() ) {
+            //$loggedout = 'Logged Out!';
+            return redirect(route('login'));
+        }
+
+        //Session::flash('flash_msg', 'Can not logout');
+        return redirect()->back()->with('error', 'Unable to logout');
+    }
 
     public function index(){
         $title = trans('app.users');
@@ -57,20 +89,14 @@ class UserController extends Controller
         return back()->with('success', trans('app.status_updated'));
     }
 
-    public function appliedJobs(){
-        $title = __('app.applicant');
-        $user_id = Auth::user()->id;
-        $applications = JobApplication::whereUserId($user_id)->orderBy('id', 'desc')->paginate(20);
 
-        return view('admin.applied_jobs', compact('title', 'applications'));
+    public function register(){
+        $title = "Quick Signup";
+        return view('register', compact('title'));
     }
 
-    public function registerIndividual(){
-        $title = "Individual Registration";
-        return view('register-individual', compact('title'));
-    }
-
-    public function registerIndividualPost(Request $request){
+    public function registerPost(Request $request){
+        //dd($request);
         $rules = [
             'name' => ['required', 'string', 'max:190'],
             'phone'=> ['required', 'digits:11'],
@@ -80,9 +106,9 @@ class UserController extends Controller
 
         $this->validate($request, $rules);
 
+        //$user_type = $this->setUserAccountType($data['user_type']);
         $data = $request->input();
 
-        $user_type = $this->setUserAccountType($data['user_type']);
         $accountID = $this->generateAccountId();
 
         $user = $this->saveUser($data, $user_type, $accountID);
@@ -93,7 +119,7 @@ class UserController extends Controller
     /*
         Generate 5 digit account pin
      */
-    private function generateAccountId()
+    public function generateAccountId()
     {
         //create a 6 digit random pin
         $x = 5;
@@ -109,14 +135,13 @@ class UserController extends Controller
      */
     
     public function saveUser(array $data, $user_type, $accountID){
+        
         return User::create([
             'name'          => $data['name'],
             'email'         => $data['email'],
             'phone'         => $data['phone'],
-            'user_type'     => $user_type,
             'account_id'    => $accountID,
-            'password'      => Hash::make($data['password']),
-            'active_status' => 1,
+            'password'      => Hash::make($data['password'])
         ]);
 
     }
@@ -133,8 +158,8 @@ class UserController extends Controller
                 return 'individual';
                 break;
 
-            case 'cooperate':
-                return 'cooperate';
+            case 'admin':
+                return 'admin';
                 break;
             
             default:
@@ -173,7 +198,7 @@ class UserController extends Controller
      */
     private function accountIndividual(){
         $user = Auth()->user();
-        $title = 'Account | '.$user->name;
+        $title = 'Account - '.$user->name;
 
         return view('admin.profile', compact('title', 'user'));
     }
@@ -189,13 +214,21 @@ class UserController extends Controller
         function to display cooperate user account
      */
     private function accountAdmin(){
-        $user = Auth()->user();
+        if (Auth::user()->user_type === 'admin') {
+            return redirect(route('dashboard'));
+        }
     }
 
     public function accountInfo(){
         $user = auth()->user();
-        $title = 'Account | '.$user->name;
+        $title = 'Account - '.$user->name;
         return view('admin.profile', compact('title', 'user'));
+    }
+
+    public function flaggedMessage(){
+        $title = "Account Messages";
+        $flagged = FlagJob::orderBy('id', 'desc')->paginate(20);
+        return view('admin.flagged_jobs', compact('title', 'flagged'));
     }
 
     public function employerProfile(){

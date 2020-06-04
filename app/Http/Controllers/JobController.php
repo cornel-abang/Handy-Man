@@ -45,11 +45,11 @@ class JobController extends Controller
             $old_country = Country::find(old('country'));
         }
 
-        return view('admin.post-new-job', compact('title', 'categories','countries', 'old_country'));
+        return view('admin.request-new-service', compact('title', 'categories','countries', 'old_country'));
     }
 
 
-    public function newJobPost(Request $request){
+    public function newServiceRequestPost(Request $request){
         $user_id = Auth::user()->id;
 
         $rules = [

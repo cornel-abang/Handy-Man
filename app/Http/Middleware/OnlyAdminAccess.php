@@ -22,7 +22,7 @@ class OnlyAdminAccess
 
         $user = Auth::user();
 
-        if ( ! $user->is_admin())
+        if ( $user->user_type !== 'admin')
             return redirect(route('dashboard'))->with('error', trans('app.access_restricted'));
 
         return $next($request);
