@@ -89,6 +89,24 @@
         });
     });
 
+    $(document).on('click', '.del_invoice', function(e){
+        e.preventDefault();
+
+        var res = confirm("Are you sure?");
+        if (res) {
+            var inv_id = $(this).attr('id');
+            $.ajax({
+                type : "GET",
+                url : page_data.routes.delete_invoice,
+                data : {invoice_id : inv_id, _token : page_data.csrf_token},
+                success: function(data){
+                    window.location=data;
+                }
+            });
+        }
+        
+    });
+
     function findServices(user_id){
         document.querySelector('#loaderImg2').removeAttribute('style');
         $.ajax({
@@ -105,7 +123,7 @@
                     });
                 }else{
                     $('#job').empty();
-                    $('#job').append('<option value="">No data</option>');
+                    $('#job').append('<option value="" class="la la-frown-o">No data</option>');
                     $('#job').attr('disabled',true);
                 }
             }
@@ -120,9 +138,13 @@
         var x = 1;
         $(add_button).click(function(e){
             e.preventDefault();
+            /*##########################
+            Check and change the various add remove func for edit amd new items
+            re,: document.querySelector('.no').style.display = 'none';
+             */
             if(x < max_fields){
                 x++;
-                $(wrapper).append('<div class="form-group row" ><label class="col-sm-3 control-label" for="item">Item *</label><div class="col-sm-3"><input type="text" name="item_name[]" id="item_name" class="form-control" placeholder="Name - Ex: Rim of Wire" /></div><div class="col-sm-2"><input type="number" name="item_price[]" id="item_price" class="form-control" placeholder="Price/Unit " /></div><div class="col-sm-2"><input type="number" name="item_qty[]" id="item_qty" class="form-control" placeholder="Quantity" /></div><a href="#" class="delete" style="color: red;">Remove</a></div>');
+                $(wrapper).append('<div class="form-group row" ><label class="col-sm-3 control-label" for="item">Item *</label><div class="col-sm-3"><input type="text" name="item_name[]" id="item_name" class="form-control" placeholder="Name - Ex: Rim of Wire" /></div><div class="col-sm-2"><input type="number" name="item_price[]" id="item_price" class="form-control" placeholder="Price/Unit " /></div><div class="col-sm-2"><input type="number" name="item_qty[]" id="item_qty" class="form-control" placeholder="Quantity" /></div><a href="#" class="delete" style="color: red;"> <span class="fa fa-times-circle"></a></div>');
             }
       else
       {
@@ -133,12 +155,103 @@
         $(wrapper).on("click",".delete", function(e){
             e.preventDefault(); $(this).parent('div').remove(); x--;
         })
+
+        /*######################
+        Add new items while editting
+         */
+     
+        var i = 1;
+        var max_fields           = 100;
+        var wrapper_edit         = $(".new_item_edit");
+        var add_button_edit      = $(".add_form_field_edit");
+        $(add_button_edit).click(function(e){
+            e.preventDefault();
+            /*##########################
+            Check and change the various add remove func for edit amd new items
+            re,: 
+             */
+            var no_items = document.querySelector('.no'); 
+            if (no_items) {
+                no_items.style.display = 'none';    
+            }
+            
+            if(i < max_fields){
+                i++;
+                $(wrapper_edit).append('<div class="form-group row" ><label class="col-sm-3 control-label" for="item">Item *</label><div class="col-sm-3"><input type="text" name="item_name_new[]" id="item_name" class="form-control" placeholder="Name - Ex: Rim of Wire" /></div><div class="col-sm-2"><input type="number" name="item_price_new[]" id="item_price" class="form-control" placeholder="Price/Unit " /></div><div class="col-sm-2"><input type="number" name="item_qty_new[]" id="item_qty" class="form-control" placeholder="Quantity" /></div><a href="#" class="delete" style="color: red;"> <span class="fa fa-times-circle"></a></div>');
+            }
+      else
+      {
+      alert('You Reached the limits')
+      }
+        });
+     
+        $(wrapper_edit).on("click",".delete", function(e){
+            e.preventDefault(); 
+            if (i > 1) {
+                $(this).parent('div').remove(); x--;
+            }else{
+                alert("There must be atleast one item in the invoice");
+            }
+        })
+
+
+        //Ajax Delete Item on Edit
+        $('.itemEdit').on("click",".delete", function(e){
+            e.preventDefault(); 
+            //$(this).parent('div').remove();
+            //get the value of clicked element id attribute which has been uniquely set
+            //var item_id = $(this).attr('id');
+            /*swal({
+              title: "Are you sure?",
+              text: "This is an irriversible action",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+            })
+            .then((willDelete) => {
+              if (willDelete) {
+                $(this).parent('div').remove();
+                $.ajax({
+                    type : "GET",
+                    url : page_data.routes.delete_edit_invoice_item,
+                    data : {id : item_id, _token : page_data.csrf_token},
+                    success: function(data){
+
+                    }
+                });
+            swal("Invoice item deleted", {
+            icon: "success",
+                });
+              } //else {
+               // swal("Your imaginary file is safe!");
+              //}
+            });*/
+            var res = confirm("Are you sure?");
+            if (res) {
+
+                var item_id = $(this).attr('id');
+                $(this).parent('div').remove();
+
+                $.ajax({
+                    type : "GET",
+                    url : page_data.routes.delete_edit_invoice_item,
+                    data : {id : item_id, _token : page_data.csrf_token},
+                    success: function(data){
+                        if (data === true) {
+                           alert('Item Dleted');
+                        }else{
+                            alert('Unable to delete item');
+                        }
+                    }
+                });
+            }
+            
+        })
+
     });
 
-     $(document).ready(function() 
-        {     
-          $('#all-invoices').DataTable(); 
-        });
+
+
 
     /**
      * Settings Panel

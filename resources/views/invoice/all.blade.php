@@ -36,10 +36,10 @@
                                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#invoice{{$inv->id}}"><i class="la la-eye"></i></button>
                                     </div>
                                     <div class="col-md-4">
-                                        <a href="{{route('job_status_change', [$inv->id, 'delete'])}}" class="btn btn-info btn-sm" data-toggle="tooltip" title="Edit"><i class="la la-edit"></i> </a>
+                                        <a href="{{route('edit-invoice', $inv->id)}}" class="btn btn-info btn-sm" data-toggle="tooltip" title="Edit"><i class="la la-edit"></i> </a>
                                     </div>
                                     <div class="col-md-4">
-                                        <a href="{{route('job_status_change', [$inv->id, 'delete'])}}" class="btn btn-danger btn-sm" data-toggle="tooltip" title="@lang('app.delete')"><i class="la la-trash-o"></i> </a>
+                                        <a href="javascript:void(0)" id="{{$inv->id}}" class="btn btn-danger btn-sm del_invoice" data-toggle="tooltip" title="@lang('app.delete')"><i class="la la-trash-o"></i> </a>
                                     </div>
                                 </div>
 
@@ -97,10 +97,7 @@
                                 </tr>
                               </thead>
                               <tbody>
-                                @php
-                                $items = \App\Http\Controllers\ItemsController::getItems($inv->id);
-                                @endphp
-                                @foreach($items as $item)
+                                @foreach($inv->items as $item)
                                 <tr>
                                   <th scope="row">=></th>
                                   <td>{{$item->item_name}}</td>
@@ -119,7 +116,7 @@
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Edit</button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='{{route('edit-invoice', $inv->id)}}'">Edit</button>
                       </div>
                     </div>
                   </div>
@@ -134,6 +131,8 @@
                         <div class="no data-wrap py-5 my-5 text-center">
                             <h1 class="display-1"><i class="la la-frown-o"></i> </h1>
                             <h1>No Data available here</h1>
+                              <button type="button" class="btn btn-primary" style="background-color: #38c172; border: 1px solid #38c172;" onclick="window.location.href='{{route('new-invoice')}}'"><span class="fa fa-plus-circle"> Create new
+                              </button>
                         </div>
                     </div>
                 </div>

@@ -66,6 +66,10 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::get('get_services', 'InvoiceController@getServices')->name('get_services');
         Route::post('store-invoice', 'InvoiceController@store')->name('store-invoice');
         Route::get('all-invoices', 'InvoiceController@index')->name('all-invoices');
+        Route::get('edit-invoice/{id}', 'InvoiceController@edit')->name('edit-invoice');
+        Route::get('delete_edit_invoice_item', 'ItemsController@deleteInvoiceItem')->name('delete_edit_invoice_item');
+        Route::post('update_invoice/{id}', 'InvoiceController@update')->name('update_invoice');
+        Route::get('delete_invoice', 'InvoiceController@destroyAjax')->name('delete_invoice');
     });
 
 });

@@ -59,6 +59,7 @@ class InvoiceController extends Controller
         return ['success'=>1, 'acct'=>$services->toArray()];
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
@@ -77,12 +78,14 @@ class InvoiceController extends Controller
         $this->validate($request, $rules);
 
         $invoice = Invoice::create(['service_id' => $request->job]);
-        //get back the total to store in invoice table
-        $totals = ItemsController::storeItems($request->all(), $invoice->id);
         $sum_total = 0;
-        //loop through totals and get the sum_total
-        foreach ($totals as $total) {
-            $sum_total += array_sum($total);
+        if (!empty($request->item_name)) {
+            //get back the total to store in invoice table
+            $totals = ItemsController::storeItems($request->all(), $invoice->id);
+            //loop through totals and get the sum_total
+            foreach ($totals as $total) {
+                $sum_total += array_sum($total);
+            } 
         }
 
         //add total amount for the invoice
@@ -116,7 +119,9 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $invoice = Invoice::find($id);
+        $title = 'Edit invoice';
+        return view('invoice.edit', compact('invoice', 'title'));
     }
 
     /**
@@ -126,9 +131,34 @@ class InvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $invoice_id)
     {
-        //
+        $rules = [
+            'item_name' =>  'required',
+            'item_price' =>  'required',
+            'item_qty' =>  'required'
+        ];
+
+        $this->validate($request, $rules);
+        //get back the total to store in invoice table
+        $totals = ItemsController::storeItemsUpdate($request->all(), $invoice_id);
+        $sum_total = 0;
+        //loop through totals and get the sum_total
+        foreach ($totals as $total) {
+            $sum_total += array_sum($total);
+        }
+
+        $invoice = Invoice::find($invoice_id);
+        //add total amount for the invoice
+        $invoice->sum_total = $sum_total;
+        $res = $invoice->save();
+        
+        if ($res) {
+
+            return redirect(route('all-invoices'))->with('success', 'Invoice successfully updated');
+        }
+        return redirect(route('new-invoice'))->with('error', 'Unable to update invoice');
+
     }
 
     /**
@@ -137,8 +167,14 @@ class InvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroyAjax(Request $request)
     {
-        //
+        $invoice = Invoice::find($request->invoice_id);
+        if ($invoice->delete()) {
+            session()->flash('success','Invoice deleted!');
+        }else{
+            session()->flash('error','Unable to delete invoice');
+        }
+        return route('all-invoices');
     }
 }

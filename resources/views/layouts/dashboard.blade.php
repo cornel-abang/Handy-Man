@@ -25,6 +25,9 @@
     @yield('page-css')
 
     <!-- Scripts -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="{{ asset('js/sweet-alert.min.js') }}" defer></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <script type='text/javascript'>
