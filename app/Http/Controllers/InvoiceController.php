@@ -177,4 +177,15 @@ class InvoiceController extends Controller
         }
         return route('all-invoices');
     }
+
+    public function destroyAjaxFromAll(Request $request)
+    {
+        $invoice = Invoice::find($request->invoice_id);
+        if ($invoice->delete()) {
+            $res = true;
+        }else{
+            $res = false;
+        }
+        return $res;
+    }
 }

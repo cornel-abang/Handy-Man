@@ -16,6 +16,8 @@
     <!--DataTable-->
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">  
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
+    <link rel="stylesheet" href="{{asset('assets/DataTable/datatables.css') }}">
+    <script src="{{asset('assets/DataTable/datatables.js') }}"></script>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -292,8 +294,7 @@ $user = auth()->user();
     @yield('page-js')
     <script src="{{asset('assets/js/jquery.min.js')}}"></script>
     <script src="{{ asset('assets/js/admin.js') }}" defer></script>
-    <link rel="stylesheet" href="{{asset('assets/DataTable/datatables.css') }}">
-    <script src="{{asset('assets/DataTable/datatables.js') }}"></script>
+    
 
 
   <script type="text/javascript">

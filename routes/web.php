@@ -70,6 +70,7 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::get('delete_edit_invoice_item', 'ItemsController@deleteInvoiceItem')->name('delete_edit_invoice_item');
         Route::post('update_invoice/{id}', 'InvoiceController@update')->name('update_invoice');
         Route::get('delete_invoice', 'InvoiceController@destroyAjax')->name('delete_invoice');
+        Route::get('delete_invoice_from_all','InvoiceController@destroyAjaxFromAll')->name('delete_invoice_from_all');
     });
 
 });

@@ -73,7 +73,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-md-12">
-                            <button type="button" class="btn btn-danger del_invoice" id="{{$invoice->id}}"><span class="fa fa-trash-alt"></span> Delete this invoice</button>
+                            <button type="button" class="btn btn-danger del_invoice_from_edit" id="{{$invoice->id}}"><span class="fa fa-trash-alt"></span> Delete this invoice</button>
                         </div>
                     </div>
 

@@ -35,11 +35,11 @@
                                     <div class="col-md-4">
                                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#invoice{{$inv->id}}"><i class="la la-eye"></i></button>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4" style="color: white;">
                                         <a href="{{route('edit-invoice', $inv->id)}}" class="btn btn-info btn-sm" data-toggle="tooltip" title="Edit"><i class="la la-edit"></i> </a>
                                     </div>
                                     <div class="col-md-4">
-                                        <a href="javascript:void(0)" id="{{$inv->id}}" class="btn btn-danger btn-sm del_invoice" data-toggle="tooltip" title="@lang('app.delete')"><i class="la la-trash-o"></i> </a>
+                                        <a href="javascript:void(0)" id="{{$inv->id}}" class="btn btn-danger btn-sm del_invoice_from_all" ><i class="la la-trash-o"></i> </a>
                                     </div>
                                 </div>
 
