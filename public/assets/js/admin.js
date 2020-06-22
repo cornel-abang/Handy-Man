@@ -20,6 +20,10 @@
         }
     });
 
+    // $(document).load(function(){
+    //     $("#completed").modal("show");
+    // })
+
     $(document).on('change', '.country_to_state', function(e){
         e.preventDefault();
 
@@ -66,6 +70,12 @@
             }
         });
     });
+
+    /*$(document).on('click', '.mark-btn', function(e){
+        e.preventDefault();
+        var id = $(this).attr('id');
+        $("#form"+id).submit();
+    });*/
 
     $(document).on('change', '#acct_id', function(e){
         e.preventDefault();
@@ -116,7 +126,10 @@
         var res = confirm("Are you sure?");
         if (res) {
             //remove the the row it belongs to
-            $(this).closest('tr').remove();
+            $(this).fadeOut(1000, function(){
+                //fade complete
+                $(this).closest('tr').remove();
+            });
 
             var inv_id = $(this).attr('id');
             $.ajax({
@@ -130,6 +143,71 @@
         }
         
     });
+
+    $(document).on('click', '.in-progress', function(e){
+        e.preventDefault(); 
+        var status = "In-Progress";
+        markJob(status, $(this));
+        
+    });
+
+    $(document).on('click', '.completed', function(e){
+        e.preventDefault();
+        var status = "Completed";
+        markJob(status, $(this));
+        
+    });
+
+    $(document).on('click', '.pending', function(e){
+        e.preventDefault();
+        var status = "Pending";
+        markJob(status, $(this));
+        
+    });
+
+    $(document).on('click', '.cancelled', function(e){
+        e.preventDefault();
+        var status = "Cancelled";
+        markJob(status, $(this));
+        
+    });
+
+    function markJob(status, handler){
+
+            $(handler).attr("title","");
+            var job_id = $(handler).attr("id");
+            //check if we're currently not on the all jobs template view
+            if (Number($("table").attr("id")) === 0) {
+                //then remove the marked job item
+                $(handler).closest('tr').fadeOut(1500, function(){
+                    //fade complete
+                    $(handler).closest('tr').remove();
+                });
+                   
+            }else{
+                var job = $("#jab"+job_id);
+                job.attr("class","");
+                job.addClass(status);
+                job.text(status);
+                
+                /*get the anchor tag inside the td and remove the done class 
+                if exist to create the effect that only one
+                status can be marked at a time
+                */
+                $("#job"+job_id+" a").removeClass("marked");
+                $(handler).toggleClass("marked");
+            }
+
+            $.ajax({
+                type : "GET",
+                url : page_data.routes.mark_job,
+                data : {job_id : job_id, status : status, _token : page_data.csrf_token},
+                success: function(data){
+                    alert("Job status changed");
+                }
+            });
+    }
+
 
     function findServices(user_id){
         document.querySelector('#loaderImg2').removeAttribute('style');
@@ -154,7 +232,41 @@
         });
     }
 
+    $(document).on("change", "#street", function(){
+        var location = $(this).val();
+        location += ", "+$("#LGA").val();
+        $("#vis-location").html("<b>"+location+"</b>");
+    });
+
+    $(document).on("change", "#job_select", function(){
+        $("#result").addClass("show-result");
+
+        var img = document.querySelector('#loaderImg');
+        img.removeAttribute('style');
+        img.style.position = 'absolute';
+        $(this).attr('disabled',true);
+        var job_id = $(this).val();
+
+        $.ajax({
+            type : "GET",
+            url : page_data.routes.get_jobs_for_reschedule,
+            data : {job_id : job_id, _token : page_data.csrf_token},
+            success: function(data){
+                
+                document.querySelector("#loaderImg").style.display = "none";
+                $("#job_select").attr('disabled',false);
+
+                $("#result").removeClass("show-result");
+
+                $("form-group input[type='date']").val(data.visiting_date);
+                $("form-group input[type='time']").val(data.visiting_time);
+            }
+        });
+    });
+
     $(document).ready(function() {
+        // Add new invoice items
+        // ######################################
         var max_fields      = 100;
         var wrapper         = $(".newItem");
         var add_button      = $(".add_form_field");

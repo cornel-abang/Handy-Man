@@ -18,12 +18,25 @@ Auth::routes();
 
 /*########################
     My Routes           ##
- #########################
+ ##########################
  */
+
+//#####################
+//Guest Routes
+//#####################
 Route::get('login', 'UserController@showLoginForm')->name('login');
 Route::post('login', 'UserController@login');
 Route::get('logout', 'UserController@logout')->name('logout');
+//#####################
+//HOME PAGE
+//#####################
+Route::get('search_category','CategoriesController@searchCategory')->name('search_category');
+Route::post('request-service','ServiceController@requestBySlug')->name('request-service');
+Route::get('cat-tile-request/{search_term}','ServiceController@requestBySlug')->name('cat-tile-request');
 
+//#####################
+//Authenticated Routes
+//#####################
 Route::group(['middleware'=>'auth:web'], function(){
     Route::group(['prefix'=>'u'], function(){
         //Route::get('user-acount', 'UserController@getAccount')->name('user-acount');
@@ -35,18 +48,23 @@ Route::group(['middleware'=>'auth:web'], function(){
 
     Route::group(['prefix'=>'service'], function(){
         Route::get('request', 'ServiceController@requestService')->name('request');
-        Route::post('request', 'ServiceController@requestServicePost');
+        Route::post('send-request', 'ServiceController@requestServicePost')->name('send-request');
     });
 
     Route::group(['prefix'=>'jobs'], function(){
+        Route::get('all','ServiceController@allUserJobs')->name('all');
         Route::get('new','ServiceController@newJobs')->name('new');
         Route::get('in-progress','ServiceController@jobsInProgress')->name('in-progress');
         Route::get('pending','ServiceController@pendingJobs')->name('pending');
         Route::get('completed','ServiceController@completedJobs')->name('completed');
         Route::get('cancelled','ServiceController@cancelledJobs')->name('cancelled');
         Route::get('invoice','ServiceController@invoice')->name('invoice');
+        Route::get('reschedule-visit','ServiceController@rescheduleVisit')->name('reschedule-visit');
+        Route::get('get_jobs_for_reschedule', 'ServiceController@getJobForReschedule')->name('get_jobs_for_reschedule');
+        Route::post('mark-job', 'ServiceController@markJobPost')->name('mark-job');
     });
 
+     
     Route::group(['prefix'=>'admin','middleware'=>'only_admin_access'], function(){
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
         Route::get('all-jobs','ServiceController@allJobs')->name('all-jobs');
@@ -57,6 +75,11 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::get('edit/{id}', ['as'=>'edit_categories', 'uses' => 'CategoriesController@edit']);
         Route::post('edit/{id}', ['uses' => 'CategoriesController@update']);
         Route::post('delete-categories', ['as'=>'delete_categories', 'uses' => 'CategoriesController@destroy']);
+        //#####################
+        //JOBS
+        //#####################
+        Route::get('jobs/{tag}','ServiceController@showJobsAdmin')->name('jobs');
+        Route::get('mark_job','ServiceController@markJob')->name('mark_job');
 
         //#####################
         //INVOICING
@@ -71,6 +94,7 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::post('update_invoice/{id}', 'InvoiceController@update')->name('update_invoice');
         Route::get('delete_invoice', 'InvoiceController@destroyAjax')->name('delete_invoice');
         Route::get('delete_invoice_from_all','InvoiceController@destroyAjaxFromAll')->name('delete_invoice_from_all');
+        Route::get('flag-invoice/{id}','InvoiceController@flag')->name('flag-invoice');
     });
 
 });

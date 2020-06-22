@@ -81,6 +81,12 @@ class CategoriesController extends Controller
         return ['success' => 0, 'msg' => trans('app.error_msg')];
     }
 
+    public function searchCategory(Request $request){
 
+        $title=Category::select('category_name','category_slug')
+                            ->where('category_name','LIKE','%'.$request->term."%")
+                            ->get();
+        return $title;
+    }
 
 }

@@ -82,3 +82,58 @@ button.updating-btn i.la:before{
 .field-required{
     color: #ff0000;
 }
+
+.mark{
+    transition: all 1.0s;
+}
+
+.New{
+    color: blue;
+    font-weight: 200px;
+}
+
+.In-Progress{
+    color: steelblue;
+    font-weight: bolder;
+}
+
+.Completed{
+    color: green;
+    font-weight: bolder;
+}
+
+.Pending{
+    color: #ffed4a;
+    font-weight: bolder;
+}
+
+.Cancelled{
+    color: red;
+    font-weight: bolder;
+}
+
+td{
+    background-color: white !important;
+}
+
+.btn-info-mark{
+    color: white;
+    background-color: steelblue !important;
+    border: 2px solid white;
+    border-radius: .25rem;
+}
+
+.job-status{
+    font-weight: bolder;
+    color: teal;
+}
+
+.marked{
+    color: grey;
+    opacity: 0.2;
+    text-decoration: line-through;
+}
+
+.show-result{
+    display: none;
+}

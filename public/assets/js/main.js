@@ -16,6 +16,53 @@
         });
     });
 
+    $(document).on('input', '#search_term', function(e){
+        e.preventDefault();
+
+        var term = $(this).val();
+        if (term !== '') {
+            $.ajax({
+                type : 'GET',
+                url : page_data.routes.search_category,
+                data : {term : term, _token : page_data.csrf_token},
+                success: function(data){
+                    $('#suggestions').empty();
+                    data.forEach(function(x){
+                        $("#suggestions").append('<tr id="sug-item"><td>'+x.category_name+'</td></tr>');
+                    });
+                }
+            });
+        }
+    });
+
+
+    $(document).on('click', '#sug-item', function(e){
+        e.preventDefault();
+
+        var sel = $(this).text();
+        $('#suggestions').empty();
+        $('#search_term').val(sel);
+        //document.querySelector('#search_form').submit();
+    });
+
+    $(document).on('input', '#add-new', function(e){
+        e.preventDefault();
+
+        var cat = $(this).val();
+        //$('#new-cat_show').empty();
+        if (cat !== '') {
+            $("#new-cat_show").html('<tr id="new-cat"><td>'+cat+'</td></tr>');
+        }
+    });
+
+     $(document).on('click', '#new-cat', function(e){
+        e.preventDefault();
+
+        var cat = $(this).text();
+        $('#new-cat_show').empty();
+        $('#add-new').val(cat);
+    });
+
 
     if (page_data.jobModalOpen){
         $('#applyJobModal').modal('show');

@@ -9,6 +9,9 @@
 
     <title>{!! !empty($title) ? $title : 'Handy Man' !!}</title>
 
+    {{-- Fav Icon --}}
+    <link rel="icon" href="{{asset('assets/images/fav.png')}}">
+
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" {{ ! request()->is('payment*')? 'defer' : ''}}></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -46,6 +49,13 @@
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item"><a class="nav-link" href="{{route('home')}}"><i class="la la-home"></i> @lang('app.home')</a> </li>
 
+                    
+
+
+                    {{-- <li class="nav-item"><a class="nav-link" href="{{route('pricing')}}"><i class="la la-dollar"></i> @lang('app.pricing')</a> </li> --}}
+                    {{-- <li class="nav-item"><a class="nav-link" href="{{route('jobs_listing')}}"><i class="la la-briefcase"></i> Services</a> </li> --}}
+                    {{-- <li class="nav-item"><a class="nav-link" href="#categories"><i class="la la-briefcase"></i> Services</a> </li> --}}
+                    {{-- <li class="nav-item"><a class="nav-link" href="{{route('blog_index')}}"><i class="la la-file-o"></i> @lang('app.blog')</a> </li> --}}
                     <?php
                     $header_menu_pages = config('header_menu_pages');
                     ?>
@@ -54,12 +64,8 @@
                             <li class="nav-item"><a class="nav-link" href="{{ route('single_page', $page->slug) }}"><i class="la la-link"></i>{{ $page->title }} </a></li>
                         @endforeach
                     @endif
-
-
-                    <li class="nav-item"><a class="nav-link" href="{{route('pricing')}}"><i class="la la-dollar"></i> @lang('app.pricing')</a> </li>
-                    <li class="nav-item"><a class="nav-link" href="{{route('jobs_listing')}}"><i class="la la-briefcase"></i> @lang('app.jobs')</a> </li>
-                    <li class="nav-item"><a class="nav-link" href="{{route('blog_index')}}"><i class="la la-file-o"></i> @lang('app.blog')</a> </li>
-                    <li class="nav-item"><a class="nav-link" href="{{route('contact_us')}}"><i class="la la-envelope-o"></i> @lang('app.contact_us')</a> </li>
+                    
+                    <li class="nav-item"><a class="nav-link" href="{{route('contact_us')}}"><i class="la la-envelope-o"></i> Contact Us</a> </li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -115,13 +121,13 @@
 
     <div id="main-footer" class="main-footer bg-dark py-5">
 
-        <div class="container">
+        <div class="container" style=" align-content: center;">
             <div class="row">
                 <div class="col-md-4">
 
                     <div class="footer-logo-wrap mb-3">
                         <a class="navbar-brand" href="{{ url('/') }}">
-                            <img src="{{asset('assets/images/logo-alt.png')}}" />
+                            <img src="{{asset('assets/images/logo.png')}}" />
                         </a>
                     </div>
 
@@ -145,28 +151,13 @@
 
                 <div class="col-md-4">
 
-                    <div class="footer-menu-wrap mt-2">
-                        <h4 class="mb-3">@lang('app.job_seeker')</h4>
-
-                        <ul class="list-unstyled">
-                            <li><a href="{{route('new_register')}}">@lang('app.create_account')</a> </li>
-                            <li><a href="{{route('jobs_listing')}}">@lang('app.search_jobs')</a> </li>
-                            <li><a href="{{route('applied_jobs')}}">@lang('app.applied_jobs')</a> </li>
-                        </ul>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4">
-
                     <div class="footer-menu-wrap  mt-2">
-                        <h4 class="mb-3">@lang('app.employer')</h4>
+                        <h4 class="mb-3">Quick Links</h4>
 
                         <ul class="list-unstyled">
-                            <li><a href="{{route('register_employer')}}">@lang('app.create_account')</a> </li>
                             <li><a href="{{ route('request') }}">Request Service</a> </li>
-                            <li><a href="{{route('pricing')}}">@lang('app.buy_premium_package')</a> </li>
+                            <li><a href="{{ route('new_register') }}">@lang('app.create_account')</a> </li>
+                            <li><a href="{{route('login')}}">Sign In</a> </li>
                         </ul>
 
                     </div>

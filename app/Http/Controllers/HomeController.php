@@ -30,8 +30,8 @@ class HomeController extends Controller
      */
     public function index(){
         $categories = Category::orderBy('category_name', 'asc')->get();
-        $blog_posts = Post::whereType('post')->with('author')->orderBy('id', 'desc')->take(3)->get();
-        return view('home', compact('categories', 'blog_posts'));
+        // $blog_posts = Post::whereType('post')->with('author')->orderBy('id', 'desc')->take(3)->get();
+        return view('home', compact('categories'));
     }
 
     public function newRegister(){

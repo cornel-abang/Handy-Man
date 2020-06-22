@@ -12,7 +12,9 @@ use App\JobApplication;
 use App\Mail\ShareByEMail;
 use App\State;
 use App\User;
+use Session;
 use PDF;
+use App\Rating;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -29,37 +31,28 @@ class ServiceController extends Controller
     /*#######################
     Return the views for jobs
      #######################*/
-
-    public function newJobs(){
+    public function allUserJobs()
+    {
         $user = Auth::user();
-        $title = "New Jobs";
-        $jobs = $this->new();
-        return view('admin.jobs', compact('title', 'jobs', 'user'));
-    }
-    public function jobsInProgress(){
-        $title = "Jobs in Progress";
-        $jobs = Job::pending()->orderBy('id', 'desc')->paginate(20);
+        $title = "All Jobs";
+        $jobs = Service::orderBy('created_at', 'desc')
+                        ->where('user_id', $user->id)
+                        ->paginate(20);
+        
         return view('admin.jobs', compact('title', 'jobs'));
     }
-     public function pendingJobs(){
-        $title = __('app.pending_jobs');
-        $jobs = Job::pending()->orderBy('id', 'desc')->paginate(20);
-        return view('admin.jobs', compact('title', 'jobs'));
-    }
-    public function completedJobs(){
-        $title = "Completed Jobs";
-        $jobs = Job::approved()->orderBy('id', 'desc')->paginate(20);
-        return view('admin.jobs', compact('title', 'jobs'));
-    }
-    public function cancelledJobs(){
-        $title = "Cancelled Jobs";
-        $jobs = Job::blocked()->orderBy('id', 'desc')->paginate(20);
-        return view('admin.jobs', compact('title', 'jobs'));
-    }
+
 
     /*###############################
         return the resources for jobs
      ##############################*/
+    public static function allUserJobsCount()
+    {
+            $user = Auth::user();
+            return $allJobs = Service::where('user_id', $user->id)
+                                     ->orderBy('created_at','desc')
+                                     ->paginate(10);
+    }
     static function new(){
             $user = Auth::user();
             return $newJobs = Service::where('status','new')
@@ -112,12 +105,16 @@ class ServiceController extends Controller
      ########################*/
 
     public function requestService(){
-        $title = "Request Service";
+        if (auth()->user()->user_type !== 'admin') {
+            $title = "Request Service";
 
-        $categories = Category::orderBy('category_name', 'asc')->get();
+            $categories = Category::orderBy('category_name', 'asc')->get();
 
-        $LGAs = $this->getLGAs();
-        return view('admin.request-new-service', compact('title', 'categories', 'LGAs'));
+            $LGAs = $this->getLGAs();
+            return view('admin.request-new-service', compact('title', 'categories', 'LGAs'));
+        }
+
+        return redirect(route('account'))->with('error','You can not request a service as an admin');
     }
 
     public function getLGAs(){
@@ -134,11 +131,13 @@ class ServiceController extends Controller
 
     public function requestServicePost(Request $request){
         $rules = [
-            'category' => ['required', 'string', 'max:190'],
+            'category'              => ['required', 'string', 'max:190'],
             //'sub_category' => ['string', 'max:190'],
-            'local_govt' => 'required',
-            'street_address' => ['required', 'string'],
-            'description' =>  'string'
+            'local_govt'            => 'required',
+            'street_address'        => ['required', 'string'],
+            'description'           =>  'string',
+            'visiting_date'         => ['date', 'required'],
+            'visiting_time'         => 'required'
         ];
         $this->validate($request, $rules);
 
@@ -147,7 +146,8 @@ class ServiceController extends Controller
             return back()->with('error', 'app.something_went_wrong')->withInput($request->input());
         }
 
-        return redirect(route('account'))->with('success', 'Service request successful! Expect a call from us in no time. Cheers!');
+        return redirect(route('all'))->with('success', '<b>'.ucwords(str_replace('-', ' ', $request->category)).'</b>'.
+            ' - Service request successful! Expect a call from us in no time. Cheers!');
     }
 
     public function saveRequest($request){
@@ -160,18 +160,50 @@ class ServiceController extends Controller
             //'sub_category'              => $request->sub_category,
             'local_govt'                => str_replace('-', ' ', $request->local_govt),
             'street_addr'               => $request->street_address,
-            'message'                   => $request->description
+            'message'                   => $request->description,
+            'visiting_date'             => $request->visiting_date,
+            'visiting_time'             => $request->visiting_time
         ];
 
         return $service = Service::create($data);
     }
+
+    public function requestBySlug(Request $request)
+    {
+        /*
+            get the service category and store in a session variable
+            for future use after authentication
+         */  
+        session()->put('intended-category', $request->search_term);
+        if (auth()->check()) {
+            return redirect(route('account'));
+         }
+
+         return redirect(route('login')); 
+    }
     /*#################################
-        //Service arequest handler ends
+        //Service request handler ends
      #################################*/
 
+    public function markJobPost(Request $request)
+    {
+        $rating = $this->rateService($request->all());
+        if ($rating) {
+            $job = Service::find($request->service_id);
+            $job->status = 'Completed';
+            $job->save();
+            session()->flash('success', 'Thanks for working with Handy Man!');
+        }else{
+            session()->flash('error', 'Server Error! Unable to Mark Off this Job');
+        }
+        
+        return redirect(route('all'));
+    }
 
-
-
+    public function rateService($job)
+    {
+        return Rating::create($job);
+    }
 
 
 
@@ -191,6 +223,22 @@ class ServiceController extends Controller
         //Invoicing Ends
      ########################*/
 
+     /*########################
+        //Visiting Feature Area
+     ########################*/
+     public function rescheduleVisit(Request $request)
+     {
+        $title = "Reschedule Visit";
+        $services = Service::where("user_id", auth()->user()->id)->get();
+       
+        return view("admin.rescheduleVisit", compact('title', 'services'));
+     }
+
+     public function getJobForReschedule(Request $request)
+     {
+        $service = Service::find($request->job_id);
+        return $service;
+     }
 
 
 
@@ -289,38 +337,95 @@ class ServiceController extends Controller
         
     }
 
-    public static function alljobs(){
+    public static function allJobs(){
         return $allJobs = Service::orderBy('created_at','desc')
-                                   ->get();
+                                   ->paginate(10);
     }
 
      static function newAll(){
             return $newJobs = Service::where('status','new')
                                      ->orderBy('created_at','desc')
-                                     ->get();
+                                     ->paginate(10);
     }
 
     static function progressAll(){
-            return $progressJobs = Service::where('status','In progress')
+            return $progressJobs = Service::where('status','In-progress')
                                      ->orderBy('created_at','desc')
-                                     ->get();
+                                     ->paginate(10);
     }
 
     static function jobsCompletedAll(){
-            return $completedJobs = Service::where('status','coomplete')
+            return $completedJobs = Service::where('status','completed')
                                      ->orderBy('created_at','desc')
-                                     ->get();
+                                     ->paginate(10);
     }
 
     static function jobsPendingAll(){
             return $pendingJobs = Service::where('status','pending')
                                      ->orderBy('created_at','desc')
-                                     ->get();
+                                     ->paginate(10);
     }
 
     static function jobsCancelledAll(){
             return $cancelled = Service::where('status','cancelled')
                                      ->orderBy('created_at','desc')
-                                     ->get();
+                                     ->paginate(10);
+    }
+
+    //Get the tag associated with the request
+    public function showJobsAdmin($tag)
+    {
+        //assign a state to know from the template which templet your on
+        //all template (1 yes, 0 no)
+        $state = 0;
+
+        switch ($tag) {
+            case 'all':
+                $title = "All Jobs";
+                $state = 1;
+                $jobs = $this->allJobs();
+                break;
+
+            case 'new':
+                $title = "New Jobs";
+                $jobs = $this->newAll();
+                break;
+
+            case 'in-progress':
+                $title = "Jobs in Progress";
+                $jobs = $this->progressAll();
+                break;
+
+            case 'completed':
+                $title = "Completed Jobs";
+                $jobs = $this->jobsCompletedAll();
+                break;
+
+            case 'pending':
+                $title = "Pending Jobs";
+                $jobs = $this->jobsPendingAll();
+                break;
+
+            case 'cancelled':
+                $title = "Cancelled Jobs";
+                $jobs = $this->jobsCancelledAll();
+                break;
+            
+            default:
+                $title = "All Jobs";
+                $jobs = $this->allJobs();
+                break;
+        }
+        
+        $user = Auth::user();
+        return view('admin.jobs_admin', compact('title', 'jobs', 'user', 'state'));
+    }
+
+    public function markJob(Request $request)
+    {
+        $job = Service::find($request->job_id);
+        $job->status = $request->status;
+        $job->save();
+        return "success";
     }
 }

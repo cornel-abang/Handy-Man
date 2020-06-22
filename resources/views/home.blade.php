@@ -10,23 +10,43 @@
 
             <div class="container">
                 <div class="row">
-                    <div class="col-md-8">
-                        <h1>Get your desired service</h1>
-                        <p class="mt-4 mb-4 job-search-sub-text">Search and request for your desired service <br> and get served -  All from the comfort of your home.</p>
+                    <div class="col-md-12">
+                        <h1>Find your Desired Service</h1>
+                        <p class="mt-4 mb-4 job-search-sub-text">
+                            <p class="text-muted mb-1 mt-1" >
+                            <span class="single-skill request">
+                                <em>Search and Request for your desired Service get Served by Qualified Artisans<br>
+                                    ..all from your position of Comfort
+                                </em>
+                            </span> 
+                            <span class="text-small text-muted"></span>
+                        </p>
+                        </p>
+                        
                     </div>
                 </div>
 
                 <div class="row ">
                     <div class="col-md-12">
 
-                        <form action="{{route('jobs_listing')}}" class="form-inline" method="get">
+                        <form action="{{route('request-service')}}" class="form-inline" method="post" id="search_form">
+                            @csrf
                             <div class="form-row">
                                 <div class="col-auto">
-                                    <input type="text" name="search" id="search" class="form-control mb-2" style="min-width: 300px;" placeholder="Ex: Plumbing, Tiling, Electricals">
-                                    <button type="submit" class="btn btn-success mb-2"><i class="la la-search"></i> Search service</button>
+                                    <select type="text" name="search_term" id="" class="form-control mb-2" 
+                                    style="min-width: 300px;">
+                                        <option value="">--Select preferred category--</option>
+                                        @foreach($categories as $cat)
+                                        <option value="{{$cat->category_slug}}">{{$cat->category_name}}</option>
+                                        @endforeach
+                                    </select>
+                                    <button type="submit" class="btn btn-success mb-2">
+                                        Request Service <i class="la la-arrow-circle-o-right"></i>
+                                    </button>
+                                    {{-- <details><summary>Title</summary><p>Trials Trials</p></details> --}}
                                     <table class="table table-bordered table-hover">
-                                        <tbody>
-
+                                        <tbody id="suggestions">
+                                            
                                         </tbody>
                                     </table>
                                 </div>
@@ -43,32 +63,38 @@
     </div>
 
 
-        <div class="home-categories-wrap bg-white pb-5 pt-5">
+       {{-- <div class="home-categories-wrap bg-white pb-5 pt-5" id="categories">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <h4 class="mb-3">@lang('app.browse_category')</h4>
+                            <h4 class="mb-3">@lang('app.browse_category')</h4>
                     </div>
                 </div>
-
+                
                 <div class="row">
 
                     @foreach($categories as $cat)
                         <div class="col-md-4">
-                            <p>
-                                <a href="" class="category-link"><i class="la la-th-large"></i> {{ $cat->category_name }} <span class="text-muted"></span> </a>
-                            </p>
-
+                            <div class="employer-job-listing-single cat {{$cat->category_name}} box-shadow bg-white mb-3 p-3" onclick="window.location.href='{{route('cat-tile-request', $cat->category_slug)}}'">
+                                <div class="listing-job-info">
+                                    <h5><a href="">{{$cat->category_name}}</a> </h5>
+                                    <p class="text-muted mb-1 mt-1">
+                                        <span class="single-skill request">
+                                            Request this service <i class="la la-arrow-circle-o-right"></i>
+                                        </span> 
+                                        <span class="text-small text-muted"></span>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     @endforeach
                 </div>
-
             </div>
-        </div>
+        </div>--}}
 
 
 
-        <div class="premium-jobs-wrap pb-5 pt-5">
+        {{-- <div class="premium-jobs-wrap pb-5 pt-5">
 
             <div class="container">
 
@@ -115,11 +141,11 @@
                 </div>
             </div>
 
-        </div>
+        </div> --}}
 
 
 
-    <div class="new-registration-page bg-white pb-5 pt-5">
+    {{-- <div class="new-registration-page bg-white pb-5 pt-5">
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
@@ -150,10 +176,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
-        <div class="regular-jobs-wrap pb-5 pt-5">
+        {{-- <div class="regular-jobs-wrap pb-5 pt-5">
 
             <div class="container">
                 <div class="regular-job-container p-3">
@@ -192,9 +218,9 @@
             </div>
 
 
-        </div>
+        </div> --}}
 
-    <div class="pricing-section bg-white pb-5 pt-5">
+    {{-- <div class="pricing-section bg-white pb-5 pt-5">
         <div class="container">
 
             <div class="row">
@@ -311,30 +337,37 @@
 
 
         </div>
-    </div>
+    </div> --}}
 
 
 
-    <div class="new-registration-page bg-white pb-5 pt-5">
+   {{-- <div class="new-registration-page bg-white pb-5 pt-5">
         <div class="container">
             <div class="row">
 
                 <div class="col-md-12">
 
                     <div class="call-to-action-post-job justify-content-center">
-                        <div class="job-post-icon my-auto">
-                            <img src="{{asset('assets/images/job.png')}}" />
+                        <div class="job-post-icon ">
+                            <img src="{{asset('assets/images/no-search.png')}}" height="170" />
                         </div>
                         <div class="job-post-details mr-3 ml-3 p-3 my-auto">
-                            <h1>Post your job</h1>
+                            <h1>Didn't find your desired service?</h1>
                             <p>
-                                Job seekers looking for quality job always. <br /> Post your job to get the talents
+                                <em>No worries...<br>Just enter it below and request</em> <br />
+                                <form class="form-inline" action="{{route('request-service')}}" method="post">
+                                    @csrf
+                                    <input type="text" name="new-cat" class="form-control mb-2" id="add-new" placeholder="Enter here..">
+                                    <button type="submit" class="btn btn-success mb-2">
+                                        Request <i class="la la-arrow-circle-o-right"></i>
+                                    </button>
+                                    <table class="table table-bordered table-hover" style="max-width: 297px;">
+                                        <tbody id="new-cat_show">
+                                            
+                                        </tbody>
+                                    </table>
+                                </form>
                             </p>
-                        </div>
-
-                        <div class="job-post-button my-auto">
-                            <a href="" class="btn btn-success btn-lg">Post a Job</a>
-
                         </div>
                     </div>
 
@@ -342,9 +375,9 @@
 
             </div>
         </div>
-    </div>
+    </div>--}}
 
-    <div class="job-stats-footer pb-5 pt-5 text-center">
+    {{-- <div class="job-stats-footer pb-5 pt-5 text-center">
         <div class="container">
 
             <div class="row">
@@ -376,6 +409,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 @endsection

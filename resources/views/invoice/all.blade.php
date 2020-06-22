@@ -17,9 +17,8 @@
 
                     @foreach($invoices as $inv)
                         <tr>
-                            <td>{{$inv->service->user->name}}
-                                
-
+                            <td>
+                                {!!$inv->service->user['name']!!}
                             </td>
                             <td>
                                 
@@ -78,7 +77,7 @@
                         <div class="modal-title">
                           <h3 class="" id="{{$inv->id}}">Job Invoice: <br></h3>
                           <strong>For:</strong> {{$inv->service->category}} <br>
-                          <strong>To:</strong> {{$inv->service->user->name}}
+                          <strong>To:</strong> {!!$inv->service->user['name']!!}
                         </div>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>

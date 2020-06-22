@@ -11,10 +11,14 @@
 
                         <label class="col-sm-3 control-label" for="account_id">Account ID *</label>
                         <div class="col-sm-7 acct_id">
-                            <div style="display: none;" id="loaderImg" class=""><img src="{{asset('assets/loader/loader.gif')}}" height="15" width="15"></div>
+                            
                             <input type="text" name="acct_id" id="acct_id" class="form-control appendUser" placeholder="Enter Account ID" />
                             {!! e_form_error('acct_id', $errors) !!}
-                            <div id="user_id_area"></div>
+                            <div id="user_id_area">
+                                <div style="display: none;" id="loaderImg" class="">
+                                    <img src="{{asset('assets/loader/loader.gif')}}" height="15" width="15">
+                                </div>
+                            </div>
                         </div>
                     </div>
 

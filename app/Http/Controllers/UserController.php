@@ -6,6 +6,7 @@ use App\Country;
 use App\JobApplication;
 use App\State;
 use App\User;
+use App\Category;
 use App\FlagJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -198,9 +199,11 @@ class UserController extends Controller
      */
     private function accountIndividual(){
         $user = Auth()->user();
-        $title = 'Account - '.$user->name;
+        $title = $user->name;
+        $categories = Category::all();
+        $LGAs = $this->getLGAs(); 
 
-        return view('admin.profile', compact('title', 'user'));
+        return view('admin.request-new-service', compact('title', 'user', 'categories','LGAs'));
     }
 
      /*
@@ -223,6 +226,18 @@ class UserController extends Controller
         $user = auth()->user();
         $title = 'Account - '.$user->name;
         return view('admin.profile', compact('title', 'user'));
+    }
+
+     public function getLGAs(){
+        /*
+            get LGAs in Cross River using a REST API call
+         */
+        $cURLConn = curl_init();
+        curl_setopt($cURLConn, CURLOPT_URL, 'http://locationsng-api.herokuapp.com/api/v1/states/cross_river/lgas');
+        curl_setopt($cURLConn, CURLOPT_RETURNTRANSFER, true);
+        $lgas = curl_exec($cURLConn);
+        curl_close($cURLConn);
+        return $LGAs = json_decode($lgas);
     }
 
     public function flaggedMessage(){

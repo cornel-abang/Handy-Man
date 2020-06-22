@@ -12,11 +12,18 @@ class Service extends Model
             'category',
             'local_govt',
             'street_addr',
-            'message'
+            'message',
+            'visiting_date',
+            'visiting_time'
         ];
 
     public function user()
     {
     	return $this->belongsTo(User::class);
+    }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
     }
 }
