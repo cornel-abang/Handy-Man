@@ -60,8 +60,11 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::get('cancelled','ServiceController@cancelledJobs')->name('cancelled');
         Route::get('invoice','ServiceController@invoice')->name('invoice');
         Route::get('reschedule-visit','ServiceController@rescheduleVisit')->name('reschedule-visit');
+        Route::post('reschedule-visit', 'ServiceController@rescheduleVisitPost');
         Route::get('get_jobs_for_reschedule', 'ServiceController@getJobForReschedule')->name('get_jobs_for_reschedule');
         Route::post('mark-job', 'ServiceController@markJobPost')->name('mark-job');
+        Route::get('flag_job/{id}', 'ServiceController@flagJob')->name('flag_job');
+        Route::post('flag_job/{id}', 'ServiceController@flagJobPost');
     });
 
      
@@ -120,7 +123,7 @@ Route::get('apply_job', function (){
     return redirect(route('home'));
 });
 Route::post('apply_job', ['as' => 'apply_job', 'uses'=>'JobController@applyJob']);
-Route::post('flag-job/{id}', ['as' => 'flag_job_post', 'uses'=>'JobController@flagJob']);
+//Route::post('flag-job/{id}', ['as' => 'flag_job_post', 'uses'=>'JobController@flagJob']);
 Route::post('share-by-email', ['as' => 'share_by_email', 'uses'=>'JobController@shareByEmail']);
 Route::get('employer/{user_name}/jobs', 'JobController@jobsByEmployer')->name('jobs_by_employer');
 Route::post('follow-unfollow', 'FollowerController@followUnfollow')->name('follow_unfollow');

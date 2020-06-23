@@ -22,7 +22,7 @@ if ( ! function_exists('pageJsonData')){
             'asset_url'     => asset('assets'),
             'csrf_token'    => csrf_token(),
             'jobModalOpen'  => $jobModalOpen,
-            'flag_job_validation_fails' => session('flag_job_validation_fails'),
+            'flag_job_validation_fails' => session()->get('flag_job_validation_fails'),
             'share_job_validation_fails' => session('share_job_validation_fails'),
             //'my_dashboard' => route('my_dashboard'),
         ];

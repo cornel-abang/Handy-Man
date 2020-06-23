@@ -39,7 +39,7 @@
                                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#invoice{{$job->id}}"><i class="la la-eye"></i> View</button>
                                     </div>
                                     <div class="col-md-6">
-                                        <a href="" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Flag invoice"><i class="la la-flag"></i> Flag</a>
+                                        <a class="btn btn-warning btn-sm" onclick="window.location.href='{{route('flag_job', $job->id)}}'"><i class="la la-flag"></i> Flag</a>
                                     </div>
                                 </div>
 
@@ -126,8 +126,7 @@
                           <span class="fa fa-money-bill-alt"></span> Make Payment
                         </button>
                         {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-                        <button type="button" class="btn btn-warning" onclick="window.location.href='{{route('flag-invoice', 
-                        $job->invoice->id)}}'">Flag</button>
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#jobFlagModal{{$job->id}}">Flag</button>
                       </div>
                     </div>
                   </div>
@@ -198,9 +197,9 @@
           <button type="submit" class="btn btn-primary mark-btn" id="{{$job->id}}">Mark off</button>
         </form>
       </div>
-      <div class="modal-footer">
+      {{-- <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
+      </div> --}}
     </div>
   </div>
 </div>

@@ -238,6 +238,7 @@
         $("#vis-location").html("<b>"+location+"</b>");
     });
 
+    //Reschedule meeting 
     $(document).on("change", "#job_select", function(){
         $("#result").addClass("show-result");
 
@@ -258,11 +259,18 @@
 
                 $("#result").removeClass("show-result");
 
-                $("form-group input[type='date']").val(data.visiting_date);
-                $("form-group input[type='time']").val(data.visiting_time);
+                var date = new Date(data.visiting_date);
+                $("#old_date").text(date.toDateString()+' @ '+date.toLocaleTimeString());
+                // $("#old_time").text();
             }
         });
     });
+
+    // Flagged job validation fail popup
+    console.log(page_data);
+    if (page_data.flag_job_validation_fails !== null){
+        $('#jobFlagModal'+page_data.flag_job_validation_fails).modal('show');
+    }
 
     $(document).ready(function() {
         // Add new invoice items

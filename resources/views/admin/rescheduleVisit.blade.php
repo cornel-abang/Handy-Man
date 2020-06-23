@@ -15,12 +15,12 @@
     <div class="row">
         <div class="col-md-10">
 
-            <form method="post" action="{{route('send-request')}}" id="jobs_form">
+            <form method="post" action="" id="jobs_form">
                 @csrf
 
                 <div class="alert alert-info">
 
-                    <legend><span class="fa fa-info"></span> Reschedule Visit </legend>
+                    <legend><span class="fa fa-handshake"></span> Reschedule Visit </legend>
 
                     <div class="form-group row">
                         <label for="is_premium" class="col-md-4 control-label">
@@ -58,25 +58,27 @@
             <div class="show-result" id="result">
                <div class="form-group row {{ $errors->has('visiting_date')? 'has-error':'' }}">
                     <label class="col-sm-4 control-label"> Visiting Date
-                        <p class="text-info" style="color: red !important;"> (Important)</p>
+                        <p class="text-info" style="color: red !important;"> Important</p>
                     </label>
                     <div class="col-sm-8">
-                        <input type="date" class="form-control {{e_form_invalid_class('visiting_date', $errors)}}" id="visiting_date" value="{{$service->visiting_date}}" name="visiting_date">
+                        <input type="datetime-local" class="form-control {{e_form_invalid_class('visiting_date', $errors)}}" id="visiting_date" value="{{$service->visiting_date}}" name="visiting_date">
+                        <small class="fa fa-calendar text-info"> Old Date: <span id="old_date" style="font-weight: bold;"></span></small>
 
                         {!! e_form_error('visiting_date', $errors) !!}
                     </div>
                 </div>
 
-                <div class="form-group row {{ $errors->has('visiting_time')? 'has-error':'' }}">
+                {{-- <div class="form-group row {{ $errors->has('visiting_time')? 'has-error':'' }}">
                     <label class="col-sm-4 control-label"> Visiting Time
-                        <p class="text-info" style="color: red !important;"> (Important)</p>
+                        <p class="text-info" style="color: red !important;"> Important</p>
                     </label>
                     <div class="col-sm-8">
                         <input type="time" class="form-control {{e_form_invalid_class('visiting_date', $errors)}}" id="visiting_time" value="{{ $service->visiting_time }}" name="visiting_time">
+                        <small class="fa fa-clock text-info"> Old Time: <span id="old_time"></span></small>
 
                         {!! e_form_error('visiting_time', $errors) !!}
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="form-group row"> 
                     <label class="col-sm-4"></label>

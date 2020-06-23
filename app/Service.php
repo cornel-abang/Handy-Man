@@ -13,8 +13,7 @@ class Service extends Model
             'local_govt',
             'street_addr',
             'message',
-            'visiting_date',
-            'visiting_time'
+            'visiting_date'
         ];
 
     public function user()

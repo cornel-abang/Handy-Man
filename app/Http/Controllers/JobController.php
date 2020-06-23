@@ -232,7 +232,7 @@ class JobController extends Controller
         return redirect()->back()->withInput($request->input())->with('error', trans('app.error_msg')) ;
     }
 
-    public function flagJob(Request $request, $id){
+    /*public function flagJob(Request $request, $id){
         $rules = [
             'reason'              => 'required',
             'email'             => 'required',
@@ -255,7 +255,7 @@ class JobController extends Controller
         FlagJob::create($data);
 
         return redirect()->back()->with('success', __('app.job_flag_submitted'));
-    }
+    }*/
 
     public function flaggedMessage(){
         $title = "Account Messages";

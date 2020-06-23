@@ -138,7 +138,7 @@
 
                 <div class="alert alert-info">
 
-                    <legend><span class="fa fa-info"></span> Schedule Visiting </legend>
+                    <legend><span class="fa fa-handshake"></span> Schedule Visiting </legend>
 
                     <div class="form-group row {{ $errors->has('is_premium')? 'has-error':'' }}">
                         <label for="is_premium" class="col-md-4 control-label">
@@ -149,7 +149,7 @@
                         </label>
                         <div class="col-md-8">
 
-                                <a style="cursor: default;">Please schedule a visiting date that works for you, so a team can come over to <span class="fa fa-map-marker"></span> <span id="vis-location">LOCATION </span> and inspect the requested service.<br>
+                                <a style="cursor: default;">Please schedule a visiting date (Date & Time) that works for you, so a team can come over to <span class="fa fa-map-marker"></span> <span id="vis-location">LOCATION </span> and inspect the requested service.<br>
                                     <strong>YOU CAN ALWAYS RESCHEDULE</strong></a>
                         </div>
                     </div>
@@ -160,13 +160,13 @@
                         <p class="text-info" style="color: red !important;"> (Important)</p>
                     </label>
                     <div class="col-sm-8">
-                        <input type="date" class="form-control {{e_form_invalid_class('visiting_date', $errors)}}" id="visiting_date" value="{{ old('visiting_date') }}" name="visiting_date">
+                        <input type="datetime-local" class="form-control {{e_form_invalid_class('visiting_date', $errors)}}" id="visiting_date" value="{{ old('visiting_date') }}" name="visiting_date">
 
                         {!! e_form_error('visiting_date', $errors) !!}
                     </div>
                 </div>
 
-                <div class="form-group row {{ $errors->has('visiting_time')? 'has-error':'' }}">
+                {{-- <div class="form-group row {{ $errors->has('visiting_time')? 'has-error':'' }}">
                     <label class="col-sm-4 control-label"> Visiting Time
                         <p class="text-info" style="color: red !important;"> (Important)</p>
                     </label>
@@ -175,7 +175,7 @@
 
                         {!! e_form_error('visiting_time', $errors) !!}
                     </div>
-                </div>
+                </div> --}}
                 
                 <div class="alert alert-info">
 

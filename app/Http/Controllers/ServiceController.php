@@ -136,8 +136,7 @@ class ServiceController extends Controller
             'local_govt'            => 'required',
             'street_address'        => ['required', 'string'],
             'description'           =>  'string',
-            'visiting_date'         => ['date', 'required'],
-            'visiting_time'         => 'required'
+            'visiting_date'         => ['date', 'required']
         ];
         $this->validate($request, $rules);
 
@@ -161,8 +160,7 @@ class ServiceController extends Controller
             'local_govt'                => str_replace('-', ' ', $request->local_govt),
             'street_addr'               => $request->street_address,
             'message'                   => $request->description,
-            'visiting_date'             => $request->visiting_date,
-            'visiting_time'             => $request->visiting_time
+            'visiting_date'             => $request->visiting_date
         ];
 
         return $service = Service::create($data);
@@ -234,11 +232,51 @@ class ServiceController extends Controller
         return view("admin.rescheduleVisit", compact('title', 'services'));
      }
 
+     public function rescheduleVisitPost(Request $request)
+     {
+        $this->validate($request, ['job'=> 'required']);
+        $service = Service::find($request->job);
+        $service->visiting_date = $request->visiting_date;
+        $service->visiting_time = $request->visiting_time;
+        $service->save();
+        session()->flash('success','You have successfully rescheduled the inspection visit date and time. Our team will act accordingly. Cheers!');
+        return redirect()->route('all');
+     }
+
      public function getJobForReschedule(Request $request)
      {
         $service = Service::find($request->job_id);
         return $service;
      }
+
+     public function flagJob($id)
+     {
+        $title = 'Flag Job';
+        return view('admin.flag_job', compact('title'));
+     }
+
+     public function flagJobPost(Request $request, $id){
+        $rules = [
+            'reason'              => 'required',
+            'message'           => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()){
+            session()->flash('flag_job_validation_fails', $id);
+            return redirect()->back()->withInput($request->input())->withErrors($validator);
+        }
+
+        $data = [
+            'service_id'    => $id,
+            'reason'    => $request->reason,
+            'message'   => $request->message,
+        ];
+        FlagJob::create($data);
+
+        return redirect()->route('all')->with('success', __('app.job_flag_submitted'));
+    }
 
 
 

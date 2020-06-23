@@ -184,12 +184,12 @@ $user = auth()->user();
                                 </a>
                             </li>
 
-                            {{-- <li class="">
+                            <li class="">
                                 <a href="{{route('reschedule-visit')}}" class="list-group-item-action">
-                                    <span class="sidebar-icon"><i class="fa fa-meetup"></i> </span>
+                                    <span class="sidebar-icon"><i class="fa fa-handshake"></i> </span>
                                         <span class="title">Reschedule Visit </span>
                                 </a>
-                            </li> --}}
+                            </li> 
 
                             @endif
 
