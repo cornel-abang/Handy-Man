@@ -10,10 +10,11 @@
 
                     <tr>
                         <th><span class="fa fa-hard-hat ic"></span> Job category</th>
-                        <th><span class="fa la-map-marker ic"></span> Location</th>
+                        <th><span class="fa fa-map-marker ic"></span> Location</th>
                         <th><span class="fa fa-file-invoice-dollar ic"></span> Invoice</th>
                         <th><span class="fa fa-hashtag"></span>Mark</th>
-                        <th><span class="fa fa-calendar-alt ic"></span> Date</th>
+                        <th><span class="fa fa-calendar-alt ic"></span> Visiting Date</th>
+                        <th><span class="fa fa-hard-hat"></span> Artisan</th>
                     </tr>
 
                     @foreach($jobs as $job)
@@ -92,13 +93,40 @@
 
                                   </div>
                             </td>
-
                             <td>
-                                {{$job->created_at->format(get_option('date_format'))}}
+                                {{-- {{$job->visiting_date->format(get_option('date_format'))}} --}}
+                                {{ $job->visiting_date }}
                                 <p class="job-status" data-toggle="tooltip" title="Job {{$job->status}}">
                                   <i class="la la-tag"></i>
                                   <span id="jab{{$job->id}}" class="{{$job->status}}">{{$job->status}}</span>
                                 </p> 
+                            </td>
+                            <td>
+                              @if(!empty($job->artisan->full_name))
+                                <a href="{{route('view_artisan', $job->artisan->id)}}">
+                                  <span class="badge badge-pill badge-success fa fa-hard-hat"> 
+                                    {{ $job->artisan->full_name}}
+                                  </span>
+                                </a>
+                              @else
+                              <div id="assign_handle">
+                                <span id="artisan_assigned{{$job->id}}" class="badge badge-pill badge-success"></span>
+                                <form class="form-inline">
+                                @csrf
+                                <select name="artisan" id="assigned{{$job->id}}">
+                                  <option value="">--Assign--</option>
+                                  @php
+                                  // $slug = \App\Http\Controllers\ArtisanController::createSlug($job->category);
+                                  $artisans = \App\Http\Controllers\ArtisanController::getArtisans($job->category);
+                                  @endphp
+                                  @foreach($artisans as $artisan){
+                                  <option value="{{$artisan->id}}">{{$artisan->full_name}}</option>
+                                  @endforeach
+                                </select>
+                                <button type="submit" id="{{$job->id}}" class="btn btn-primary fa fa-arrow-alt-circle-right assign" style="margin-top: 3px;"></button>
+                              </form>
+                            </div>
+                            @endif
                             </td>
                         </tr>
                     @endforeach

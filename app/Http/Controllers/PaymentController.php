@@ -7,9 +7,103 @@ use App\Pricing;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Paystack;
+use App\Invoice;
 
 class PaymentController extends Controller
 {
+    /*public function verifyPayment(Request $request)
+    {
+
+        if ($request->reference === null) {
+            return false;
+
+        }else {
+
+            //Make POST call to PayStack
+            $url = 'https://api.paystack.co/transaction/verify/'.$request->reference;
+            //Connect
+            $ch = curl_init();
+            //Request Parameters
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: sk_live_00fcf5a4ec1ee8cb040274b29e7767083dfb28c2']);
+            //send Arequest
+            $Request = curl_exec();
+            //close connection
+            curl_close($ch);
+
+            //An Array to hold returned request data
+            $result = array();
+            //check for returned result
+            if ($Request) {
+                //Decode the json Response
+                $result = json_decode($Request, true);
+            }
+
+            //set payment deatails
+            $payment_details = ['payment_ref' => $request->reference, 'job_id' => $request->job_id];
+
+            if (array_key_exists('data', $result) && array_key_exists('status', $result['data']) && ($result['data']['status'] === 'success') ) {
+                /*  save payer information into database for admin purpose
+                    if the transaction details where saved successfully, assign success as true and move on
+                    if details werent saved, send an error emial to the admin, with the transaction reference
+                    for clarification sake.
+                
+                if (Payment::create($payment_details)) {
+                    $response = true;
+                }else{
+
+                    $response = false;
+                }
+
+            }else{
+
+                $response = false;
+            }
+        }
+
+        return $response;
+    }*/
+    /*########################################
+        PAYSTACK PAYMENT GATEWAY INTEGRATION #
+     ########################################*/
+    public function redirectToGateway()
+    {
+        return Paystack::getAuthorizationUrl()->redirectNow(); 
+    }
+
+     public function handleGatewayCallback()
+     {         
+        $paymentDetails = Paystack::getPaymentData(); 
+        if ($paymentDetails['data']['status'] === 'success') {
+            // dd($paymentDetails);
+            $payment_status = $paymentDetails['data']['metadata']['payment_status'] === 'Percentage' ? 'Percentage':'Paid';
+            $invoice_id = $paymentDetails['data']['metadata']['invoice_id'];
+            $invoice = Invoice::find($invoice_id);
+            $invoice->status = $payment_status;
+            $invoice->save();
+
+            $data = [
+                        'invoice_id'    => $invoice_id,
+                        'payer_name'    => auth()->user()->name,
+                        'amount_paid'   => $paymentDetails['data']['amount'],
+                        'reference'     => $paymentDetails['data']['reference'],
+                        'channel'       => $paymentDetails['data']['authorization']['channel'],
+                        'card_type'     => $paymentDetails['data']['authorization']['card_type'],
+                        'payer_bank'    => $paymentDetails['data']['authorization']['bank']
+                    ];
+            $res = Payment::create($data);
+            if ($res) {
+                session()->flash('successfull_payment', true);
+            }else{
+                session()->flash('successfull_payment', false);
+            }
+            return redirect(route('all')); 
+        }         
+        session()->flash('successfull_payment', false);     
+        return redirect(route('all'));
+    } 
 
     public function index(Request $request){
         $user = Auth::user();

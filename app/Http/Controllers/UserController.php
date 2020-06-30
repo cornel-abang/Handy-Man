@@ -49,20 +49,24 @@ class UserController extends Controller
     }
 
     public function index(){
-        $title = trans('app.users');
+        $title = 'Clients';
         $current_user = Auth::user();
         $users = User::where('id', '!=', $current_user->id)->orderBy('name', 'asc')->paginate(20);
         return view('admin.users', compact('title', 'users'));
     }
 
+    public static function getUsersCount()
+    {
+        return User::where('id', '!=', auth()->user()->id)->get();
+    }
+
 
     public function show($id = 0){
         if ($id){
-            $title = trans('app.profile');
+            $title = 'Client Profile';
             $user = User::find($id);
 
-            $is_user_id_view = true;
-            return view('admin.profile', compact('title', 'user', 'is_user_id_view'));
+            return view('admin.profile', compact('title', 'user'));
         }
     }
 
@@ -243,6 +247,9 @@ class UserController extends Controller
     public function flaggedMessage(){
         $title = "Account Messages";
         $flagged = FlagJob::orderBy('id', 'desc')->paginate(20);
+        // foreach ($flagged as $flag) {
+        //     dd($flag->service->category);
+        // }
         return view('admin.flagged_jobs', compact('title', 'flagged'));
     }
 

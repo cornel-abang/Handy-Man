@@ -38,7 +38,6 @@ class ServiceController extends Controller
         $jobs = Service::orderBy('created_at', 'desc')
                         ->where('user_id', $user->id)
                         ->paginate(20);
-        
         return view('admin.jobs', compact('title', 'jobs'));
     }
 
@@ -159,7 +158,7 @@ class ServiceController extends Controller
             //'sub_category'              => $request->sub_category,
             'local_govt'                => str_replace('-', ' ', $request->local_govt),
             'street_addr'               => $request->street_address,
-            'message'                   => $request->description,
+            'description'               => $request->description,
             'visiting_date'             => $request->visiting_date
         ];
 
@@ -249,7 +248,7 @@ class ServiceController extends Controller
         return $service;
      }
 
-     public function flagJob($id)
+     public function flagJob()
      {
         $title = 'Flag Job';
         return view('admin.flag_job', compact('title'));
@@ -299,6 +298,12 @@ class ServiceController extends Controller
         ADMIN ACTIVITIES AREA
      ####################################################################################*/
 
+    public function show($id)
+    {
+       $job = Service::find($id);
+       $title = $job->category.' job for '.$job->user->name;
+       return view('admin.view_job', compact('job','title')); 
+    }
     /**
      * Display a listing of the resource.
      *
@@ -336,10 +341,7 @@ class ServiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+    
 
     /**
      * Show the form for editing the specified resource.

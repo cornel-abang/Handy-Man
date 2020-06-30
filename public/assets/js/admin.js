@@ -20,9 +20,69 @@
         }
     });
 
+    if (page_data.successfull_payment === true) {
+        swal(
+          'Payment Successfull!',
+          'You have Successfully made a payment for your invoice',
+          'success'
+        ) 
+    }
+
+    if (page_data.successfull_payment === false) {
+        swal(
+              'Payment Failed!',
+              'Unable to complete payment. Please try again',
+              'error'
+            )
+    }
+        
+
     // $(document).load(function(){
     //     $("#completed").modal("show");
     // })
+   
+    /*########################################
+        PAYSTACK PAYMENT GATEWAY INTEGRATION #
+     ########################################
+     $(document).on('click', '.paystack_pay', function(){
+        var amount = $(this).attr('id');
+        var job_id = $(this).attr('title');
+        var handler = PaystackPop.setup({
+            key: 'pk_live_29502dd109b31178219d15782815563bebf478d2',
+            email: page_data.user.email,
+            amount: (amount*100),
+            metadata: {
+                custom_fields: [
+                    {
+                        display_name: "Mobile Number",
+                        variable_name: "mobile_number",
+                        value: phone
+                    }
+                ]
+            },
+            callback: function (response){
+                //After a complete Transaction
+                //window.location.href = page_data.routes.verify_payment;
+                $.ajax({
+                    url: page_data.routes.verify_payment,
+                    type: 'POST',
+                    data: {reference: response.reference, job_id : job_id, _token : page_data.csrf_token},
+                    success: function (data){
+                        $('#payment_success').modal('show');
+                    },
+                    error: function(data){
+                        $('#payment_failure').modal('show');
+                    }
+                })
+            },
+            onClose: function () {
+                //When user closes the payment modal
+                alert('Transaction cancelled');
+            }
+        });
+        //Open paystack payment Modal
+        handler.openIframe();
+     });*/
 
     $(document).on('change', '.country_to_state', function(e){
         e.preventDefault();
@@ -76,6 +136,26 @@
         var id = $(this).attr('id');
         $("#form"+id).submit();
     });*/
+
+    $(document).on('click', '.assign', function(e){
+        e.preventDefault();
+        var that = $(this);
+        that.addClass('faa-spin animated');
+        var job_id = that.attr('id');
+        var artisan_id = $('#assigned'+job_id).val();
+        $.ajax({
+                type : "GET",
+                url : `http://127.0.0.1:8000/admin/assign_artisan/${artisan_id}/${job_id}`,
+                success: res => {
+                    if(res.success) {
+                        that.parent('form').fadeOut(500, function(){
+                            $('#artisan_assigned'+job_id).text(res.artisan.full_name);
+                            alert('Job assigned');
+                        });
+                    }
+                }
+            });
+    });
 
     $(document).on('change', '#acct_id', function(e){
         e.preventDefault();
@@ -267,7 +347,7 @@
     });
 
     // Flagged job validation fail popup
-    console.log(page_data);
+    
     if (page_data.flag_job_validation_fails !== null){
         $('#jobFlagModal'+page_data.flag_job_validation_fails).modal('show');
     }

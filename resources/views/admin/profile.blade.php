@@ -23,33 +23,39 @@
                     <td>{{ $user->email }}</td>
                 </tr>
                 <tr>
-                    <th>Account ID</th>
-                    <td>{{ ($user->account_id) }}</td>
-                </tr>
-                <tr>
                     <th>@lang('app.phone')</th>
                     <td>{{ $user->phone }}</td>
                 </tr>
                 <tr>
-                    <th>@lang('app.address')</th>
-                    <td>{{ $user->address }}</td>
+                    <th>Account ID</th>
+                    <td>{{ ($user->account_id) }}</td>
                 </tr>
                 <tr>
-                    <th>@lang('app.country')</th>
+                    <th>Jobs</th>
                     <td>
-                        @if($user->country)
-                            {{ $user->country->name }}
-                        @endif
+                       @foreach($user->services as $job)
+                       <span class="fa fa-arrow-circle-right"></span>
+                       {{ $job->category }} 
+                       @if($job->status === 'Completed')
+                       <span class="badge badge-pill badge-success">Completed</span>
+                       @elseif($job->status === 'Cancelled')
+                       <span class="badge badge-pill badge-danger">Cancelled</span>
+                       @elseif($job->status === 'Pending')
+                       <span class="badge badge-pill badge-warning">Pending</span>
+                       @elseif($job->status === 'In-Progress')
+                       <span class="badge badge-pill badge-info">In Progress</span>
+                       @else
+                       <span class="badge badge-pill badge-primary">New</span>
+                       @endif
+                       <br>
+                       @endforeach()
                     </td>
                 </tr>
 
                 <tr>
-                    <th>@lang('app.created_at')</th>
-                    <td>{{ $user->signed_up_datetime() }}</td>
-                </tr>
-                <tr>
-                    <th>@lang('app.status')</th>
-                    <td>{{ $user->status_context() }}</td>
+                    <th>Signed Up Date</th>
+                    <td><span class="fa fa-calendar"></span> {{$user->created_at->format(get_option('date_format')) }} 
+                         <span class="fa fa-clock"></span> {{ $user->created_at->format(get_option('time_format')) }}</td>
                 </tr>
             </table>
 

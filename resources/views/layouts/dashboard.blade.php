@@ -24,6 +24,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/admin.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/font-awesome-5/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{asset('assets/css/font-awesome-animation.min.css')}}" rel="stylesheet" type="text/css" href="">
 
     @yield('page-css')
 
@@ -53,6 +54,7 @@ $user = auth()->user();
     $progressJobCountAll = \App\Http\Controllers\ServiceController::progressAll()->count();
     $completedJobCountAll = \App\Http\Controllers\ServiceController::jobsCompletedAll()->count();
     $cancelledJobCountAll = \App\Http\Controllers\ServiceController::jobsCancelledAll()->count();
+    $allClients = \App\Http\Controllers\UserController::getUsersCount()->count();
     
     }
     else
@@ -212,6 +214,58 @@ $user = auth()->user();
                                     <li><a class="sidebar-link" href="{{route('jobs','cancelled')}}">Cancelled Jobs  <span class="badge badge-danger float-right">{{$cancelledJobCountAll}}</span> </a></li>
                                 </ul>
                             </li>
+
+                            <li class="">
+                                <a href="" class="list-group-item-action">
+                                    <span class="sidebar-icon"><i class="la la-users" style="font-weight: bolder;"></i> </span>
+                                    <span class="title">Users</span>
+                                    <span class="arrow"><i class="la la-arrow-right"></i> </span>
+                                </a>
+
+                                <ul class="dropdown-menu" style="display: none;">
+                                    <li>
+                                        <a class="sidebar-link" href="{{route('clients')}}">Clients  
+                                            <span class="badge badge-success fa fa-users float-right"> {{$allClients}}</span> 
+                                        </a>
+                                    </li>
+                                    {{-- <li>
+                                        <a class="sidebar-link" href="#">Artisans  
+                                            <span class="badge badge-success fa fa-hard-hat float-right"> {{$allClients}}</span>
+
+                                        </a>
+                                    </li> --}}
+                                    <li class="">
+                                        <a href="" class="list-group-item-action">
+                                            <span class="sidebar-icon"><i class=""></i> </span>
+                                            <span class="title">Artisans</span>
+                                            <span class="arrow"><i class="la la-arrow-right"></i> </span>
+                                        </a>
+
+                                        <ul class="dropdown-menu" style="display: none;">
+                                            <li>
+                                                <a class="sidebar-link" href="{{route('artisans')}}">View Artisans  
+                                                    <span class="badge badge-success fa fa-hard-hat float-right"> {{$allClients}}</span> 
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="sidebar-link" href="{{route('artisan/add')}}">Add Artisan  
+                                                    <span class="badge badge-success float-right">
+                                                        <i class="fa fa-user-plus"></i>
+                                                    </span>
+                                                     
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="">
+                                <a href="{{route('payments')}}" class="list-group-item-action active">
+                                    <span class="sidebar-icon"><i class="la la-money"></i> </span>
+                                    <span class="title">@lang('app.payments')</span>
+                                </a>
+                            </li>
                            
                             <li class="">
                                 <a href="#" class="list-group-item-action">
@@ -228,14 +282,6 @@ $user = auth()->user();
                             </li>
 
 
-                            <li class="">
-                                <a href="{{route('payments')}}" class="list-group-item-action active">
-                                    <span class="sidebar-icon"><i class="la la-money"></i> </span>
-                                    <span class="title">@lang('app.payments')</span>
-                                </a>
-                            </li>
-
-
                             {{--
                             <li>
                                 <a href="{{route('dashboard')}}" class="list-group-item-action active">
@@ -244,10 +290,11 @@ $user = auth()->user();
                                 </a>
                             </li>
                             --}}
-                            <li class="">
-                                <a href="{{route('users')}}" class="list-group-item-action ">
-                                    <span class="sidebar-icon"><i class="la la-users"></i> </span>
-                                    <span class="title">@lang('app.users')</span>
+
+                             <li class="">
+                                <a href="{{route('messages')}}" class="list-group-item-action">
+                                    <span class="sidebar-icon"><i class="fa fa-envelope"></i> </span>
+                                    <span class="title">Messages <span class="badge badge-success float-right">0 </span></span>
                                 </a>
                             </li>
 
@@ -260,12 +307,12 @@ $user = auth()->user();
                                 </a>
                             </li> --}}
 
-                             <li class="">
+                            {{--  <li class="">
                                 <a href="{{route('messages')}}" class="list-group-item-action">
-                                    <span class="sidebar-icon"><i class="fa fa-envelope"></i> </span>
-                                    <span class="title">Messages <span class="badge badge-success float-right">0 </span></span>
+                                    <span class="sidebar-icon"><i class="fa fa-bell"></i> </span>
+                                    <span class="title">Notifications <span class="badge badge-success float-right">0 </span></span>
                                 </a>
-                            </li>
+                            </li> --}}
 
 
                             <li class="">

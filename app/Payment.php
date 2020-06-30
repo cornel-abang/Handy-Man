@@ -6,20 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    protected $guarded = [];
+    protected $fillable = ['invoice_id', 'payer_name', 'amount_paid', 'reference' ,'channel', 'card_type', 'payer_bank'];
 
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
-
-    public function addJobBalance(){
-        $user = User::find($this->user_id);
-        $user->premium_jobs_balance = $user->premium_jobs_balance + $this->premium_job;
-        $user->save();
-    }
-
-    public function scopeSuccess($query){
-        return $query->where('status', '=', 'success');
+    public function invoice(){
+        return $this->belongsTo(Invoice::class);
     }
 
 }

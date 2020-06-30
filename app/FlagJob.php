@@ -8,7 +8,7 @@ class FlagJob extends Model
 {
     protected $guarded = [];
 
-    public function job(){
-        return $this->belongsTo(Job::class);
+    public function service(){
+        return $this->belongsTo(Service::class);
     }
 }

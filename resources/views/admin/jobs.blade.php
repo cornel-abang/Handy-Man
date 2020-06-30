@@ -11,7 +11,8 @@
                     <tr>
                         <th><span class="fa fa-hard-hat ic"></span> Job category</th>
                         <th><span class="fa fa-file-invoice-dollar ic"></span> Invoice</th>
-                        <th><span class="fa fa-hash ic"></span> #</th> 
+                        <th># </th>
+                        <th><span class="fa fa-star ic"></span> </th>  
                     </tr>
 
                     @foreach($jobs as $job)
@@ -36,12 +37,24 @@
                                 <div class="row">
                                    
                                     <div class="col-md-6">
+                                       @if($job->invoice !== null)
                                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#invoice{{$job->id}}"><i class="la la-eye"></i> View</button>
+                                        @else
+                                        <span><i class="la la-eye-slash"></i></span>
+                                        @endif
                                     </div>
-                                    <div class="col-md-6">
-                                        <a class="btn btn-warning btn-sm" onclick="window.location.href='{{route('flag_job', $job->id)}}'"><i class="la la-flag"></i> Flag</a>
-                                    </div>
+                                    
                                 </div>
+
+                                <td>
+                                  <div class="col-md-6">
+                                      @if($job->invoice !== null)
+                                        <a class="btn btn-warning btn-sm" onclick="window.location.href='{{route('flag_job', $job->id)}}'"><i class="la la-flag"></i> Flag</a>
+                                        @else
+                                        <span><i class="la la-times-circle-o"></i></span>
+                                        @endif
+                                    </div>
+                                </td>
 
                                 <!--<a href="" class="btn btn-primary btn-sm" target="_blank" data-toggle="tooltip" title="@lang('app.view')"><i class="la la-eye"></i> </a>
                                 <a href="" class="btn btn-secondary btn-sm"><i class="la la-edit" data-toggle="tooltip" title="@lang('app.edit')"></i> </a>
@@ -65,7 +78,11 @@
                             </td>
                             <td> 
                                <div class="col-md-6">
+                                      @if($job->invoice !== null)
                                         <a href="" class="btn btn-info btn-sm" data-toggle="modal" data-target="#job{{$job->id}}"><i class="la la-star"></i> Mark Off</a>
+                                      @else
+                                        <span><i class="la la-times-circle"></i></span>
+                                      @endif
                                   </div>
                             </td>
                         </tr>
@@ -118,15 +135,70 @@
                                 </tr>
                               </tbody>
                             </table>
-                            <h3 class="pull-right">Sum Total: &#8358;{!! number_format($job->invoice->sum_total) !!}</h3>
+                            <h3 class="pull-right">
+                              Sum Total: &#8358;{!! number_format($job->invoice->sum_total) !!}
+                              <small>
+                                @if($job->invoice->status === 'Paid')
+                                  <span class="badge badge-pill badge-success fa fa-check-circle"> 
+                                    Paid
+                                  </span>
+                                @elseif($job->invoice->status === 'Percentage')
+                                <span class="badge badge-pill badge-success"> 
+                                    30% Due: (&#8358;{!!number_format(($job->invoice->sum_total * 30)/100)!!}
+                                </span>
+                                @else
+                                  <span class="badge badge-pill badge-success"> 
+                                    70% Due: (&#8358;{!!number_format(($job->invoice->sum_total * 70)/100)!!}
+                                  </span>
+                                  @endif
+                                {{-- {!! $job->invoice->status === 'Unpaid' ? '<span class="badge badge-pill badge-success"> 70% Due: (&#8358;'.number_format(($job->invoice->sum_total * 70)/100).')</span>' : '<span class="badge badge-pill badge-success"> 30% Due: (&#8358;'.number_format(($job->invoice->sum_total * 30)/100).')</span>' !!} --}}
+                              </small>
+                            </h3>
+                            <strong></strong>
                           </div>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary">
-                          <span class="fa fa-money-bill-alt"></span> Make Payment
-                        </button>
+
+                        @if($job->invoice->status === 'Paid')
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        @else
+                        <form method="POST" action="{{ route('pay') }}" accept-charset="UTF-8" role="form">
+                          @csrf
+                          <input type="hidden" name="email" value="{{$job->user->email}}"> {{-- required --}}
+                            @if($job->invoice->status === 'Unpaid')
+                                {{-- Get only 70% of the total amount for first time payment --}}
+                              <input type="hidden" name="amount" value="{!! (($job->invoice->sum_total * 70)/100) * 100 !!}">
+                              <input type="hidden" name="metadata" value="{{ json_encode($array = [
+                              'invoice_id' => $job->invoice->id,
+                              'payment_status' => 'Percentage',
+                              'client_name' => $job->user->name
+                              ]) }}" > 
+                              {{-- in kobo --}}
+                            @else
+                              <input type="hidden" name="amount" value="{!! (($job->invoice->sum_total * 30)/100) * 100 !!}">
+                              <input type="hidden" name="metadata" value="{{ json_encode($array = [
+                              'invoice_id' => $job->invoice->id,
+                              'payment_status' => 'Complete'
+                              ]) }}" >
+                               {{-- in kobo --}}
+                            @endif
+                          <input type="hidden" name="currency" value="NGN">
+                          <input type="hidden" name="first_name" value="">
+                          <input type="hidden" name="reference" value="{{ Paystack::genTranxRef() }}">
+                          @if($job->invoice->status === 'Percentage')
+                          <button type="submit" class="btn btn-secondary">
+                            <span class="fa fa-money-bill-alt"></span> {!! $job->invoice->status === 'Unpaid' ? 'Pay Now!': 'Complete Payment' !!}
+                          </button>
+                          @else
+                          <button type="submit" class="btn btn-secondary">
+                            <span class="fa fa-money-bill-alt"></span> Pay Now!
+                          </button>
+                        </form>
+                        @endif
+                        
                         {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#jobFlagModal{{$job->id}}">Flag</button>
+                        <button type="button" class="btn btn-warning" onclick="window.location.href='{{route('flag_job', $job->id)}}'">Flag</button>
+                        @endif
                       </div>
                     </div>
                   </div>

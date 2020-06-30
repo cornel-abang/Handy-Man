@@ -24,6 +24,8 @@ if ( ! function_exists('pageJsonData')){
             'jobModalOpen'  => $jobModalOpen,
             'flag_job_validation_fails' => session()->get('flag_job_validation_fails'),
             'share_job_validation_fails' => session('share_job_validation_fails'),
+            'user'          => auth()->user(),
+            'successfull_payment' => session()->get('successfull_payment'),
             //'my_dashboard' => route('my_dashboard'),
         ];
 

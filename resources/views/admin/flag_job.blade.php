@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-10" >
+        <div class="col-md-7" style="margin: 0 auto;">
 
             <form action="" method="post">
                                     @csrf
@@ -11,12 +11,10 @@
                                         <label class="control-label">@lang('app.reason'):</label>
                                         <select class="form-control  {{e_form_invalid_class('reason', $errors)}}" name="reason">
                                             <option value="">@lang('app.select_a_reason')</option>
-                                            <option value="applying_problem">@lang('app.applying_problem')</option>
-                                            <option value="fraud">@lang('app.fraud')</option>
-                                            <option value="duplicate">@lang('app.duplicate')</option>
-                                            <option value="spam">@lang('app.spam')</option>
-                                            <option value="wrong_category">@lang('app.wrong_category')</option>
-                                            <option value="offensive">@lang('app.offensive')</option>
+                                            <option value="Invoice_overpricing">Invoice overpricing</option>
+                                            <option value="Poor_service_quality">Poor service quality</option>
+                                            <option value="Incomplete_job">Incomplete job</option>
+                                            <option value="Poor_artisan_behavior">Poor artisan behavior</option>
                                             <option value="other">@lang('app.other')</option>
                                         </select>
                                         {!! e_form_error('reason', $errors) !!}
@@ -33,10 +31,7 @@
                                         {!! e_form_error('message', $errors) !!}
                                     </div>
                                 {{-- <input type="hidden" name="job_id" value="{{$job->id}}"> --}}
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">@lang('app.close')</button>
-                                    
-                                </div>
+                                    <button type="submit" class="btn btn-primary"><span class="fa fa-flag"></span> Flag</button>
             </form>
 
 

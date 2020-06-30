@@ -136,6 +136,33 @@
                     </div>
                 </div>
 
+                 <div class="alert alert-info">
+
+                    <legend><span class="fa fa-info"></span> Brief description </legend>
+
+                    <div class="form-group row {{ $errors->has('is_premium')? 'has-error':'' }}">
+                        <label for="is_premium" class="col-md-4 control-label">
+                             @php
+                                $name = auth()->user()->name;
+                            @endphp
+                            <span class="fa fa-user-alt"></span> {{ $name }}
+                        </label>
+                        <div class="col-md-8">
+
+                                <a style="cursor: default;">Although a description of the requested service is optional, filling it out will help us understand the situation better.</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row {{ $errors->has('description')? 'has-error':'' }}">
+                    <label class="col-sm-4 control-label"> @lang('app.description')<p class="text-info"> (Optional)</p></label>
+                    <div class="col-sm-8">
+                        <textarea name="description" class="form-control {{e_form_invalid_class('description', $errors)}}" rows="5">{{ old('description') }}</textarea>
+                        {!! $errors->has('description')? '<p class="help-block">'.$errors->first('description').'</p>':'' !!}
+                        
+                    </div>
+                </div>
+
                 <div class="alert alert-info">
 
                     <legend><span class="fa fa-handshake"></span> Schedule Visiting </legend>
@@ -177,32 +204,6 @@
                     </div>
                 </div> --}}
                 
-                <div class="alert alert-info">
-
-                    <legend><span class="fa fa-info"></span> Brief description </legend>
-
-                    <div class="form-group row {{ $errors->has('is_premium')? 'has-error':'' }}">
-                        <label for="is_premium" class="col-md-4 control-label">
-                             @php
-                                $name = auth()->user()->name;
-                            @endphp
-                            <span class="fa fa-user-alt"></span> {{ $name }}
-                        </label>
-                        <div class="col-md-8">
-
-                                <a style="cursor: default;">Although a description of the requested service is optional, filling it out will help us understand the situation better.</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group row {{ $errors->has('message')? 'has-error':'' }}">
-                    <label class="col-sm-4 control-label"> @lang('app.description')<p class="text-info"> (Optional)</p></label>
-                    <div class="col-sm-8">
-                        <textarea name="message" class="form-control {{e_form_invalid_class('message', $errors)}}" rows="5">{{ old('message') }}</textarea>
-                        {!! $errors->has('message')? '<p class="help-block">'.$errors->first('message').'</p>':'' !!}
-                        
-                    </div>
-                </div>
 
                 <div class="form-group row">
                     <label class="col-sm-4"></label>

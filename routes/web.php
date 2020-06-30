@@ -27,6 +27,10 @@ Auth::routes();
 Route::get('login', 'UserController@showLoginForm')->name('login');
 Route::post('login', 'UserController@login');
 Route::get('logout', 'UserController@logout')->name('logout');
+
+// PayStack Payment WebHook
+Route::post('/paystack_hook', 'PaymentController@veryHook')->name('/paystack_hook');
+// 52.31.139.75, 52.49.173.169, 52.214.14.220 (PayStack IPs)
 //#####################
 //HOME PAGE
 //#####################
@@ -67,6 +71,10 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::post('flag_job/{id}', 'ServiceController@flagJobPost');
     });
 
+    Route::group(['prefix'=>'payment'], function(){
+        Route::post('pay', 'PaymentController@redirectToGateway')->name('pay');
+        Route::get('callback', 'PaymentController@handleGatewayCallback')->name('/payment/callback'); 
+    });
      
     Route::group(['prefix'=>'admin','middleware'=>'only_admin_access'], function(){
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
@@ -83,6 +91,8 @@ Route::group(['middleware'=>'auth:web'], function(){
         //#####################
         Route::get('jobs/{tag}','ServiceController@showJobsAdmin')->name('jobs');
         Route::get('mark_job','ServiceController@markJob')->name('mark_job');
+        Route::get('assign_artisan/{artisan_id}/{job_id}', 'ArtisanController@assignArtisan')->name('assign-artisan');
+        Route::get('view_job/{id}', 'ServiceController@show')->name('view_job');
 
         //#####################
         //INVOICING
@@ -99,6 +109,27 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::get('delete_invoice_from_all','InvoiceController@destroyAjaxFromAll')->name('delete_invoice_from_all');
         Route::get('flag-invoice/{id}','InvoiceController@flag')->name('flag-invoice');
     });
+
+        //#####################
+        //ROUTES FOR USERS IN THE SYSTEM
+        //#####################
+        //
+        //(Clients)
+        Route::group(['prefix'=>'users'], function(){
+            Route::get('clients', 'UserController@index')->name('clients');
+            Route::get('view/{slug}', ['as'=>'users_view', 'uses' => 'UserController@show']);
+            Route::get('user_status/{id}/{status}', 'UserController@statusChange')->name('user_status');
+
+            //Edit
+            Route::get('edit/{id}', ['as'=>'users_edit', 'uses' => 'UserController@profileEdit']);
+            Route::post('edit/{id}', ['uses' => 'UserController@profileEditPost']);
+            Route::get('profile/change-avatar/{id}', ['as'=>'change_avatar', 'uses' => 'UserController@changeAvatar']);
+            //(Artisans)
+            Route::get('artisans', 'ArtisanController@index')->name('artisans');
+            Route::get('artisan/add', 'ArtisanController@create')->name('artisan/add');
+            Route::post('artisan/add', 'ArtisanController@store');
+            Route::get('view_artisan/{id}', 'ArtisanController@show')->name('view_artisan');
+        });
 
 });
 
@@ -143,7 +174,7 @@ Route::post('contact-us', 'HomeController@contactUsPost');
 
 
 //checkout
-Route::get('checkout/{package_id}', 'PaymentController@checkout')->name('checkout')->middleware('auth');
+/*Route::get('checkout/{package_id}', 'PaymentController@checkout')->name('checkout')->middleware('auth');
 Route::post('checkout/{package_id}', 'PaymentController@checkoutPost')->middleware('auth');
 
 Route::get('payment/{transaction_id}', 'PaymentController@payment')->name('payment');
@@ -159,7 +190,7 @@ Route::any('payment/paypal-notify/{transaction_id?}', 'PaymentController@paypalN
 
 Route::post('payment/{transaction_id}/stripe', 'PaymentController@paymentStripeReceive')->name('payment_stripe_receive');
 
-Route::post('payment/{transaction_id}/bank-transfer', 'PaymentController@paymentBankTransferReceive')->name('bank_transfer_submit');
+Route::post('payment/{transaction_id}/bank-transfer', 'PaymentController@paymentBankTransferReceive')->name('bank_transfer_submit');*/
 
 
 //Dashboard Route
@@ -254,17 +285,6 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'dashboard'], function(){
         Route::get('profile', 'UserController@profile')->name('profile');
         Route::get('profile/edit', 'UserController@profileEdit')->name('profile_edit');
         Route::post('profile/edit', 'UserController@profileEditPost');
-
-        Route::group(['prefix'=>'users'], function(){
-            Route::get('/', 'UserController@index')->name('users');
-            Route::get('view/{slug}', ['as'=>'users_view', 'uses' => 'UserController@show']);
-            Route::get('user_status/{id}/{status}', 'UserController@statusChange')->name('user_status');
-
-            //Edit
-            Route::get('edit/{id}', ['as'=>'users_edit', 'uses' => 'UserController@profileEdit']);
-            Route::post('edit/{id}', ['uses' => 'UserController@profileEditPost']);
-            Route::get('profile/change-avatar/{id}', ['as'=>'change_avatar', 'uses' => 'UserController@changeAvatar']);
-        });
 
         /**
          * Change Password route

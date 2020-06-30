@@ -12,7 +12,7 @@ class Service extends Model
             'category',
             'local_govt',
             'street_addr',
-            'message',
+            'description',
             'visiting_date'
         ];
 
@@ -24,5 +24,10 @@ class Service extends Model
     public function invoice()
     {
         return $this->hasOne(Invoice::class);
+    }
+
+    public function artisan()
+    {
+        return $this->belongsTo(Artisan::class);
     }
 }

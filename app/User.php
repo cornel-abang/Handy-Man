@@ -28,8 +28,8 @@ class User extends Authenticatable
     ];
 
 
-    public function jobs(){
-        return $this->hasMany(Job::class)->orderBy('id', 'desc');
+    public function services(){
+        return $this->hasMany(Service::class)->orderBy('created_at', 'desc');
     }
     public function is_user(){
         return $this->user_type === 'user';
