@@ -38,7 +38,7 @@
     <nav class="navbar navbar-expand-md navbar-light navbar-laravel {{request()->routeIs('home') ? 'transparent-navbar' : ''}}">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
-                <img src="{{asset('assets/images/logo.png')}}" />
+                <img src="{{asset('assets/images/logo.jpeg')}}" />
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                 <span class="navbar-toggler-icon"></span>
@@ -72,7 +72,7 @@
                 <ul class="navbar-nav ml-auto">
 
                     <li class="nav-item">
-                        <a class="nav-link btn btn-success text-white" href="{{ route('request') }}"><i class="la la-save"></i>Request Service </a>
+                        <a class="nav-link btn btn-success text-white" style="background-color: #ffbf00; border: 0 solid #ffbf00;" href="{{ route('request') }}"><i class="la la-save"></i>Request Service </a>
                     </li>
 
                     <!-- Authentication Links -->
@@ -127,7 +127,7 @@
 
                     <div class="footer-logo-wrap mb-3">
                         <a class="navbar-brand" href="{{ url('/') }}">
-                            <img src="{{asset('assets/images/logo.png')}}" />
+                            <img src="{{asset('assets/images/logo.jpeg')}}" style="opacity: 1px;" />
                         </a>
                     </div>
 

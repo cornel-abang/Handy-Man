@@ -99,10 +99,15 @@
                             <tr>
                                 <th>Work Status</th>
                                 <td>
-                                    {!! 
-                                        $artisan->status === 'free'? '<span class="badge badge-pill badge-success">Free</span>' :
+                                    @if($artisan->service)
+                                        <span class="badge badge-pill badge-warning">Occupied</span>
+                                    @else
+                                        <span class="badge badge-pill badge-success">Free</span>
+                                    @endif
+                                    {{-- {!! 
+                                        $artisan->status === 'free'? '' :
                                         '<a href = "view_job/'.$artisan->service->id.'"><span class="badge badge-pill badge-warning">Occupied by <b>'.$artisan->service->user->name.'\'s job</span></a>' 
-                                    !!}
+                                    !!} --}}
                                 </td>
                             </tr>
                         </table>

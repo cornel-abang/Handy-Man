@@ -19,6 +19,7 @@ class UserController extends Controller
 
     public function showLoginForm()
     {
+        $title = 'Handiman - Login';
         return view('auth.login');
     }
 
@@ -113,10 +114,9 @@ class UserController extends Controller
 
         //$user_type = $this->setUserAccountType($data['user_type']);
         $data = $request->input();
-
         $accountID = $this->generateAccountId();
-
         $user = $this->saveUser($data, $user_type, $accountID);
+        $this->notifyViaMail($user);
         auth()->guard()->login($user);
         return redirect(route('account'))->with('success', 'Registration successful. Your account ID is: '.$accountID);
     }
@@ -124,6 +124,20 @@ class UserController extends Controller
     /*
         Generate 5 digit account pin
      */
+    
+    public function notifyViaMail($user)
+    {
+        $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+        $beautymail->send('emails.new_signup', ['user'=>$user], function($message) use ($user)
+        {
+            $message
+                ->from('info@handiman.com','Handiman Servicesss')
+                ->to($user->email, $user->name)
+                ->subject('Welcome to Handiman Services');
+        });
+        return true;
+    }
+
     public function generateAccountId()
     {
         //create a 6 digit random pin

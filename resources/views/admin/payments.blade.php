@@ -2,62 +2,33 @@
 
 
 @section('content')
-
-    <div class="row mb-4">
-        <div class="col-md-5">
-            @lang('app.total') : {{$payments->total()}}
-        </div>
-
-        <div class="col-md-7">
-            <form class="form-inline" method="get" action="">
-                <div class="form-group">
-                    <input type="text" name="q" value="{{request('q')}}" class="form-control" placeholder="@lang('app.payer_email')">
-                </div>
-                <button type="submit" class="btn btn-secondary">@lang('app.search')</button>
-            </form>
-
-        </div>
-    </div>
-
-
     <div class="row">
         <div class="col-md-12">
 
             @if($payments->count() > 0)
-                <table class="table table-striped table-bordered">
-
+                <p><b>{{$payments->total()}}</b> Payment detail(s) found on the system</p>
+                <table class="table table-bordered table-striped">
                     <tr>
-                        <th>@lang('app.name')</th>
-                        <th>@lang('app.payer_email')</th>
-                        <th>@lang('app.amount')</th>
-                        <th>@lang('app.method')</th>
-                        <th>@lang('app.time')</th>
-                        <th>#</th>
+                        <th>Payer Name</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <td>View Details</td>
                     </tr>
 
-                    @foreach($payments as $payment)
+                    @foreach($payments as $Payment)
                         <tr>
                             <td>
-                                <a href="{{route('payment_view', $payment->id)}}">
-                                    <i class="la la-user"></i> {{$payment->user->name}} <br />
-                                    <i class="la la-building-o"></i> {{$payment->user->company}}
+                                {{ $payment->payer_name }}
+                            </td>
+                            <td>&#8358;{!! number_format($payment->amount) !!}</td>
+                            <td>
+                                {!! $payment->created_at->format(get_option('date_format')) !!}
+                            </td>
+                            <td>
+                                <a href="" class="btn btn-secondary btn-sm" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#payment{{$payment->reference}}">
+                                    <i class="la la-eye"></i> 
                                 </a>
                             </td>
-                            <td><a href="{{route('payment_view', $payment->id)}}"> {{$payment->email}} </a></td>
-                            <td>{!! get_amount($payment->amount) !!}</td>
-                            <td>{{$payment->payment_method}}</td>
-                            <td><span data-toggle="tooltip" title="{{$payment->created_at->format('F d, Y h:i a')}}">{{$payment->created_at->format('F d, Y')}}</span></td>
-
-                            <td>
-                                @if($payment->status == 'success')
-                                    <span class="text-success" data-toggle="tooltip" title="{{$payment->status}}"><i class="la la-check-circle-o"></i> </span>
-                                @else
-                                    <span class="text-danger" data-toggle="tooltip" title="{{$payment->status}}"><i class="la la-exclamation-circle"></i> </span>
-                                @endif
-
-                                <a href="{{route('payment_view', $payment->id)}}" class="btn btn-success ml-2"><i class="la la-eye"></i> </a>
-                            </td>
-
                         </tr>
                     @endforeach
 
@@ -66,13 +37,75 @@
                 {!! $payments->links() !!}
 
             @else
-                @lang('app.no_data')
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="no data-wrap py-5 my-5 text-center">
+                            <h1 class="display-1"><i class="la la-frown-o"></i> </h1>
+                            <h1>No Data available here</h1>
+                        </div>
+                    </div>
+                </div>
             @endif
+
 
 
         </div>
     </div>
+    
+@foreach($payments as $payment)
+<!-- Modal -->
+<div class="modal fade" id="payment{{$payment->reference}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-hard-hat"></span> Payment {{$payment->reference}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Payer Name</th>
+                                <td>{{ $payment->payer_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Amount Paid</th>
+                                <td>&#8358;{!! number_format($payment->amount) !!}</td>
+                            </tr>
 
+                            <tr>
+                                <th>Payment Reference</th>
+                                <td>{{ $payment->reference }}</td>
+                            </tr>
+                            <tr>
+                                <th>Paid For</th>
+                                <td>{{ $payment->invoice->category }}</td>
+                            </tr>
+                            <tr>
+                                <th>Channel</th>
+                                <td>{{ $payment->channel }}</td>
+                            </tr>
+                            <tr>
+                                <th>Payer Bank</th>
+                                <td>{{ $payment->payer_bank }}</td>
+                            </tr>
+                            <tr>
+                                <th>Card Type</th>
+                                <td>{{ $payment->card_type }}</td>
+                            </tr>
+                            <tr>
+                                <th>Transaction Date</th>
+                                <td>
+                                {!! $payment->created_at->format(get_option('date_format')) !!}
+                                </td>
+                            </tr>
+                        </table>
+      </div>
+    </div>
+  </div>
+</div>
+@endforeach
 
 
 @endsection

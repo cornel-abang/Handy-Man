@@ -5,9 +5,9 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class AdminAgentEmployer
+ /**class AdminAgentEmployers
 {
-    /**
+   
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -27,5 +27,6 @@ class AdminAgentEmployer
 
 
         return $next($request);
-    }*/
+    }
 }
+*/

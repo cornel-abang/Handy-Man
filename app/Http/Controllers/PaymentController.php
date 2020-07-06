@@ -9,62 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Paystack;
 use App\Invoice;
+use App\Mail\sendJobOrder;
+use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
-    /*public function verifyPayment(Request $request)
-    {
-
-        if ($request->reference === null) {
-            return false;
-
-        }else {
-
-            //Make POST call to PayStack
-            $url = 'https://api.paystack.co/transaction/verify/'.$request->reference;
-            //Connect
-            $ch = curl_init();
-            //Request Parameters
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: sk_live_00fcf5a4ec1ee8cb040274b29e7767083dfb28c2']);
-            //send Arequest
-            $Request = curl_exec();
-            //close connection
-            curl_close($ch);
-
-            //An Array to hold returned request data
-            $result = array();
-            //check for returned result
-            if ($Request) {
-                //Decode the json Response
-                $result = json_decode($Request, true);
-            }
-
-            //set payment deatails
-            $payment_details = ['payment_ref' => $request->reference, 'job_id' => $request->job_id];
-
-            if (array_key_exists('data', $result) && array_key_exists('status', $result['data']) && ($result['data']['status'] === 'success') ) {
-                /*  save payer information into database for admin purpose
-                    if the transaction details where saved successfully, assign success as true and move on
-                    if details werent saved, send an error emial to the admin, with the transaction reference
-                    for clarification sake.
-                
-                if (Payment::create($payment_details)) {
-                    $response = true;
-                }else{
-
-                    $response = false;
-                }
-
-            }else{
-
-                $response = false;
-            }
-        }
-
-        return $response;
-    }*/
+   
     /*########################################
         PAYSTACK PAYMENT GATEWAY INTEGRATION #
      ########################################*/
@@ -87,15 +37,18 @@ class PaymentController extends Controller
             $data = [
                         'invoice_id'    => $invoice_id,
                         'payer_name'    => auth()->user()->name,
-                        'amount_paid'   => $paymentDetails['data']['amount'],
+                        'amount_paid'   => $paymentDetails['data']['amount']/100,
                         'reference'     => $paymentDetails['data']['reference'],
                         'channel'       => $paymentDetails['data']['authorization']['channel'],
                         'card_type'     => $paymentDetails['data']['authorization']['card_type'],
                         'payer_bank'    => $paymentDetails['data']['authorization']['bank']
                     ];
-            $res = Payment::create($data);
-            if ($res) {
+            $payment = Payment::create($data);
+            if ($payment) {
                 session()->flash('successfull_payment', true);
+                if ($payment_status === 'Percentage') {
+                    $this->genSendJobOrder($payment);
+                }
             }else{
                 session()->flash('successfull_payment', false);
             }
@@ -105,21 +58,23 @@ class PaymentController extends Controller
         return redirect(route('all'));
     } 
 
-    public function index(Request $request){
-        $user = Auth::user();
-        $title = trans('app.payments');
-
-        if ($user->is_admin()){
-            if ($request->q){
-                $payments = Payment::with('user')->where('email', 'like', "%{$request->q}%")->orderBy('id', 'desc')->paginate(20);
-            }else{
-                $payments = Payment::with('user')->orderBy('id', 'desc')->paginate(20);
-            }
-        }else{
-            $payments = Payment::with('user')->whereUserId($user->id)->orderBy('id', 'desc')->paginate(20);
-        }
-
+    public function index(){
+        $title = 'Payments';
+        $payments = Payment::orderBy('created_at', 'desc')->paginate(15);
         return view('admin.payments', compact('title', 'payments'));
+    }
+
+    public function genSendJobOrder($payment)
+    {
+        $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+        $beautymail->send('emails.job_order', ['data'=>$payment], function($message) use ($payment)
+        {
+            $message
+                ->from('info@handiman.com','Handiman Services')
+                ->to($payment->invoice->service->artisan->email, $payment->invoice->service->artisan->full_name)
+                ->subject('New Job Order');
+        });
+        return true;
     }
 
     public function view($id){

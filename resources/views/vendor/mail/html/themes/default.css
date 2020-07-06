@@ -6,7 +6,7 @@ body, body *:not(html):not(style):not(br):not(tr):not(code) {
 }
 
 body {
-    background-color: #f5f8fa;
+    background-color: white;
     color: #74787E;
     height: 100%;
     hyphens: auto;
@@ -172,8 +172,9 @@ img {
 /* Tables */
 
 .table table {
-    margin: 30px auto;
+    /*margin: 30px auto;*/
     width: 100%;
+    border: 1px solid #e29000;
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
@@ -189,7 +190,7 @@ img {
     color: #74787E;
     font-size: 15px;
     line-height: 18px;
-    padding: 10px 0;
+    /*padding: 10px 0;*/
     margin: 0;
 }
 
@@ -247,13 +248,15 @@ img {
 
 /* Panels */
 
-.panel {
+/*.panel {
     margin: 0 0 21px;
-}
+}*/
 
 .panel-content {
-    background-color: #EDEFF2;
-    padding: 16px;
+    background-color: #e29000;
+    color: white;
+    /*padding: 6px;*/
+    width: 100%;
 }
 
 .panel-item {

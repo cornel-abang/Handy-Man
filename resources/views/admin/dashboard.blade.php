@@ -15,35 +15,35 @@
             <div class="col-md-4">
                 <div class="p-3 mb-3 bg-warning">
                     <h4>Total Jobs</h4>
-                    <h5>{{$data['totalJobs']}}</h5>
+                    <h5></h5>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="p-3 mb-3 text-white bg-danger">
                     <h4>Total Jobs</h4>
-                    <h5>{{$data['totalJobs']}}</h5>
+                    <h5></h5>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="p-3 mb-3 text-white bg-dark">
                     <h4>Employer</h4>
-                    <h5>{{$data['employerCount']}}</h5>
+                    <h5></h5>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="p-3 mb-3 text-white bg-info">
                     <h4>Agent</h4>
-                    <h5>{{$data['agentCount']}}</h5>
+                    <h5></h5>
                 </div>
             </div>
 
             <div class="col-md-4">
                 <div class="p-3 mb-3 text-white bg-primary">
                     <h4>Applied</h4>
-                    <h5>{{$data['totalApplicants']}}</h5>
+                    <h5></h5>
                 </div>
             </div>
         </div>

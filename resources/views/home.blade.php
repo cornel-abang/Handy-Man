@@ -40,7 +40,7 @@
                                         <option value="{{$cat->category_slug}}">{{$cat->category_name}}</option>
                                         @endforeach
                                     </select>
-                                    <button type="submit" class="btn btn-success mb-2">
+                                    <button type="submit" class="btn btn-success mb-2" style="background-color: #fb7400;; border: 1px solid #fb7400;;">
                                         Request Service <i class="la la-arrow-circle-o-right"></i>
                                     </button>
                                     {{-- <details><summary>Title</summary><p>Trials Trials</p></details> --}}

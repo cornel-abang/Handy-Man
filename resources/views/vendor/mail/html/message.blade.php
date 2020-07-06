@@ -2,7 +2,8 @@
     {{-- Header --}}
     @slot('header')
         @component('mail::header', ['url' => route('home')])
-            {{ get_option('site_name') }}
+            <img src="{{url('/assets/images/logo.jpeg')}}" alt="{{ get_option('site_name') }} Logo">
+            {{-- {{ get_option('site_name') }} --}}
         @endcomponent
     @endslot
 

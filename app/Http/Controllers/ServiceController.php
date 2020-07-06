@@ -134,7 +134,7 @@ class ServiceController extends Controller
             //'sub_category' => ['string', 'max:190'],
             'local_govt'            => 'required',
             'street_address'        => ['required', 'string'],
-            'description'           =>  'string',
+            'description'           => ['string', 'max:500'],
             'visiting_date'         => ['date', 'required']
         ];
         $this->validate($request, $rules);
@@ -143,7 +143,7 @@ class ServiceController extends Controller
         if ( ! $service){
             return back()->with('error', 'app.something_went_wrong')->withInput($request->input());
         }
-
+        $this->notifyUser($service);
         return redirect(route('all'))->with('success', '<b>'.ucwords(str_replace('-', ' ', $request->category)).'</b>'.
             ' - Service request successful! Expect a call from us in no time. Cheers!');
     }
@@ -155,7 +155,6 @@ class ServiceController extends Controller
             'user_id'                   => $user->id,
             'state'                     => str_replace('-', ' ', $request->state),
             'category'                  => ucfirst(str_replace('-', ' ', $request->category)),
-            //'sub_category'              => $request->sub_category,
             'local_govt'                => str_replace('-', ' ', $request->local_govt),
             'street_addr'               => $request->street_address,
             'description'               => $request->description,
@@ -163,6 +162,19 @@ class ServiceController extends Controller
         ];
 
         return $service = Service::create($data);
+    }
+
+    public function notifyUser($service)
+    {
+        $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+        $beautymail->send('emails.new_service', ['data'=>$service], function($message) use ($service)
+        {
+            $message
+                ->from('info@handiman.com','Handiman Services')
+                ->to($service->user->email, $service->user->name)
+                ->subject('New Service Request');
+        });
+        return true;
     }
 
     public function requestBySlug(Request $request)

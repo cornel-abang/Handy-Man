@@ -37,6 +37,8 @@ Route::post('/paystack_hook', 'PaymentController@veryHook')->name('/paystack_hoo
 Route::get('search_category','CategoriesController@searchCategory')->name('search_category');
 Route::post('request-service','ServiceController@requestBySlug')->name('request-service');
 Route::get('cat-tile-request/{search_term}','ServiceController@requestBySlug')->name('cat-tile-request');
+Route::get('accept_order/{id}', 'ArtisanController@accept')->name('accept_order');
+Route::get('decline_order/{id}', 'ArtisanController@accept')->name('decline_order');
 
 //#####################
 //Authenticated Routes
@@ -71,9 +73,10 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::post('flag_job/{id}', 'ServiceController@flagJobPost');
     });
 
-    Route::group(['prefix'=>'payment'], function(){
+    Route::group(['prefix'=>'payments'], function(){
         Route::post('pay', 'PaymentController@redirectToGateway')->name('pay');
-        Route::get('callback', 'PaymentController@handleGatewayCallback')->name('/payment/callback'); 
+        Route::get('callback', 'PaymentController@handleGatewayCallback')->name('/payment/callback');
+        Route::get('/', 'PaymentController@index')->name('payments'); 
     });
      
     Route::group(['prefix'=>'admin','middleware'=>'only_admin_access'], function(){
@@ -86,6 +89,20 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::get('edit/{id}', ['as'=>'edit_categories', 'uses' => 'CategoriesController@edit']);
         Route::post('edit/{id}', ['uses' => 'CategoriesController@update']);
         Route::post('delete-categories', ['as'=>'delete_categories', 'uses' => 'CategoriesController@destroy']);
+         //#####################
+        //SETTINGS
+        //#####################
+        Route::group(['prefix'=>'settings'], function(){
+            Route::get('/', 'SettingsController@GeneralSettings')->name('general_settings');
+
+            Route::get('theme-settings', 'SettingsController@ThemeSettings')->name('theme_settings');
+            Route::get('gateways', 'SettingsController@GatewaySettings')->name('gateways_settings');
+            Route::get('pricing', 'SettingsController@PricingSettings')->name('pricing_settings');
+            Route::post('pricing', 'SettingsController@PricingSave');
+
+            //Save settings / options
+            Route::post('save-settings', ['as'=>'save_settings', 'uses' => 'SettingsController@update']);
+        });
         //#####################
         //JOBS
         //#####################
@@ -200,7 +217,7 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'dashboard'], function(){
     Route::get('applied-jobs', 'DashboardController@dashboard')->name('applied_jobs');
 
 
-    Route::group(['middleware'=>'admin_agent_employer'], function(){
+    Route::group([], function(){
 
         Route::group(['prefix'=>'employer'], function(){
 
@@ -259,25 +276,7 @@ Route::group(['prefix'=>'dashboard', 'middleware' => 'dashboard'], function(){
         });
 
         //Settings
-        Route::group(['prefix'=>'settings'], function(){
-            Route::get('/', 'SettingsController@GeneralSettings')->name('general_settings');
-
-            Route::get('theme-settings', 'SettingsController@ThemeSettings')->name('theme_settings');
-            Route::get('gateways', 'SettingsController@GatewaySettings')->name('gateways_settings');
-            Route::get('pricing', 'SettingsController@PricingSettings')->name('pricing_settings');
-            Route::post('pricing', 'SettingsController@PricingSave');
-
-            //Save settings / options
-            Route::post('save-settings', ['as'=>'save_settings', 'uses' => 'SettingsController@update']);
-        });
-    });
-
-
-    Route::group(['prefix'=>'payments'], function() {
-        Route::get('/', 'PaymentController@index')->name('payments');
-
-        Route::get('view/{id}', ['as'=>'payment_view', 'uses' => 'PaymentController@view']);
-        Route::get('status-change/{id}/{status}', ['as'=>'status_change', 'uses' => 'PaymentController@markSuccess']);
+        
     });
 
     Route::group(['prefix'=>'u'], function(){

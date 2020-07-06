@@ -64,19 +64,32 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name'          => $data['name'],
             'email'         => $data['email'],
             'phone'         => $data['phone'],
             'account_id'    => $this->getAccountID(),
             'password'      => Hash::make($data['password'])
         ]);
+        if ($user) {
+         $userInst = $this->getUserInst();
+         $userInst->notifyViaMail($user);
+         return $user;
+        }else{
+            return false;
+        }
     }
 
     public function getAccountID()
     {
-        $user = new UserController();
+        $user = $this->getUserInst();
         return $user->generateAccountId();
+    }
+
+    public function getUserInst()
+    {
+        $user = new UserController();
+        return $user;
     }
 
 }
