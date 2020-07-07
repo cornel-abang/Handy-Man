@@ -15,12 +15,12 @@
                         <td>View Details</td>
                     </tr>
 
-                    @foreach($payments as $Payment)
+                    @foreach($payments as $payment)
                         <tr>
                             <td>
                                 {{ $payment->payer_name }}
                             </td>
-                            <td>&#8358;{!! number_format($payment->amount) !!}</td>
+                            <td>&#8358;{!! number_format($payment->amount_paid) !!}</td>
                             <td>
                                 {!! $payment->created_at->format(get_option('date_format')) !!}
                             </td>
@@ -58,7 +58,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-hard-hat"></span> Payment {{$payment->reference}}</h5>
+        <h5 class="modal-title" id="exampleModalLabel"><span class="fa fa-hard-hat"></span> Payment <b>{{$payment->reference}}</b></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -71,7 +71,7 @@
                             </tr>
                             <tr>
                                 <th>Amount Paid</th>
-                                <td>&#8358;{!! number_format($payment->amount) !!}</td>
+                                <td>&#8358;{!! number_format($payment->amount_paid) !!}</td>
                             </tr>
 
                             <tr>
@@ -80,7 +80,17 @@
                             </tr>
                             <tr>
                                 <th>Paid For</th>
-                                <td>{{ $payment->invoice->category }}</td>
+                                <td>{{ $payment->invoice->service->category }}</td>
+                            </tr>
+                            <tr>
+                                <th>Payment Type</th>
+                                @if($payment->payment_status === 'Percentage')
+                                    Percentage Payment
+                                @elseif($payment->payment_status === 'Paid')
+                                    Completion Payment
+                                @else
+                                    Nothing
+                                @endif
                             </tr>
                             <tr>
                                 <th>Channel</th>

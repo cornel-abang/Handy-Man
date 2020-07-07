@@ -50,7 +50,7 @@ class PaymentController extends Controller
                 session()->flash('successfull_payment', true);
                 if ($payment_status === 'Percentage'){
                     // To artisan
-                    //$this->genSendJobOrder($payment);
+                    $this->genSendJobOrder($payment);
                     // To Client
                     $this->genSendReceipt($payment);
                 }
