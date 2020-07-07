@@ -61,7 +61,7 @@
 	</tr>
 </table>
 @include('beautymail::templates.widgets.newfeatureEnd')
-
+@stop
 {{-- @include('beautymail::templates.widgets.newfeatureStart', ['color'=>'black'])
 <div style="margin: 0 auto;">
 		<i class="fa fa-check-circle-o"></i>
@@ -76,17 +76,6 @@
 	</button>
 </div>
 @include('beautymail::templates.widgets.newfeatureEnd') --}}
-@stop
-
-
-
-
-{{-- @component('mail::button', ['url' => route('accept_order', $data->invoice->service->id)])
-	Accept
-@endcomponent
-@component('mail::button', ['url' => route('decline_order', $data->invoice->service->id), 'color'=>'red'])
-	Decline
-@endcomponent --}}
 
 
 

@@ -41,13 +41,18 @@ class PaymentController extends Controller
                         'reference'     => $paymentDetails['data']['reference'],
                         'channel'       => $paymentDetails['data']['authorization']['channel'],
                         'card_type'     => $paymentDetails['data']['authorization']['card_type'],
-                        'payer_bank'    => $paymentDetails['data']['authorization']['bank']
+                        'payer_bank'    => $paymentDetails['data']['authorization']['bank'],
+                        'payment_status'=> $payment_status
                     ];
             $payment = Payment::create($data);
             if ($payment) {
+                //flash so the helper can pick it up
                 session()->flash('successfull_payment', true);
-                if ($payment_status === 'Percentage') {
-                    $this->genSendJobOrder($payment);
+                if ($payment_status === 'Percentage'){
+                    // To artisan
+                    //$this->genSendJobOrder($payment);
+                    // To Client
+                    $this->genSendReceipt($payment);
                 }
             }else{
                 session()->flash('successfull_payment', false);
@@ -73,6 +78,19 @@ class PaymentController extends Controller
                 ->from('info@handiman.com','Handiman Services')
                 ->to($payment->invoice->service->artisan->email, $payment->invoice->service->artisan->full_name)
                 ->subject('New Job Order');
+        });
+        return true;
+    }
+
+    public function genSendReceipt($payment)
+    {
+        $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+        $beautymail->send('emails.payment_confirmation', ['payment'=>$payment], function($message) use ($payment)
+        {
+            $message
+                ->from('info@handiman.com','Handiman Services')
+                ->to($payment->invoice->service->user->email, $payment->invoice->service->user->name)
+                ->subject('Invoice Payment Confirmation: #'.$payment->invoice->id);
         });
         return true;
     }

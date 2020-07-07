@@ -94,10 +94,32 @@ class InvoiceController extends Controller
         $res = $invoice->save();
         
         if ($res) {
-
+            $this->notifyUser($invoice);
             return redirect(route('all-invoices'))->with('success', 'Invoice successfully created');
         }
         return redirect(route('new-invoice'))->with('error', 'Unable to create invoice');
+    }
+
+    public function notifyUser($invoice)
+    {
+        $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+        $beautymail->send('emails.new_invoice', ['invoice'=>$invoice], function($message) use ($invoice)
+        {
+            $message
+                ->from('info@handiman.com','Handiman Services')
+                ->to($invoice->service->user->email, $invoice->service->user->name)
+                ->subject('Invoice #'.$invoice->id.' for '.$invoice->service->category);
+        });
+        return true;
+    }
+
+    public function checkUser(Request $request)
+    {
+        $user = User::find($request->user_id);
+        if ($user) {
+            auth()->guard()->login($user);
+            return $this->show($request->invoice_id);
+        }
     }
        
 
@@ -109,7 +131,9 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        //
+        $invoice = Invoice::find($id);
+        $title = 'Invoice #'.$invoice->id;
+        return view('admin.invoice', compact('title','invoice'));
     }
 
     /**

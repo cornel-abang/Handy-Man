@@ -28,6 +28,11 @@ Route::get('login', 'UserController@showLoginForm')->name('login');
 Route::post('login', 'UserController@login');
 Route::get('logout', 'UserController@logout')->name('logout');
 
+//#####################
+//View Invoice from email
+//#####################
+Route::get('view_invoice/{invoice_id}/{user_id}', 'InvoiceController@checkUser')->name('view_invoice');
+
 // PayStack Payment WebHook
 Route::post('/paystack_hook', 'PaymentController@veryHook')->name('/paystack_hook');
 // 52.31.139.75, 52.49.173.169, 52.214.14.220 (PayStack IPs)
