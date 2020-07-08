@@ -8,6 +8,7 @@ use App\User;
 use App\Service;
 use App\Invoice;
 use App\Item;
+use App\Artisan;
 
 class InvoiceController extends Controller
 {
@@ -60,6 +61,22 @@ class InvoiceController extends Controller
         return ['success'=>1, 'acct'=>$services->toArray()];
     }
 
+    //Function t check if an artisan has been assogned to a servcie 
+    //Ajax request
+    public function checkArtisanAssigned(Request $request)
+    {
+        $service = Service::find($request->service_id);
+        if ($service->artisan) {
+            return ['success' => true];
+        }else{
+
+            $artisans = Artisan::orderBy('full_name','asc')
+                                 ->where(['skill' => $service->category, 'status'=> 'free'])
+                                 ->get();
+            return ['success' => false, 'artisans' => $artisans];
+        }
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -77,7 +94,14 @@ class InvoiceController extends Controller
         ];
 
         $this->validate($request, $rules);
-
+        if ($request->input('artisan') !== null) {
+            $service = Service::find($request->job);
+            $service->artisan_id = $request->artisan;
+            $service->save();
+            //change artisan status to occupied
+            $service->artisan->status = 'occupied';
+            $service->artisan->save();
+        }
         $invoice = Invoice::create(['service_id' => $request->job]);
         $sum_total = 0;
         if (!empty($request->item_name)) {

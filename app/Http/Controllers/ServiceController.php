@@ -478,6 +478,12 @@ class ServiceController extends Controller
         $job = Service::find($request->job_id);
         $job->status = $request->status;
         $job->save();
+        // if job has been marked as Completed
+        // change artisan status to free
+        if ($request->status === 'Completed') {
+            $job->artisan->status = 'free';
+            $job->artisan->save();
+        }
         return "success";
     }
 }

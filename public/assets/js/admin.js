@@ -157,6 +157,7 @@
             });
     });
 
+    // Generate new invoice area
     $(document).on('change', '#acct_id', function(e){
         e.preventDefault();
         document.querySelector('#loaderImg').removeAttribute('style');
@@ -300,6 +301,7 @@
                 if (data.acct.length > 0) {
                     $('#job').empty();
                     $('#job').attr('disabled',false);
+                    $('#job').append('<option value="">--Select Job--</option>');
                     data.acct.forEach(function(val){
                    $('#job').append('<option value="'+val.id+'">'+val.category+'</option>');
                     });
@@ -311,6 +313,33 @@
             }
         });
     }
+    // Determine if a service has an artisan assigned 
+    //if not assign one 
+     $(document).on("change", ".createInvoiceSelect", function(){
+        document.querySelector('#artisanList').style.display = 'none';
+        var service_id = $(this).val();
+        // var category = $('#artisanInfo option:selected').text();
+        if (service_id !== "") {
+            $.ajax({
+                type : "GET",
+                url : page_data.routes.check_artisan_assigned,
+                data : {service_id : service_id, _token : page_data.csrf_token},
+                success: function(data){
+                    if (data.success !== true) {
+                        var artisanInfo = $("#artisanInfo");
+                        artisanInfo.empty();
+                        var artisanList = document.querySelector('#artisanList');
+                        artisanList.removeAttribute('style');
+                        artisanInfo.append('<option value="">Please Assign an Artisan</option>')
+                        data.artisans.forEach(function(artisan){
+                            artisanInfo.append('<option value="'+artisan.id+'">'+artisan.full_name+'</option>')
+                        });
+                    }
+                }
+            });
+        }
+        
+    });
 
     $(document).on("change", "#street", function(){
         var location = $(this).val();

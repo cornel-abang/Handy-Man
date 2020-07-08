@@ -151,6 +151,7 @@ Route::group(['middleware'=>'auth:web'], function(){
             Route::get('artisan/add', 'ArtisanController@create')->name('artisan/add');
             Route::post('artisan/add', 'ArtisanController@store');
             Route::get('view_artisan/{id}', 'ArtisanController@show')->name('view_artisan');
+            Route::get('check_artisan_assigned', 'InvoiceController@checkArtisanAssigned')->name('check_artisan_assigned');
         });
 
 });
