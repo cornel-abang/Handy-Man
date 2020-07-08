@@ -36,8 +36,7 @@
 <h3 class="pull-right">
    Sum Total: &#8358;{!! number_format($invoice->sum_total) !!}
 </h3>
-You can carry out the payment by clicking the <b>Pay Now</b> button below. Please reach out to us if you have any questions. <br><em>Cheers!</em>
-@include('beautymail::templates.widgets.newfeatureStart', ['color'=>'black'])
+You can carry out the payment by clicking the <b>Pay Now</b> button below.<br>
 <div style="margin: 10px">
 		<i class="fa fa-check-circle-o"></i>
 	<button style="background-color: green; border: 1px solid green; border-radius: 1px;">
@@ -45,7 +44,7 @@ You can carry out the payment by clicking the <b>Pay Now</b> button below. Pleas
 		 	style="font-weight: bold;text-decoration: none; color: white;"><h1>Pay Now!</h1></a> 
 	</button>
 </div><br>
-@include('beautymail::templates.widgets.newfeatureEnd')
+Please feel free to reply this email if you have any questions. <br><em>Cheers!</em>
                             
 @include('beautymail::templates.widgets.newfeatureEnd')
 @stop

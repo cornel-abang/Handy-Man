@@ -4,7 +4,7 @@
 @include('beautymail::templates.widgets.articleStart', ['color' => '#ffbf00'])
 <h1>Invoice Payment Confirmation: #{{$payment->invoice->id}}</h1>
 	Hi {{$payment->invoice->service->user->name}}, we are pleased to inform you that your recent payment of 
-	<b>&#8358;{!! number_format($payment->amount_paid) !!}</b> dated: <b>{{$payment->created_at->format('j F, Y')}}</b>, for invoice <b>#{{$payment->invoice->id}}</b> generated for your <b>{{$payment->invoice->service->category}}</b> job; has been recieved and approved.<br>
+	<b>&#8358;{!! number_format($payment->amount_paid) !!}</b><br> Dated: <b>{{$payment->created_at->format('j F, Y')}}</b><br> For invoice <b>#{{$payment->invoice->id}}</b> generated for your <b>{{$payment->invoice->service->category}}</b> job; has been recieved and approved.<br>
 	Your invoice is represented as below:<br>
 	<table class="table table-striped">
     <thead>
@@ -39,7 +39,9 @@
 </h3>
 <h4>Please note that the invoice is considered <b>Paid</b> only when the the total amount is paid in full. You owe a balance of <b>&#8358;{!! number_format(($payment->invoice->sum_total*30)/100) !!}</b>, that is due at the end of the job.</h4>
 @else
-<h4>This invoice has been paid for in full and is now considered as <b>Paid</b>. Thank you!</h4>
+    Previous Payment: &#8358;{!! number_format(($payment->invoice->sum_total*70)/100) !!}<br>
+    Balance: &#8358;0<br>
+<h4>This invoice has been paid for in full and is now considered as <b>Paid</b>.<br> Thank you!</h4>
 @endif 
 @include('beautymail::templates.widgets.articleEnd')
 
