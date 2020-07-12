@@ -29,12 +29,8 @@ class UserController extends Controller
 
         if (Auth::attempt(['email'=>$request->email, 
                            'password'=>$request->password])) {
-           
-                return redirect(route('account'));
-                //return redirect(route('account'));
-          
+                return redirect(route('account')); 
         }
-        //session()->flash('msg','Incorrect Login Credentials.');
         return redirect()->back()->with('error','Incorrect Login Credentials');
     }
 
@@ -220,7 +216,6 @@ class UserController extends Controller
         $title = $user->name;
         $categories = Category::all();
         $LGAs = $this->getLGAs(); 
-
         return view('admin.request-new-service', compact('title', 'user', 'categories','LGAs'));
     }
 

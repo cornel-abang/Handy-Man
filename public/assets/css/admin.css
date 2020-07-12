@@ -1,4 +1,22 @@
 @import url('../line-awesome/css/line-awesome.min.css');
+
+.btn-success{
+    background-color: #fdb522;
+    font-weight: bold;
+    border: 2px solid #fdb522;
+    border-radius: .25rem;
+}
+
+.btn-success:hover{
+    background-color: #fdb522;
+    border: 2px solid #fdb522;
+}
+
+.old{
+    font-weight: bold;
+    margin-top: 5px;
+}
+
 .navbar-laravel{
     box-shadow: none;
     border-bottom: 1px solid rgba(0,0,0,.125);

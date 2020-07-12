@@ -79,9 +79,12 @@
     
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-success">
+                                    <button type="submit" class="btn btn-sign">
                                         <i class="la la-save"></i> {{ __('Register') }}
                                     </button>
+                                    <a class="btn btn-link" href="{{ route('login') }}">
+                                        Login Instead
+                                    </a>
                                 </div>
                             </div>
                         </form>

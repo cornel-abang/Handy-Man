@@ -135,7 +135,8 @@ class ServiceController extends Controller
             'local_govt'            => 'required',
             'street_address'        => ['required', 'string'],
             'description'           => ['string', 'max:500'],
-            'visiting_date'         => ['date', 'required']
+            'visiting_date'         => ['date', 'required'],
+            'visiting_time'         => ['string', 'required']
         ];
         $this->validate($request, $rules);
 
@@ -143,7 +144,7 @@ class ServiceController extends Controller
         if ( ! $service){
             return back()->with('error', 'app.something_went_wrong')->withInput($request->input());
         }
-        $this->notifyUser($service);
+        //$this->notifyUser($service);
         return redirect(route('all'))->with('success', '<b>'.ucwords(str_replace('-', ' ', $request->category)).'</b>'.
             ' - Service request successful! Expect a call from us in no time. Cheers!');
     }
@@ -158,7 +159,8 @@ class ServiceController extends Controller
             'local_govt'                => str_replace('-', ' ', $request->local_govt),
             'street_addr'               => $request->street_address,
             'description'               => $request->description,
-            'visiting_date'             => $request->visiting_date
+            'visiting_date'             => $request->visiting_date,
+            'visiting_time'             => $request->visiting_time
         ];
 
         return $service = Service::create($data);

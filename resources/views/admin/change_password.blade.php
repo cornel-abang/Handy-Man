@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="form-group row {{ $errors->has('new_password_confirmation')? 'has-error' : '' }}">
-                    <label class="col-sm-3 control-label" for="new_password_confirmation">@lang('app.old_password_confirmation') *</label>
+                    <label class="col-sm-3 control-label" for="new_password_confirmation">@lang('app.old_password_confirmation')*</label>
                     <div class="col-sm-6">
                         <input type="password" name="new_password_confirmation" id="new_password_confirmation" class="form-control" value="" autocomplete="off" placeholder="@lang('app.old_password_confirmation')" />
                         {!! e_form_error('new_password_confirmation', $errors) !!}

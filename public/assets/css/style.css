@@ -1,9 +1,10 @@
 @import url('../line-awesome/css/line-awesome.min.css');
 a{
-    color: #ffbf00;
+    color: #fdb522 ;
+    font-weight: bold;
 }
 a:hover{
-    color: ##ffbf00;
+    opacity: .8;
     text-decoration: none;
 }
 .navbar-laravel{
@@ -11,7 +12,23 @@ a:hover{
     border-bottom: 1px solid rgba(0,0,0,.125);
 }
 .btn{
-    border-radius: 0 !important;
+    border-radius: 1px !important;
+}
+
+.btn-sign{
+    background-color: #fdb522;
+    border-radius: .25rem !important;
+    border: 2px solid #fdb522;
+    color: white;
+    font-weight: bold;
+}
+
+.btn-success{
+    background-color: #fdb522;
+    border-radius: .25rem !important;
+    border: 2px solid #fdb522;
+    color: white;
+    font-weight: bold;
 }
 /**
 Home Page

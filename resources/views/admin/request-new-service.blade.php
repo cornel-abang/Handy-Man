@@ -41,7 +41,7 @@
                                             !!}
                                         </h5>
                                     @else
-                                        Please select a category that best describes the service you're reguesting.
+                                        Please select a category that best describes the service you want to reguest.
                                     @endif 
                                 </a>
                         </div>
@@ -53,11 +53,11 @@
                     <div class="col-md-8">
                         <select name="category" class="form-control {{e_form_invalid_class('category', $errors)}} state_options">
                             <option value="">Select Category</option>
-
                             @if($categories)
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->category_slug}}" 
-                                        @if(Session::has('intended-category') && Session::get('intended-category') == $category->category_name || Session::get('intended-category') == $category->category_slug) selected="selected"
+                                <option value="{{ $category->category_slug}}"
+                                        @if(Session::has('intended-category') && Session::get('intended-category') === $category->category_name || Session::get('intended-category') === $category->category_slug)
+                                        selected="selected"
                                         @endif
                                          @if(old('category') && $category->category_slug == old('category')) selected="selected" 
                                          @endif >{!! $category->category_name !!}</option>
@@ -165,22 +165,51 @@
                         <p class="text-info" style="color: red !important;"> (Important)</p>
                     </label>
                     <div class="col-sm-8">
-                        <input type="datetime-local" class="form-control {{e_form_invalid_class('visiting_date', $errors)}}" id="visiting_date" value="{{ old('visiting_date') }}" name="visiting_date">
+                        <input type="date" class="form-control {{e_form_invalid_class('visiting_date', $errors)}}" id="visiting_date" value="{{ old('visiting_date') }}" name="visiting_date" required="">
 
                         {!! e_form_error('visiting_date', $errors) !!}
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label class="col-sm-4"></label>
+
+                <div class="form-group row {{ $errors->has('visiting_time')? 'has-error':'' }}">
+                    <label class="col-sm-4 control-label"> Visiting Time
+                        <p class="text-info" style="color: red !important;"> (Important)</p>
+                    </label>
                     <div class="col-sm-8">
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <select class="form-control {{e_form_invalid_class('visiting_time', $errors)}}" id="visiting_time" value="{{ old('visiting_time') }}" name="visiting_time" required="">
+                            <option value="08:00AM">08:00AM</option>
+                            <option value="08:30AM">08:30AM</option>
+                            <option value="09:00AM">09:00AM</option>
+                            <option value="09:30AM">09:30AM</option>
+                            <option value="10:00AM">10:00AM</option>
+                            <option value="10:30AM">10:30AM</option>
+                            <option value="11:00AM">11:00AM</option>
+                            <option value="11:30AM">11:30AM</option>
+                            <option value="12:00PM">12:00PM</option>
+                            <option value="12:30PM">12:30PM</option>
+                            <option value="01:00PM">01:00PM</option>
+                            <option value="01:30PM">01:30PM</option>
+                            <option value="02:00PM">02:00PM</option>
+                            <option value="02:30PM">02:30PM</option>
+                            <option value="03:00PM">03:00PM</option>
+                            <option value="03:30PM">03:30PM</option>
+                            <option value="04:00PM">04:00PM</option>
+                            <option value="04:30PM">04:30PM</option>
+                            <option value="05:00PM">05:00PM</option>
+                            <option value="05:30PM">05:00PM</option>
+                            <option value="06:00PM">06:00PM</option>
+                            <option value="06:30PM">06:30PM</option>
+                        </select>
+                        {!! e_form_error('visiting_time', $errors) !!}
                     </div>
                 </div>
-
-                </form>
-
-
-
+                 <div class="form-group row">
+                    <label class="col-sm-4"></label>
+                    <div class="col-sm-8">
+                        <button type="submit" class="btn btn-success">Request</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

@@ -7,10 +7,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Handy Man - {{ !empty($title) ? $title : __('app.dashboard') }}</title>
+    <title>Handiman - {{ !empty($title) ? $title : __('app.dashboard') }}</title>
 
-    {{-- Fav Icon --}}
-   <link rel="icon" href="{{asset('assets/images/fav.png')}}">
+    <!-- Favicons -->
+    <link href="{{ asset('assets/landing/img/favicon.png')}}" rel="icon">
+    <link href="{{ asset('assets/landing/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
@@ -31,7 +32,6 @@
     <!-- Scripts -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="{{ asset('js/sweet-alert.min.js') }}" defer></script>
     <script src="{{ asset('js/app.js') }}" defer></script>
 
     <script type='text/javascript'>
@@ -74,7 +74,7 @@ $user = auth()->user();
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ route('account') }}">
-                    <img src="{{asset('assets/images/logo.jpeg')}}" />
+                    <img src="{{asset('assets/images/logo.png')}}" />
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -92,7 +92,7 @@ $user = auth()->user();
 
                         <li class="nav-item">
                             <a class="nav-link">
-                                <i class="la la-key" style="color: #38c172;"></i>Account ID: 
+                                <i class="la la-key" style="color: #fdb522; font-weight: bold;"></i>Account ID: 
                                 <span style="font-weight: bold;">{{$user->account_id}}</span> 
                             </a>
                         </li>
@@ -100,17 +100,17 @@ $user = auth()->user();
 
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle " href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                <i class="la la-phone" style="color: #38c172;"></i> 
+                                <i class="la la-phone" style="color: #fdb522; font-weight: bold;"></i> 
                                 Call Assigned Numbers
                                 <span class="caret"></span>
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="tel:2348149514281">
-                                    <i class="la la-phone" style="color: #38c172;"></i> +2348149514281 
+                                    <i class="la la-phone" style="color: #fdb522; font-weight: bold;"></i> +2348149514281 
                                 </a>
                                 <a class="dropdown-item" href="tel:2348149514281">
-                                    <i class="la la-phone" style="color: #38c172;"></i> +2348149514281 
+                                    <i class="la la-phone" style="color: #fdb522; font-weight: bold;"></i> +2348149514281 
                                 </a>
                             </div>
                         </li>
@@ -191,7 +191,15 @@ $user = auth()->user();
                                     <span class="sidebar-icon"><i class="fa fa-handshake"></i> </span>
                                         <span class="title">Reschedule Visit </span>
                                 </a>
-                            </li> 
+                            </li>
+
+                             <li class="">
+                                <a href="{{route('change_password')}}" class="list-group-item-action">
+                                    <span class="sidebar-icon"><i class="fa fa-lock"></i> </span>
+                                    <span class="title">@lang('app.change_password')</span>
+                                </a>
+                            </li>
+ 
 
                             @endif
 
@@ -281,15 +289,12 @@ $user = auth()->user();
                                 </ul>
                             </li>
 
-
-                            {{--
                             <li>
-                                <a href="{{route('dashboard')}}" class="list-group-item-action active">
-                                    <span class="sidebar-icon"><i class="la la-user-secret"></i> </span>
-                                    <span class="title">@lang('app.administrator')</span>
+                                <a href="{{route('flagged_jobs')}}" class="list-group-item-action active">
+                                    <span class="sidebar-icon"><i class="la la-flag"></i> </span>
+                                    <span class="title">Flagged Jobs</span>
                                 </a>
                             </li>
-                            --}}
 
                              <li class="">
                                 <a href="{{route('messages')}}" class="list-group-item-action">
@@ -299,28 +304,6 @@ $user = auth()->user();
                             </li>
 
                             @endif
-
-                            {{-- <li class="">
-                                <a href="{{route('account')}}" class="list-group-item-action ">
-                                    <span class="sidebar-icon"><i class="fa fa-user"></i> </span>
-                                    <span class="title">@lang('app.profile')</span>
-                                </a>
-                            </li> --}}
-
-                            {{--  <li class="">
-                                <a href="{{route('messages')}}" class="list-group-item-action">
-                                    <span class="sidebar-icon"><i class="fa fa-bell"></i> </span>
-                                    <span class="title">Notifications <span class="badge badge-success float-right">0 </span></span>
-                                </a>
-                            </li> --}}
-
-
-                            <li class="">
-                                <a href="{{route('change_password')}}" class="list-group-item-action">
-                                    <span class="sidebar-icon"><i class="fa fa-lock"></i> </span>
-                                    <span class="title">@lang('app.change_password')</span>
-                                </a>
-                            </li>
 
                             <li>
                                 <a href="{{ route('logout') }}" class="list-group-item-action">
@@ -340,19 +323,21 @@ $user = auth()->user();
 
                         <div class="main-page-title mt-3 mb-3 d-flex">
                             
-                                <img src="{{ asset('assets/font-awesome-5/svgs/solid/angle-double-down.svg') }}" height="50" width="50"> <h3 class="flex-grow-1">{!! ! empty($title) ? $title : __('app.dashboard') !!}</h3>
+                                <img src="{{ asset('assets/images/hat.png') }}" height="50" width="50"> <h3 class="flex-grow-1">{!! ! empty($title) ? $title : __('app.dashboard') !!}</h3>
                             
                             <div class="action-btn-group">@yield('title_action_btn_gorup')</div>
                         </div>
 
-                        @include('admin.flash_msg')
+                        <div class="col-md-6">
+                            @include('admin.flash_msg')
+                        </div>
 
                         <div class="main-page-content p-4 mb-4">
                             @yield('content')
                         </div>
 
                         <div class="dashboard-footer mb-3">
-                            <a href="https://www.themeqx.com/product/jobfair-job-board-application" target="_blank">Handy Man</a> Version {{config('app.version')}}
+                            <a href="{{route('home')}}" target="_blank">Handy Man</a> Version {{config('app.version')}}
                         </div>
                     </div>
 
@@ -370,14 +355,5 @@ $user = auth()->user();
     <link rel="stylesheet" href="{{asset('assets/DataTable/datatables.css') }}">
     <script src="{{asset('assets/DataTable/datatables.js') }}"></script>
     
-
-
-  <script type="text/javascript">
-      $(document).ready(function() 
-        {     
-          $('#categories').DataTable(); 
-        });
-    </script>
-
 </body>
 </html>

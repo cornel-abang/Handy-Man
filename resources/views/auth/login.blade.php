@@ -56,7 +56,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-success">
+                                <button type="submit" class="btn btn-sign">
                                     {{ __('Login') }}
                                 </button>
 
@@ -69,7 +69,7 @@
                         <div class="form-group row mt-3 mb-3">
                             <div class="col-md-6 offset-md-4">
                                 <p>
-                                    @lang('app.no_account_msg') <a href="{{route('register')}}">@lang('app.register_now')</a>
+                                    Don't have an account? <a href="{{route('new_register')}}">@lang('app.register_now')</a>
                                 </p>
                             </div>
                         </div>

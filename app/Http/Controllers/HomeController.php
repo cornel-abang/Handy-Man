@@ -29,9 +29,9 @@ class HomeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+        $title = 'All your office and household repairs & maintenance services';
         $categories = Category::orderBy('category_name', 'asc')->get();
-        // $blog_posts = Post::whereType('post')->with('author')->orderBy('id', 'desc')->take(3)->get();
-        return view('home', compact('categories'));
+        return view('landing', compact('categories','title'));
     }
 
     public function newRegister(){

@@ -27,6 +27,7 @@ Auth::routes();
 Route::get('login', 'UserController@showLoginForm')->name('login');
 Route::post('login', 'UserController@login');
 Route::get('logout', 'UserController@logout')->name('logout');
+Route::get('about_us', 'HomeController@aboutUs')->name('about_us');
 
 //#####################
 //View Invoice from email
@@ -40,8 +41,8 @@ Route::post('/paystack_hook', 'PaymentController@veryHook')->name('/paystack_hoo
 //HOME PAGE
 //#####################
 Route::get('search_category','CategoriesController@searchCategory')->name('search_category');
-Route::post('request-service','ServiceController@requestBySlug')->name('request-service');
-Route::get('cat-tile-request/{search_term}','ServiceController@requestBySlug')->name('cat-tile-request');
+
+// Route::get('cat-tile-request/{search_term}','ServiceController@requestBySlug')->name('cat-tile-request');
 Route::get('accept_order/{id}', 'ArtisanController@accept')->name('accept_order');
 Route::get('decline_order/{id}', 'ArtisanController@accept')->name('decline_order');
 
@@ -60,6 +61,8 @@ Route::group(['middleware'=>'auth:web'], function(){
     Route::group(['prefix'=>'service'], function(){
         Route::get('request', 'ServiceController@requestService')->name('request');
         Route::post('send-request', 'ServiceController@requestServicePost')->name('send-request');
+        Route::get('request-service/{search_term}','ServiceController@requestBySlug')->name('request-service');
+        Route::post('request_service','ServiceController@requestBySlug')->name('request_service');
     });
 
     Route::group(['prefix'=>'jobs'], function(){
@@ -115,6 +118,7 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::get('mark_job','ServiceController@markJob')->name('mark_job');
         Route::get('assign_artisan/{artisan_id}/{job_id}', 'ArtisanController@assignArtisan')->name('assign-artisan');
         Route::get('view_job/{id}', 'ServiceController@show')->name('view_job');
+        Route::get('flagged_jobs', 'ServiceController@flaggedJobs')->name('flagged_jobs');
 
         //#####################
         //INVOICING
@@ -161,7 +165,7 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('search', 'HomeController@search')->name('search');
 Route::get('clear', 'HomeController@clearCache')->name('clear_cache');
 
-Route::get('new-register', 'UserController@register')->name('new_register');
+Route::get('new_register', 'UserController@register')->name('new_register');
 //Route::get('individual_register', 'UserController@register')->name('register');
 Route::post('new-register', 'UserController@registerPost');//->name('individual_register');
 

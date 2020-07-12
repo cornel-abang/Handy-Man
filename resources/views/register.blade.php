@@ -82,6 +82,9 @@
                                     <button type="submit" class="btn btn-success">
                                         <i class="la la-save"></i> {{ __('Register') }}
                                     </button>
+                                    <a class="btn btn-link" href="{{ route('login') }}">
+                                        Login Instead
+                                    </a>
                                 </div>
                             </div>
                         </form>

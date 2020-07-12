@@ -369,8 +369,8 @@
                 $("#result").removeClass("show-result");
 
                 var date = new Date(data.visiting_date);
-                $("#old_date").text(date.toDateString()+' @ '+date.toLocaleTimeString());
-                // $("#old_time").text();
+                $("#old_date").text(date.toDateString());
+                $("#old_time").text(data.visiting_time);
             }
         });
     });

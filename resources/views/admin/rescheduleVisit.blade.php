@@ -58,45 +58,59 @@
             <div class="show-result" id="result">
                <div class="form-group row {{ $errors->has('visiting_date')? 'has-error':'' }}">
                     <label class="col-sm-4 control-label"> Visiting Date
-                        <p class="text-info" style="color: red !important;"> Important</p>
                     </label>
                     <div class="col-sm-8">
-                        <input type="datetime-local" class="form-control {{e_form_invalid_class('visiting_date', $errors)}}" id="visiting_date" value="{{$service->visiting_date}}" name="visiting_date">
-                        <small class="fa fa-calendar text-info"> Old Date: <span id="old_date" style="font-weight: bold;"></span></small>
+                        <input type="date" class="form-control {{e_form_invalid_class('visiting_date', $errors)}}" id="visiting_date" value="{{$service->visiting_date}}" name="visiting_date">
+                        <small class="fa fa-calendar old"> Old Date: <span class="text-info" id="old_date"></span></small>
 
                         {!! e_form_error('visiting_date', $errors) !!}
                     </div>
                 </div>
 
-                {{-- <div class="form-group row {{ $errors->has('visiting_time')? 'has-error':'' }}">
+                <div class="form-group row {{ $errors->has('visiting_time')? 'has-error':'' }}">
                     <label class="col-sm-4 control-label"> Visiting Time
-                        <p class="text-info" style="color: red !important;"> Important</p>
                     </label>
                     <div class="col-sm-8">
-                        <input type="time" class="form-control {{e_form_invalid_class('visiting_date', $errors)}}" id="visiting_time" value="{{ $service->visiting_time }}" name="visiting_time">
-                        <small class="fa fa-clock text-info"> Old Time: <span id="old_time"></span></small>
+                        <select class="form-control {{e_form_invalid_class('visiting_time', $errors)}}" id="visiting_time" value="{{ old('visiting_time') }}" name="visiting_time">
+                            <option value="08:00AM">08:00AM</option>
+                            <option value="08:30AM">08:30AM</option>
+                            <option value="09:00AM">09:00AM</option>
+                            <option value="09:30AM">09:30AM</option>
+                            <option value="10:00AM">10:00AM</option>
+                            <option value="10:30AM">10:30AM</option>
+                            <option value="11:00AM">11:00AM</option>
+                            <option value="11:30AM">11:30AM</option>
+                            <option value="12:00PM">12:00PM</option>
+                            <option value="12:30PM">12:30PM</option>
+                            <option value="01:00PM">01:00PM</option>
+                            <option value="01:30PM">01:30PM</option>
+                            <option value="02:00PM">02:00PM</option>
+                            <option value="02:30PM">02:30PM</option>
+                            <option value="03:00PM">03:00PM</option>
+                            <option value="03:30PM">03:30PM</option>
+                            <option value="04:00PM">04:00PM</option>
+                            <option value="04:30PM">04:30PM</option>
+                            <option value="05:00PM">05:00PM</option>
+                            <option value="05:30PM">05:00PM</option>
+                            <option value="06:00PM">06:00PM</option>
+                            <option value="06:30PM">06:30PM</option>
+                        </select>
+                        <small class="fa fa-clock old"> Old Time: <span class="text-info" id="old_time"></span></small>
 
                         {!! e_form_error('visiting_time', $errors) !!}
                     </div>
-                </div> --}}
+                </div>
 
                 <div class="form-group row"> 
                     <label class="col-sm-4"></label>
                     <div class="col-sm-8">
-                        <button type="submit" class="btn btn-primary">Reschedule</button>
+                        <button type="submit" class="btn btn-success">Reschedule</button>
                     </div>
                 </div>
             </div>
-
             </form>
-
-
-
         </div>
     </div>
-
-
-
 @endsection
 
 
