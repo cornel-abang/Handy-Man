@@ -34,7 +34,7 @@
                   </div>
                   <span class="badge badge-success">Plumbing repairs & fixture</span>
                 </div>
-                <a href="{{route('request-service', 'Plumbing')}}" class="request-service la la-hard-hat"> Request Service</a>
+                <a href="{{route('request-service', 'plumbing')}}" class="request-service la la-hard-hat"> Request Service</a>
               </div>
               <div class="col-md-6" style="margin-bottom: 25px;">
                 <div class="row service-area">
@@ -43,7 +43,7 @@
                   </div>
                   <span class="badge badge-success">Electrical installations and repairs</span>
                 </div>
-                <a href="{{route('request-service', 'Electricals')}}" class="request-service la la-hard-hat"> Request Service</a>
+                <a href="{{route('request-service', 'electricals')}}" class="request-service la la-hard-hat"> Request Service</a>
               </div>
               <div class="col-md-6" style="margin-bottom: 25px;">
                 <div class="row service-area">
@@ -77,9 +77,9 @@
                   <div class="col-md-6">
                       <img src="{{ asset('assets/landing/img/civil.png')}}" class="wrap-icon icon-1">
                   </div>
-                  <span class="badge badge-success">Civil construction & remodeling work</span>
+                  <span class="badge badge-success">Civil construction and remodeling work</span>
                 </div>
-                <a href="{{route('request-service', 'civil-constrcution-&-remodeling')}}" class="request-service la la-hard-hat"> Request Service</a>
+                <a href="{{route('request-service', 'civil-constrcution-and-remodeling')}}" class="request-service la la-hard-hat"> Request Service</a>
               </div>
 
             </div>

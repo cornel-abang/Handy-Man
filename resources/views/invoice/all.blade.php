@@ -26,7 +26,7 @@
                               
                             </td>
                             <td>
-                              <p class="alert alert-danger la la-bookmark-o" data-toggle="tooltip" title="Unpaid invoice">{{$inv->status}}</p> 
+                              <p class="alert alert-danger la la-tag" data-toggle="tooltip" title="Unpaid invoice">{{$inv->status}}</p> 
                             </td>
                             <td>
                                 <div class="row">
@@ -41,26 +41,6 @@
                                         <a href="javascript:void(0)" id="{{$inv->id}}" class="btn btn-danger btn-sm del_invoice_from_all" ><i class="la la-trash-o"></i> </a>
                                     </div>
                                 </div>
-
-                                <!--<a href="" class="btn btn-primary btn-sm" target="_blank" data-toggle="tooltip" title="@lang('app.view')"><i class="la la-eye"></i> </a>
-                                <a href="" class="btn btn-secondary btn-sm"><i class="la la-edit" data-toggle="tooltip" title="@lang('app.edit')"></i> </a>
-
-                                
-                                    <a href="{{route('job_status_change', [$inv->id, 'premium'])}}" class="btn btn-success btn-sm" data-toggle="tooltip" title="@lang('app.mark_premium')"><i class="la la-bookmark-o"></i> </a>
-                               
-
-                                
-                                        <a href="{{route('job_status_change', [$inv->id, 'approve'])}}" class="btn btn-success btn-sm" data-toggle="tooltip" title="@lang('app.approve')"><i class="la la-check-circle-o"></i> </a>
-                                   
-
-                                    
-                                        <a href="{{route('job_status_change', [$inv->id, 'block'])}}" class="btn btn-warning btn-sm" data-toggle="tooltip" title="@lang('app.block')"><i class="la la-ban"></i> </a>
-                                    
-
-                                    <a href="{{route('job_status_change', [$inv->id, 'delete'])}}" class="btn btn-danger btn-sm" data-toggle="tooltip" title="@lang('app.delete')"><i class="la la-trash-o"></i> </a>-->
-                                
-
-
                             </td>
                         </tr>
                     @endforeach
@@ -114,8 +94,8 @@
                           </div>
                       </div>
                       <div class="modal-footer">
+                        <button type="button" class="btn btn-success" onclick="window.location.href='{{route('edit-invoice', $inv->id)}}'">Edit</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="window.location.href='{{route('edit-invoice', $inv->id)}}'">Edit</button>
                       </div>
                     </div>
                   </div>
@@ -130,7 +110,7 @@
                         <div class="no data-wrap py-5 my-5 text-center">
                             <h1 class="display-1"><i class="la la-frown-o"></i> </h1>
                             <h1>No Data available here</h1>
-                              <button type="button" class="btn btn-primary" style="background-color: #38c172; border: 1px solid #38c172;" onclick="window.location.href='{{route('new-invoice')}}'"><span class="fa fa-plus-circle"> Create new
+                              <button type="button" class="btn btn-success" onclick="window.location.href='{{route('new-invoice')}}'"><span class="fa fa-plus-circle"> Create new
                               </button>
                         </div>
                     </div>

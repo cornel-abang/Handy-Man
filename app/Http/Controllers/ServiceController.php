@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
-use App\Country;
 use App\FlagJob;
 use App\Job;
 use App\Service;
-use App\JobApplication;
-use App\Mail\ShareByEMail;
 use App\State;
 use App\User;
 use Session;
@@ -288,7 +285,7 @@ class ServiceController extends Controller
         ];
         FlagJob::create($data);
 
-        return redirect()->route('all')->with('success', __('app.job_flag_submitted'));
+        return redirect()->route('all')->with('success', 'Your complaint has been submitted. We will get back to you in no time. Cheers!');
     }
 
 
@@ -487,5 +484,27 @@ class ServiceController extends Controller
             $job->artisan->save();
         }
         return "success";
+    }
+
+    public function flaggedJobs()
+    {
+        $title = 'Flagged Jobs';
+        $flagged = FlagJob::orderBy('created_at', 'desc')->paginate(10);
+        return view('admin.flagged_jobs', compact('title', 'flagged'));
+    }
+
+    public function replyFlag(Request $request)
+    {
+        $rule = [
+            'reply' => 'required', 'string'];
+        $validator = Validator::make($request->all(), $rule);
+        if ($validator->fails()){
+            session()->flash('flag_reply_validation_fails', $request->service_id);
+            return redirect()->back()->withInput($request->input())->withErrors($validator);
+        }
+        $flag = FlagJob::where('service_id', $request->service_id)->first();
+        $flag->reply = $request->reply;
+        $flag->save();
+        return redirect()->route('flagged_jobs')->with('success', 'Reply sent!');
     }
 }

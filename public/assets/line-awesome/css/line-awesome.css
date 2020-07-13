@@ -5361,7 +5361,8 @@ readers do not read off random characters that represent icons */
   font-weight: 400; }
 
 .la.la-dot-circle-o:before {
-  content: "\f192"; }
+  content: "\f192";
+  font-weight: bold; }
 
 .la.la-vimeo-square {
   font-family: 'Line Awesome Brands';

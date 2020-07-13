@@ -16,29 +16,35 @@
                             </tr>
                             <tr>
                                 <th>Owner</th>
-                                <td>{{ $job->user->name }}</td>
+                                <td>
+                                    <a href="{{route('view', $job->user->id)}}" data-toggle="tooltip" title="view client profile">{{ $job->user->name }}
+                                    </a>
+                                </td>
                             </tr>
 
                             <tr>
                                 <th>Assigned Artisan</th>
-                                <td>{{ $job->artisan->full_name }}</td>
+                                <td>
+                                    <a href="{{route('view_artisan', $job->artisan->id)}}" data-toggle="tooltip" title="view artisan profile">{{ $job->artisan->full_name }}</a>
+                                </td>
                             </tr>
                             <tr>
                                 <th>Job Status</th>
                                 <td>{{ $job->status }}</td>
                             </tr>
                             <tr>
-                                <th>Invoice total (&#8358;)</th>
+                                <th>Invoice Total </th>
                                 <td>
                                 @if($job->invoice !== null)
-                                    {!! number_format($job->invoice->sum_total) !!}
+                                <a href="{{route('admin_view_invoice', $job->invoice->id)}}" data-toggle="tooltip" title="view invoice" target="_blank">Invoice #{{$job->invoice->id}}</a><br>
+                                    &#8358;{!! number_format($job->invoice->sum_total) !!}
                                     @if($job->invoice->status === 'Paid')
                                         <span class="badge badge-pill badge-success fa fa-check-circle"> Paid</span>
                                     @elseif($job->invoice->status === 'Percentage')
-                                        <span class="badge badge-pill badge-info">Paid: 70% ({!! number_format($job->invoice->sum_total * 70/100 ) !!})<br>
-                                        Balance: {!! number_format($job->invoice->sum_total * 30/100 ) !!}
+                                        <span class="badge badge-pill badge-info">Paid: 70% (&#8358;{!! number_format($job->invoice->sum_total * 70/100 ) !!})<br>
+                                        Balance: &#8358;{!! number_format($job->invoice->sum_total * 30/100 ) !!}
                                     @else
-                                    <span class="badge badge-pill badge-danger">Unpaid</span>
+                                    <span class="badge badge-pill badge-warning">Unpaid</span>
                                     @endif
                                 @else
                                     <span class="badge badge-pill badge-info fa fa-info"> No Invoice for this job yet</span>

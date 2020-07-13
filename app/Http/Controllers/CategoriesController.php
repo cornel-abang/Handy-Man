@@ -10,7 +10,7 @@ class CategoriesController extends Controller
     public function index()
     {
         $title = 'Service Categories';
-        $categories = Category::orderBy('id', 'desc')->get();
+        $categories = Category::orderBy('id', 'desc')->paginate(10);
 
         return view('admin.categories', compact('title', 'categories'));
     }

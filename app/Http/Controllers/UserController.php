@@ -58,7 +58,7 @@ class UserController extends Controller
     }
 
 
-    public function show($id = 0){
+    public function show($id){
         if ($id){
             $title = 'Client Profile';
             $user = User::find($id);

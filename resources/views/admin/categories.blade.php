@@ -7,7 +7,7 @@
 
             <div class="form-group row">
                     <div class="col-sm-offset-4 col-sm-5">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-cat">Add New Category</button>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-cat">Add New Category</button>
                     </div>
                 </div>
         </div>
@@ -38,15 +38,13 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-offset-4 col-sm-5">
-                                        <button type="submit" class="btn btn-primary">Add Category</button>
+                                        <button type="submit" class="btn btn-success">Add Category</button>
                                     </div>
                                 </div>
                             </form>
                           </div>
                       </div>
                       <div class="modal-footer">
-                        
-                        
                       </div>
                     </div>
                   </div>
@@ -72,6 +70,7 @@
                     </tr>
                 @endforeach
             </table>
+            {{ $categories->links() }}
         </div>
     </div>
 

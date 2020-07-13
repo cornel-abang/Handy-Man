@@ -119,6 +119,7 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::get('assign_artisan/{artisan_id}/{job_id}', 'ArtisanController@assignArtisan')->name('assign-artisan');
         Route::get('view_job/{id}', 'ServiceController@show')->name('view_job');
         Route::get('flagged_jobs', 'ServiceController@flaggedJobs')->name('flagged_jobs');
+        Route::post('reply-flag', 'ServiceController@replyFlag')->name('reply-flag');
 
         //#####################
         //INVOICING
@@ -134,6 +135,7 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::get('delete_invoice', 'InvoiceController@destroyAjax')->name('delete_invoice');
         Route::get('delete_invoice_from_all','InvoiceController@destroyAjaxFromAll')->name('delete_invoice_from_all');
         Route::get('flag-invoice/{id}','InvoiceController@flag')->name('flag-invoice');
+        Route::get('admin_view_invoice/{invoice_id}', 'InvoiceController@viewInvoiceAdmin')->name('admin_view_invoice');
     });
 
         //#####################
@@ -141,9 +143,9 @@ Route::group(['middleware'=>'auth:web'], function(){
         //#####################
         //
         //(Clients)
-        Route::group(['prefix'=>'users'], function(){
+        Route::group(['prefix'=>'user'], function(){
             Route::get('clients', 'UserController@index')->name('clients');
-            Route::get('view/{slug}', ['as'=>'users_view', 'uses' => 'UserController@show']);
+            Route::get('view/{id}','UserController@show')->name('view');
             Route::get('user_status/{id}/{status}', 'UserController@statusChange')->name('user_status');
 
             //Edit

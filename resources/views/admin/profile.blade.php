@@ -34,8 +34,10 @@
                     <th>Jobs</th>
                     <td>
                        @foreach($user->services as $job)
-                       <span class="fa fa-arrow-circle-right"></span>
-                       {{ $job->category }} 
+                       <a href="{{route('view_job', $job->id)}}" data-toggle="tooltip" title="view job">
+                            <span class="la la-dot-circle-o"></span>
+                            {{ $job->category }}
+                        </a> 
                        @if($job->status === 'Completed')
                        <span class="badge badge-pill badge-success">Completed</span>
                        @elseif($job->status === 'Cancelled')
@@ -53,7 +55,7 @@
                 </tr>
 
                 <tr>
-                    <th>Signed Up Date</th>
+                    <th>Sign Up Date</th>
                     <td><span class="fa fa-calendar"></span> {{$user->created_at->format(get_option('date_format')) }} 
                          <span class="fa fa-clock"></span> {{ $user->created_at->format(get_option('time_format')) }}</td>
                 </tr>

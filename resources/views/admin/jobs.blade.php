@@ -56,25 +56,6 @@
                                     </div>
                                 </td>
 
-                                <!--<a href="" class="btn btn-primary btn-sm" target="_blank" data-toggle="tooltip" title="@lang('app.view')"><i class="la la-eye"></i> </a>
-                                <a href="" class="btn btn-secondary btn-sm"><i class="la la-edit" data-toggle="tooltip" title="@lang('app.edit')"></i> </a>
-
-                                
-                                    <a href="{{route('job_status_change', [$job->id, 'premium'])}}" class="btn btn-success btn-sm" data-toggle="tooltip" title="@lang('app.mark_premium')"><i class="la la-bookmark-o"></i> </a>
-                               
-
-                                
-                                        <a href="{{route('job_status_change', [$job->id, 'approve'])}}" class="btn btn-success btn-sm" data-toggle="tooltip" title="@lang('app.approve')"><i class="la la-check-circle-o"></i> </a>
-                                   
-
-                                    
-                                        <a href="{{route('job_status_change', [$job->id, 'block'])}}" class="btn btn-warning btn-sm" data-toggle="tooltip" title="@lang('app.block')"><i class="la la-ban"></i> </a>
-                                    
-
-                                    <a href="{{route('job_status_change', [$job->id, 'delete'])}}" class="btn btn-danger btn-sm" data-toggle="tooltip" title="@lang('app.delete')"><i class="la la-trash-o"></i> </a>-->
-                                
-
-
                             </td>
                             <td> 
                                <div class="col-md-6">

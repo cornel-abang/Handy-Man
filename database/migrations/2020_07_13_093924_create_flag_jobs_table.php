@@ -18,6 +18,7 @@ class CreateFlagJobsTable extends Migration
             $table->integer('service_id')->unsigned();
             $table->string('reason');
             $table->string('message');
+            $table->string('reply')->nullable();
             $table->timestamps();
             $table->foreign('service_id')->references('id')->on('services');
         });

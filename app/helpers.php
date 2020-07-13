@@ -18,15 +18,15 @@ if ( ! function_exists('pageJsonData')){
         }
 
         $data = [
-            'home_url'      => route('home'),
-            'asset_url'     => asset('assets'),
-            'csrf_token'    => csrf_token(),
-            'jobModalOpen'  => $jobModalOpen,
-            'flag_job_validation_fails' => session()->get('flag_job_validation_fails'),
-            'share_job_validation_fails' => session('share_job_validation_fails'),
-            'user'          => auth()->user(),
-            'successfull_payment' => session()->get('successfull_payment'),
-            //'my_dashboard' => route('my_dashboard'),
+            'home_url'                      => route('home'),
+            'asset_url'                     => asset('assets'),
+            'csrf_token'                    => csrf_token(),
+            'jobModalOpen'                  => $jobModalOpen,
+            'flag_job_validation_fails'     => session()->get('flag_job_validation_fails'),
+            'share_job_validation_fails'    => session('share_job_validation_fails'),
+            'user'                          => auth()->user(),
+            'successfull_payment'           => session()->get('successfull_payment'),
+            'flag_reply_validation_fails'   => session()->get('flag_reply_validation_fails'),
         ];
 
         $routeLists = \Illuminate\Support\Facades\Route::getRoutes();

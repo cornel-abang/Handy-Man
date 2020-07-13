@@ -145,6 +145,11 @@ class InvoiceController extends Controller
             return $this->show($request->invoice_id);
         }
     }
+
+    public function viewInvoiceAdmin(Request $request)
+    {
+        return $this->showAdmin($request->invoice_id);
+    }
        
 
     /**
@@ -158,6 +163,13 @@ class InvoiceController extends Controller
         $invoice = Invoice::find($id);
         $title = 'Invoice #'.$invoice->id;
         return view('admin.invoice', compact('title','invoice'));
+    }
+
+    public function showAdmin($id)
+    {
+        $invoice = Invoice::find($id);
+        $title = 'Invoice #'.$invoice->id;
+        return view('admin.invoice_admin', compact('title','invoice'));
     }
 
     /**

@@ -307,6 +307,10 @@ section {
   font-weight: normal;
 }
 
+.step-off ul{
+  list-style: square;
+}
+
 .step-off {
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
   background: #fdb522;

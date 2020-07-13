@@ -381,6 +381,12 @@
         $('#jobFlagModal'+page_data.flag_job_validation_fails).modal('show');
     }
 
+    // Flagged job reply validation fail popup    
+     if (page_data.flag_reply_validation_fails !== null){
+        $("#reply"+page_data.flag_reply_validation_fails).modal('show');
+    }
+
+
     $(document).ready(function() {
         // Add new invoice items
         // ######################################

@@ -93,7 +93,7 @@ class ArtisanController extends Controller
      */
     public function show($id)
     {
-        $title = 'View Artisan Profile';
+        $title = 'Artisan profile';
         $artisan = Artisan::find($id);
 
         return view('admin.artisan_profile', compact('title','artisan'));

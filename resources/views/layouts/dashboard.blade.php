@@ -120,6 +120,13 @@ $user = auth()->user();
                                 <i class="fa fa-hard-hat"></i> Request Service 
                             </a>
                         </li>
+                        @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="">
+                            <span class="notification-num badge-pill badge-success">0</span> 
+                                <i class="la la-bell"></i> 
+                            </a>
+                        </li>
                         @endif
 
                     </ul>

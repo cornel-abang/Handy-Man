@@ -165,7 +165,7 @@
                         <p class="text-info" style="color: red !important;"> (Important)</p>
                     </label>
                     <div class="col-sm-8">
-                        <input type="date" class="form-control {{e_form_invalid_class('visiting_date', $errors)}}" id="visiting_date" value="{{ old('visiting_date') }}" name="visiting_date" required="">
+                        <input type="datetime" class="form-control {{e_form_invalid_class('visiting_date', $errors)}}" id="visiting_date" value="{{ old('visiting_date') }}" name="visiting_date" required="">
 
                         {!! e_form_error('visiting_date', $errors) !!}
                     </div>

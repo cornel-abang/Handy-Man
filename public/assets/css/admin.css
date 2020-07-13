@@ -17,6 +17,23 @@
     margin-top: 5px;
 }
 
+.notification-num{
+    font-weight: bold; 
+    position: absolute; 
+    margin-left: 25px;
+    margin-bottom: 10px;
+}
+
+.la-bell{
+    color: black; 
+    font-weight: bold; 
+    font-size: 45px !important;
+}
+
+.reply-btn{
+    margin-left: 50%;
+}
+
 .navbar-laravel{
     box-shadow: none;
     border-bottom: 1px solid rgba(0,0,0,.125);
