@@ -16,10 +16,10 @@ class CreateFlagJobsTable extends Migration
         Schema::create('flag_jobs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('service_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->string('reason');
-            $table->string('message');
-            $table->string('reply')->nullable();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('service_id')->references('id')->on('services');
         });
     }

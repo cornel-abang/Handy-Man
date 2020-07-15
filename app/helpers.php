@@ -27,6 +27,7 @@ if ( ! function_exists('pageJsonData')){
             'user'                          => auth()->user(),
             'successfull_payment'           => session()->get('successfull_payment'),
             'flag_reply_validation_fails'   => session()->get('flag_reply_validation_fails'),
+            'pusher_app_key'                => \Config::get('pushervals.app_key'),
         ];
 
         $routeLists = \Illuminate\Support\Facades\Route::getRoutes();

@@ -80,7 +80,7 @@
                         
                         <div class="col-md-8">
 
-                                <a style="cursor: default;">For now, Handy Man is only available in and around the city of Calabar, Cross River State.</a>
+                                <a style="cursor: default;">For now, Handiman is only available in and around the city of Calabar, Cross River State.</a>
                         </div>
                     </div>
                 </div>

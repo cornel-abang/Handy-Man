@@ -20,18 +20,61 @@
 .notification-num{
     font-weight: bold; 
     position: absolute; 
-    margin-left: 25px;
+    margin-left: 12px;
     margin-bottom: 10px;
+    font-size: 7px !important;
 }
 
 .la-bell{
     color: black; 
     font-weight: bold; 
-    font-size: 45px !important;
+    font-size: 25px !important;
 }
 
 .reply-btn{
     margin-left: 50%;
+}
+
+.msg{
+    background-color: #38c172;
+    color: white;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.user-msg-avatar{
+    border: 1px solid black;
+    border-radius: 50%;
+    font-size: 15px;
+    color: black;
+    font-weight: bold;
+}
+
+.user-date{
+    font-size: 8px;
+    font-weight: bold;
+    margin-left: 30%;
+}
+
+.msg-admin{
+    background-color: #fdb522;
+    color: white;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.btn-reply{
+    margin-left: 65%;
+}
+
+.btn-reply-client{
+    margin-left: 65%;
+    background-color: #38c172;
+    border: 2px solid #38c172;
+}
+
+.msg-tab{
+    margin-bottom: 15px;
 }
 
 .navbar-laravel{

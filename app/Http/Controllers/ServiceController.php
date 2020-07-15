@@ -12,6 +12,7 @@ use App\User;
 use Session;
 use PDF;
 use App\Rating;
+use App\Message;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -234,15 +235,15 @@ class ServiceController extends Controller
      /*########################
         //Visiting Feature Area
      ########################*/
-     public function rescheduleVisit(Request $request)
+    public function rescheduleVisit(Request $request)
      {
         $title = "Reschedule Visit";
         $services = Service::where("user_id", auth()->user()->id)->get();
        
         return view("admin.rescheduleVisit", compact('title', 'services'));
-     }
+    }
 
-     public function rescheduleVisitPost(Request $request)
+    public function rescheduleVisitPost(Request $request)
      {
         $this->validate($request, ['job'=> 'required']);
         $service = Service::find($request->job);
@@ -280,12 +281,50 @@ class ServiceController extends Controller
 
         $data = [
             'service_id'    => $id,
-            'reason'    => $request->reason,
-            'message'   => $request->message,
+            'reason'        => $request->reason,
+            'user_id'       => auth()->user()->id
         ];
-        FlagJob::create($data);
 
+        $flag_job = FlagJob::create($data);
+        $MsgData = [
+            'flag_job_id'  => $flag_job->id,
+            'message'      => $request->message,
+                ];
+        Message::create($MsgData);
+        //event(new \App\Events\JobFlagged($info));
         return redirect()->route('all')->with('success', 'Your complaint has been submitted. We will get back to you in no time. Cheers!');
+    }
+
+    public function flagReplyModal(Request $request, $id)
+    {
+         $rules = [
+            'message'              => ['required','string'],
+        ];
+
+         $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()){
+            session()->flash('flag_job_validation_fails', $id);
+            return redirect()->back()->withInput($request->input())->withErrors($validator);
+        }
+
+        $flag_job = FlagJob::where('service_id', $id)->first();
+
+        $data = [
+            'flag_job_id'   => $flag_job->id,
+            'message'       => $request->message,
+            ];
+        Message::create($data);
+        return redirect()->route('my_flagged_jobs')->with('success', 'Reply sent!'); 
+    }
+
+     public function userFlaggedJobs()
+    {
+        $title = 'My Flagged Jobs';
+        $flagged = FlagJob::orderBy('created_at', 'desc')
+                            ->where('user_id', auth()->user()->id)
+                            ->paginate(10);
+        return view('admin.flagged_jobs_user', compact('title', 'flagged'));
     }
 
 
@@ -490,7 +529,7 @@ class ServiceController extends Controller
     {
         $title = 'Flagged Jobs';
         $flagged = FlagJob::orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.flagged_jobs', compact('title', 'flagged'));
+        return view('admin.flagged_jobs_admin', compact('title', 'flagged'));
     }
 
     public function replyFlag(Request $request)
@@ -502,9 +541,14 @@ class ServiceController extends Controller
             session()->flash('flag_reply_validation_fails', $request->service_id);
             return redirect()->back()->withInput($request->input())->withErrors($validator);
         }
-        $flag = FlagJob::where('service_id', $request->service_id)->first();
-        $flag->reply = $request->reply;
-        $flag->save();
+        $flag_job = FlagJob::where('service_id', $request->service_id)->first();
+
+        $data = [
+            'flag_job_id'   => $flag_job->id,
+            'message'       => $request->reply,
+            'message_type'  => 'reply'
+            ];
+        Message::create($data);
         return redirect()->route('flagged_jobs')->with('success', 'Reply sent!');
     }
 }

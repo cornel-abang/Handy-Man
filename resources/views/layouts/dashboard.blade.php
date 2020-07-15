@@ -114,21 +114,19 @@ $user = auth()->user();
                                 </a>
                             </div>
                         </li>
-
+                        @endif
+                         <li class="nav-item">
+                          <a href="" class="nav-link">
+                            <span class="badge-pill badge-success notification-num">0</span>
+                            <i class="la la-bell notification-icon"></i>
+                          </a>
+                          @if($user->user_type !== 'admin')
                          <li class="nav-item">
                             <a class="nav-link btn btn-success text-white" href="{{ route('request') }}">
                                 <i class="fa fa-hard-hat"></i> Request Service 
                             </a>
                         </li>
-                        @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="">
-                            <span class="notification-num badge-pill badge-success">0</span> 
-                                <i class="la la-bell"></i> 
-                            </a>
-                        </li>
                         @endif
-
                     </ul>
                 </div>
             </div>
@@ -173,9 +171,6 @@ $user = auth()->user();
                                     <li>
                                         <a class="sidebar-link" href="{{route('new-invoice')}}">Create New</a>
                                     </li>
-                                    <!--<li><a class="sidebar-link" href="{{route('employer_applicant')}}">@lang('app.applicants')</a></li>
-                                    <li><a class="sidebar-link" href="{{route('shortlisted_applicant')}}">@lang('app.shortlist')</a></li>
-                                    <li><a class="sidebar-link" href="">@lang('app.profile')</a></li>-->
                                 </ul>
                             </li>
 
@@ -206,7 +201,13 @@ $user = auth()->user();
                                     <span class="title">@lang('app.change_password')</span>
                                 </a>
                             </li>
- 
+                            
+                            <li>
+                                <a href="{{route('my_flagged_jobs')}}" class="list-group-item-action active">
+                                    <span class="sidebar-icon"><i class="la la-flag"></i> </span>
+                                    <span class="title">My Flagged Jobs</span>
+                                </a>
+                            </li>
 
                             @endif
 
@@ -303,15 +304,14 @@ $user = auth()->user();
                                 </a>
                             </li>
 
-                             <li class="">
+                            @endif
+                             {{-- <li class="">
                                 <a href="{{route('messages')}}" class="list-group-item-action">
                                     <span class="sidebar-icon"><i class="fa fa-envelope"></i> </span>
-                                    <span class="title">Messages <span class="badge badge-success float-right">0 </span></span>
+                                    <span class="title">Message Board<span class="badge badge-success float-right">0 </span></span>
                                 </a>
                             </li>
-
-                            @endif
-
+ --}}
                             <li>
                                 <a href="{{ route('logout') }}" class="list-group-item-action">
                                     <span class="sidebar-icon"><i class="la la-sign-out"></i> </span>
@@ -335,7 +335,7 @@ $user = auth()->user();
                             <div class="action-btn-group">@yield('title_action_btn_gorup')</div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-9">
                             @include('admin.flash_msg')
                         </div>
 
@@ -359,8 +359,9 @@ $user = auth()->user();
     @yield('page-js')
     <script src="{{asset('assets/js/jquery.min.js')}}"></script>
     <script src="{{ asset('assets/js/admin.js') }}" defer></script>
+    <script src="//js.pusher.com/3.1/pusher.min.js" defer></script>
     <link rel="stylesheet" href="{{asset('assets/DataTable/datatables.css') }}">
-    <script src="{{asset('assets/DataTable/datatables.js') }}"></script>
+    <script src="{{asset('assets/DataTable/datatables.js') }}" defer></script>
     
 </body>
 </html>

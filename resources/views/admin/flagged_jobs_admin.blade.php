@@ -26,20 +26,15 @@
                                 {{$flag->created_at->format(get_option('date_format'))}} {{$flag->created_at->format(get_option('time_format'))}}
                             </p>
                         </td>
-                        {{-- <td>
-                            <a href='' class="btn btn-sm btn-success" data-toggle='modal' data-tagert='#msg'{{$flag->id}}><span class='fa fa-eye'></span></a>"
-                            {!! \Illuminate\Support\Str::limit(nl2br($flag->message), 20, 
-                            $end="...<a href='' data-toggle='modal' data-tagert='#msg'".{{$flag->id}}." style='color: #38c172'><span class='fa fa-eye'></span></a>") 
-                            !!} 
-                        </td> --}}
+                        
                         <td>
 
                             <p>
                             <a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#msg{{$flag->id}}">
-                                <i class="la la-envelope"></i> view message</a>
-                            
+                                <i class="la la-envelope"></i> view message thread</a>
+                            {{-- 
                                 <a href="" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#reply{{$flag->service->id}}">
-                                    <i class="la la-reply"></i> reply</a>
+                                    <i class="la la-reply"></i> reply</a> --}}
                         </td>
                     </tr>
                 @endforeach
@@ -51,8 +46,8 @@
                 
                 {{-- Message Modal --}}
                 @foreach($flagged as $flag)
-                <div class="modal fade" id="msg{{$flag->id}}" tabindex="-1" role="dialog" aria-labelledby="{{$flag->id}}" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
+                <div class="modal fade reply{{$flag->service->id}}" id="msg{{$flag->id}}" tabindex="-1" role="dialog" aria-labelledby="{{$flag->id}}" aria-hidden="true">
+                  <div class="modal-dialog " role="document">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h5 class="modal-title">Flag raised by {{$flag->service->user->name}} for {{$flag->service->category}} job</h5>
@@ -64,15 +59,57 @@
                         <div class="container-fluid">
                             <table class="table table-bordered table-striped">
                                 <tr>
-                                    <th>Message</th>
-                                    <td>{{ $flag->message }}</td>
+                                    <th>Thread</th>
+                                    <td>
+                                      @foreach($flag->messages as $msg)
+                                        @if($msg->message_type === 'msg')
+                                         <div class="row msg-tab">
+                                           <div class="col-sm-1">
+                                           <i class="la la-user user-msg-avatar"></i>
+                                          </div>
+                                          <div class="msg col-sm-11">
+                                            <p>{{$msg->message}}</p>
+                                          </div>
+                                          <small class="user-date">Client - {!! $msg->created_at->format('F d, Y h:i a')!!}</small>
+                                         </div>
+                                        @else
+                                        <div class="row msg-tab">
+                                           <div class="msg-admin col-sm-11">
+                                            <p>{{$msg->message}}</p>
+                                          </div>
+                                          <div class="col-sm-1">
+                                            <i class="la la-hard-hat user-msg-avatar"></i>
+                                          </div>
+                                          <small class="user-date">You - {!! $msg->created_at->format('F d, Y h:i a')!!}</small>
+                                         </div>
+                                        @endif
+                                      @endforeach
+                                    </td>
                                 </tr>
                             </table>
+
+                            <form method="post" action="{{route('reply-flag')}}">
+                                @csrf
+                                <div class="form-group row {{ $errors->has('reply')? 'has-error':'' }}">
+                                    <label for="category_name" class="col-sm-3 control-label">Reply</label>
+                                    <div class="col-sm-9">
+                                        <textarea type="text" class="form-control {{e_form_invalid_class('reply', $errors)}}" value="{{ old('reply') }}" name="reply" placeholder="type your reply here..."></textarea>
+
+                                        {!! e_form_error('reply', $errors) !!}
+                                    </div>
+                                </div>
+                              <input type="hidden" name="service_id" value="{{$flag->service->id}}">
+                                <div class="form-group row">
+                                    <div class="col-sm-offset-4 col-sm-5">
+                                        <button type="submit" class="btn btn-success btn-reply">Send</button>
+                                    </div>
+                                </div>
+                            </form>
                           </div>
                       </div>
-                      <div class="modal-footer">
+                      {{-- <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      </div>
+                      </div> --}}
                     </div>
                   </div>
                 </div>

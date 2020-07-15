@@ -79,6 +79,8 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::post('mark-job', 'ServiceController@markJobPost')->name('mark-job');
         Route::get('flag_job/{id}', 'ServiceController@flagJob')->name('flag_job');
         Route::post('flag_job/{id}', 'ServiceController@flagJobPost');
+        Route::get('my_flagged_jobs', 'ServiceController@userFlaggedJobs')->name('my_flagged_jobs');
+        Route::post('flag_reply_modal/{id}', 'ServiceController@flagReplyModal')->name('flag_reply_modal');
     });
 
     Route::group(['prefix'=>'payments'], function(){

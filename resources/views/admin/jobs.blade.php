@@ -24,15 +24,6 @@
   
                             </td>
                             
-                            {{-- <td>{{$job->street_addr}},  
-                                @php
-                                    echo str_replace('-', ' ', $job->local_govt);
-                                @endphp
-                                ,
-                                @php 
-                                    echo str_replace('_', ' ', $job->state);
-                                @endphp
-                            </td>--}}
                             <td>
                                 <div class="row">
                                    
