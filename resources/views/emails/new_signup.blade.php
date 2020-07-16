@@ -27,10 +27,9 @@
     @include('beautymail::templates.widgets.newfeatureStart', ['color'=>'black'])
         <h2>What is Handiman Services?</h2>
         <p>
-            Handiman services provides a range of maintenance duties for homeowners and corporate bodies. Our services include providing repair assessments, fixing of plumbing and electrical systems, major and minor repairs and civil construction/ remodeling works.<br>
-        <button style="background-color: black; border: 1px solid black;">
+            Handiman services provides a range of maintenance duties for homeowners and corporate bodies. Our services include providing repair assessments, fixing of plumbing and electrical systems, major and minor repairs and civil construction/ remodeling works. <button style="background-color: black; border: 1px solid black;">
             <a href="{{route('home')}}" 
-            style="font-weight: bold; color: white;"><h1>More About Us</h1></a>
+            style="font-weight: bold; color: white;">More about us</a>
         </button><br>
         Requesting for any maintenance service is a breeze with our user friendly and simply designed Web App, it only takes a few steps<br>
         <button style="background-color: #ffbf00; border: 1px solid #ffbf00;">

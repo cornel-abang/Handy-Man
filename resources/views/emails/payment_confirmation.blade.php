@@ -2,7 +2,7 @@
 
 @section('content')
 @include('beautymail::templates.widgets.articleStart', ['color' => '#ffbf00'])
-<h1>Invoice Payment Confirmation: #{{$payment->invoice->id}}</h1>
+<h1>Invoice #{{$payment->invoice->id}} Payment Confirmation</h1>
 	Hi {{$payment->invoice->service->user->name}}, we are pleased to inform you that your recent payment of 
 	<b>&#8358;{!! number_format($payment->amount_paid) !!}</b><br> Dated: <b>{{$payment->created_at->format('j F, Y')}}</b><br> For invoice <b>#{{$payment->invoice->id}}</b> generated for your <b>{{$payment->invoice->service->category}}</b> job; has been recieved and approved.<br>
 	Your invoice is represented as below:<br>

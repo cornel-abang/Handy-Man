@@ -48,7 +48,7 @@
                                   <div class="col-md-6">
                                       @if($job->invoice !== null)
                                         @if($job->flag)
-                                          <small>Job flagged already<br>Check your flagged job threads for further complains</small>
+                                          <small>Job flagged already<br>Check your flagged job threads for further complaints</small>
                                         @else 
                                           <a class="btn btn-warning btn-sm" onclick="window.location.href='{{route('flag_job', $job->id)}}'"><i class="la la-flag"></i> Flag</a>
                                         @endif
@@ -179,8 +179,11 @@
                         </form>
                         @endif
                         
-                        {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
-                        <button type="button" class="btn btn-warning" onclick="window.location.href='{{route('flag_job', $job->id)}}'">Flag</button>
+                          @if($job->flag)
+                            <button type="button" class="btn btn-warning" disabled data-toggle="tooltip" title="job already flagged">Flag</button>
+                          @else 
+                          <button type="button" class="btn btn-warning" onclick="window.location.href='{{route('flag_job', $job->id)}}'">Flag</button>
+                          @endif
                         @endif
                       </div>
                     </div>

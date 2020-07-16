@@ -90,7 +90,7 @@ class PaymentController extends Controller
             $message
                 ->from('info@handiman.com','Handiman Services')
                 ->to($payment->invoice->service->user->email, $payment->invoice->service->user->name)
-                ->subject('Invoice Payment Confirmation: #'.$payment->invoice->id);
+                ->subject('Invoice #'.$payment->invoice->id.' Payment Confirmation');
         });
         return true;
     }
