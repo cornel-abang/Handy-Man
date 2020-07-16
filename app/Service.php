@@ -31,4 +31,9 @@ class Service extends Model
     {
         return $this->belongsTo(Artisan::class);
     }
+
+    public function flag()
+    {
+        return $this->hasOne(FLagJob::class);
+    }
 }

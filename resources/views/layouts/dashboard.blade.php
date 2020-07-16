@@ -115,11 +115,12 @@ $user = auth()->user();
                             </div>
                         </li>
                         @endif
-                         <li class="nav-item">
+                        {{-- <li class="nav-item">
                           <a href="" class="nav-link">
                             <span class="badge-pill badge-danger notification-num">0</span>
                             <i class="la la-bell notification-icon"></i>
                           </a>
+                        </li> --}}
                           @if($user->user_type !== 'admin')
                          <li class="nav-item">
                             <a class="nav-link btn btn-success text-white" href="{{ route('request') }}">
@@ -181,7 +182,7 @@ $user = auth()->user();
                                 <a href="{{route('all')}}" class="list-group-item-action">
                                     <span class="sidebar-icon"><i class="fa fa-hard-hat"></i> </span>
                                         <span class="title">Jobs 
-                                            <span class="badge badge-success float-right">
+                                            <span class="badge badge-info float-right">
                                                 {{$allJobs}}
                                             </span>
                                         </span>

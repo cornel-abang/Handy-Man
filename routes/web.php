@@ -56,6 +56,7 @@ Route::group(['middleware'=>'auth:web'], function(){
         Route::get('change-password', ['as' => 'change_password', 'uses' => 'UserController@changePassword']);
         Route::post('change-password', 'UserController@changePasswordPost');
         Route::get('messages', 'UserController@flaggedMessage')->name('messages');
+        Route::get('job_seen', 'InvoiceController@markSeen')->name('job_seen');
     });
 
     Route::group(['prefix'=>'service'], function(){

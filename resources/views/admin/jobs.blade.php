@@ -29,7 +29,14 @@
                                    
                                     <div class="col-md-6">
                                        @if($job->invoice !== null)
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#invoice{{$job->id}}"><i class="la la-eye"></i> View</button>
+                                        <button type="button" class="btn btn-primary btn-sm invoice-seen" data-toggle="modal" data-target="#invoice{{$job->id}}" id="{{$job->id}}"><i class="la la-eye"></i> 
+                                          View
+                                          @if($job->invoice->seen === 'no')
+                                            <span class="badge-pill badge-danger notification-invoice la la-money-bill" id="unseen{{$job->id}}">
+                                              new
+                                            </span>
+                                          @endif
+                                        </button>
                                         @else
                                         <span><i class="la la-eye-slash"></i></span>
                                         @endif
@@ -40,10 +47,14 @@
                                 <td>
                                   <div class="col-md-6">
                                       @if($job->invoice !== null)
-                                        <a class="btn btn-warning btn-sm" onclick="window.location.href='{{route('flag_job', $job->id)}}'"><i class="la la-flag"></i> Flag</a>
-                                        @else
-                                        <span><i class="la la-times-circle-o"></i></span>
+                                        @if($job->flag)
+                                          <small>Job flagged already<br>Check your flagged job threads for further complains</small>
+                                        @else 
+                                          <a class="btn btn-warning btn-sm" onclick="window.location.href='{{route('flag_job', $job->id)}}'"><i class="la la-flag"></i> Flag</a>
                                         @endif
+                                      @else
+                                        <span><i class="la la-times-circle-o"></i></span>
+                                      @endif
                                     </div>
                                 </td>
 

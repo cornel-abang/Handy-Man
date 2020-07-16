@@ -187,7 +187,6 @@
 
     // Mark messages as read
     $(document).on('click','.msg-thread', function (e) {
-        var selector = $(this);
         var flag_id = $(this).attr('id');
         $.ajax({
             type: 'POST',
@@ -196,6 +195,21 @@
             success: function (data) {
                 if (data.success === true) {
                     $('#unreads'+flag_id).fadeOut(500);
+                }
+            }
+        });
+    });
+
+    // Mark invoice as seen
+    $(document).on('click','.invoice-seen', function (e) {
+        var job_id = $(this).attr('id');
+        $.ajax({
+            type: 'GET',
+            url : page_data.routes.job_seen,
+            data: {job_id, _token: page_data.csrf_token},
+            success: function (data) {
+                if (data.success === true) {
+                    $('#unseen'+job_id).fadeOut(500);
                 }
             }
         });

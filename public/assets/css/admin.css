@@ -32,6 +32,13 @@
     font-size: 10px !important;
 }
 
+.notification-invoice{
+    font-weight: bold; 
+    position: absolute; 
+    margin-bottom: 10px;
+    font-size: 12px !important;
+}
+
 .la-bell{
     color: black; 
     font-weight: bold; 
@@ -82,6 +89,10 @@
 
 .msg-tab{
     margin-bottom: 15px;
+}
+
+.badge-pill{
+    font-weight: bold;
 }
 
 .navbar-laravel{

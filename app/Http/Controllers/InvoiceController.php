@@ -249,4 +249,12 @@ class InvoiceController extends Controller
         }
         return $res;
     }
+
+    public function markSeen(Request $request)
+    {
+        $invoice = Invoice::where('service_id', $request->job_id)->first();
+        $invoice->seen = 'yes';
+        $invoice->save();
+        return ['success'=>true];
+    }
 }
