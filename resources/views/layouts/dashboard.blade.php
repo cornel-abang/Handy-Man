@@ -48,25 +48,25 @@ $user = auth()->user();
     if($user->user_type === 'admin')
     {
 
-    $allJobsCount = \App\Http\Controllers\ServiceController::allJobs()->count();
-    $pendingJobCountAll = \App\Http\Controllers\ServiceController::jobsPendingAll()->count();
-    $newJobCountAll = \App\Http\Controllers\ServiceController::newAll()->count();
-    $progressJobCountAll = \App\Http\Controllers\ServiceController::progressAll()->count();
-    $completedJobCountAll = \App\Http\Controllers\ServiceController::jobsCompletedAll()->count();
-    $cancelledJobCountAll = \App\Http\Controllers\ServiceController::jobsCancelledAll()->count();
-    $allClients = \App\Http\Controllers\UserController::getUsersCount()->count();
-    
+    $allJobsCount           = \App\Http\Controllers\ServiceController::allJobs()->count();
+    $pendingJobCountAll     = \App\Http\Controllers\ServiceController::jobsPendingAll()->count();
+    $newJobCountAll         = \App\Http\Controllers\ServiceController::newAll()->count();
+    $progressJobCountAll    = \App\Http\Controllers\ServiceController::progressAll()->count();
+    $completedJobCountAll   = \App\Http\Controllers\ServiceController::jobsCompletedAll()->count();
+    $cancelledJobCountAll   = \App\Http\Controllers\ServiceController::jobsCancelledAll()->count();
+    $allClients             = \App\Http\Controllers\UserController::getUsersCount()->count();
+    $allUnreadMsgs          = \App\Http\Controllers\ServiceController::allUnreadMsgsCountAdmin()->count();
     }
     else
     {
 
-    $pendingJobCount = \App\Http\Controllers\ServiceController::jobsPending()->count();
-    $newJobCount = \App\Http\Controllers\ServiceController::new()->count();
-    $progressJobCount = \App\Http\Controllers\ServiceController::progress()->count();
-    $completedJobCount = \App\Http\Controllers\ServiceController::jobsCompleted()->count();
-    $cancelledJobCount = \App\Http\Controllers\ServiceController::jobsCancelled()->count();
-    $allJobs = App\Http\Controllers\ServiceController::allUserJobsCount()->count();
-
+    $pendingJobCount        = \App\Http\Controllers\ServiceController::jobsPending()->count();
+    $newJobCount            = \App\Http\Controllers\ServiceController::new()->count();
+    $progressJobCount       = \App\Http\Controllers\ServiceController::progress()->count();
+    $completedJobCount      = \App\Http\Controllers\ServiceController::jobsCompleted()->count();
+    $cancelledJobCount      = \App\Http\Controllers\ServiceController::jobsCancelled()->count();
+    $allJobs                = \App\Http\Controllers\ServiceController::allUserJobsCount()->count();
+    $allUnreadMsgs          = \App\Http\Controllers\ServiceController::allUnreadMsgsCountUser();
     }
 @endphp
 
@@ -117,7 +117,7 @@ $user = auth()->user();
                         @endif
                          <li class="nav-item">
                           <a href="" class="nav-link">
-                            <span class="badge-pill badge-success notification-num">0</span>
+                            <span class="badge-pill badge-danger notification-num">0</span>
                             <i class="la la-bell notification-icon"></i>
                           </a>
                           @if($user->user_type !== 'admin')
@@ -205,7 +205,14 @@ $user = auth()->user();
                             <li>
                                 <a href="{{route('my_flagged_jobs')}}" class="list-group-item-action active">
                                     <span class="sidebar-icon"><i class="la la-flag"></i> </span>
-                                    <span class="title">My Flagged Jobs</span>
+                                    <span class="title">
+                                        My Flagged Jobs
+                                        @if($allUnreadMsgs > 0)
+                                            <span class="badge-pill badge-danger notification-num-side la la-envelope">
+                                                {{$allUnreadMsgs}}
+                                            </span>
+                                        @endif
+                                    </span>
                                 </a>
                             </li>
 
@@ -300,7 +307,14 @@ $user = auth()->user();
                             <li>
                                 <a href="{{route('flagged_jobs')}}" class="list-group-item-action active">
                                     <span class="sidebar-icon"><i class="la la-flag"></i> </span>
-                                    <span class="title">Flagged Jobs</span>
+                                    <span class="title">
+                                        Flagged Jobs
+                                        @if($allUnreadMsgs > 0)
+                                            <span class="badge-pill badge-danger notification-num-side la la-envelope">
+                                                {{$allUnreadMsgs}}
+                                            </span>
+                                        @endif
+                                    </span>
                                 </a>
                             </li>
 

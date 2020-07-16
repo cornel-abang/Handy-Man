@@ -95,6 +95,53 @@ class ServiceController extends Controller
      ########################*/
 
 
+     /*########################
+        //Flagged Job Messages
+     ########################*/
+     static function allUnreadMsgsCountUser(){
+            //get the id of the currently logged in user
+            $user = Auth::user();
+            //use that user's id to find flagged jobs the user owns 
+            //through the user_id field on the flagged job table
+            $flagged_jobs = FlagJob::where('user_id', $user->id)->get();
+            //initialize the number of unread messages for this user's flagged jobs
+            $unreadMsgsCount = 0;
+            //Loop through the flagged jobs while getting the messages for each
+            foreach ($flagged_jobs as $flag) {
+                $msgs = Message::where('flag_job_id', $flag->id)->get();
+                //loop through the messages and find the ones with thier status set to unread 
+                //if found, add to the initialized unread messages counter to be returned
+                //messages of type 'reply' are sent by admin
+                foreach ($msgs as $msg) {
+                     if ($msg->status === 'unread' && $msg->message_type === 'reply') {
+                        $unreadMsgsCount = $unreadMsgsCount + 1;
+                    }   
+                }
+            }
+        return $unreadMsgsCount;
+    }
+
+    static function allUnreadMsgsCountAdmin(){
+        return Message::orderBy('created_at','desc')
+                        ->where('status','unread')
+                        ->where('message_type','msg')
+                        ->get();
+    }
+
+    public function markMessageRead(Request $request)
+    {
+        //set message type to mark
+        //based on user
+        $msg_type = auth()->user()->user_type === 'admin' ? 'msg':'reply'; 
+        $flagMessages = Message::where('flag_job_id', $request->flag_id)
+                                ->where('message_type',$msg_type)
+                                ->get();
+        foreach ($flagMessages as $msg) {
+            $msg->status = 'read';
+            $msg->save();
+        }
+        return ['success'=>true];
+    }
 
 
     /*########################

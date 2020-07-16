@@ -25,6 +25,13 @@
     font-size: 7px !important;
 }
 
+.notification-num-side{
+    font-weight: bold; 
+    position: absolute; 
+    margin-bottom: 10px;
+    font-size: 10px !important;
+}
+
 .la-bell{
     color: black; 
     font-weight: bold; 

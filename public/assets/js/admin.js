@@ -185,6 +185,22 @@
         });
     });
 
+    // Mark messages as read
+    $(document).on('click','.msg-thread', function (e) {
+        var selector = $(this);
+        var flag_id = $(this).attr('id');
+        $.ajax({
+            type: 'POST',
+            url : page_data.routes.mark_read,
+            data: {flag_id, _token: page_data.csrf_token},
+            success: function (data) {
+                if (data.success === true) {
+                    $('#unreads'+flag_id).fadeOut(500);
+                }
+            }
+        });
+    });
+
     /*$(document).on('click', '.mark-btn', function(e){
         e.preventDefault();
         var id = $(this).attr('id');

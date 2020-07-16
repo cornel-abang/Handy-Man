@@ -28,13 +28,25 @@
                         </td>
                         
                         <td>
-
-                            <p>
-                            <a href="" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#msg{{$flag->id}}">
-                                <i class="la la-envelope"></i> view message thread</a>
-                            {{-- 
-                                <a href="" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#reply{{$flag->service->id}}">
-                                    <i class="la la-reply"></i> reply</a> --}}
+                          @php
+                          $unreadMessages = 0;
+                          foreach ($flag->messages as $msg) {
+                            if ($msg->status === 'unread' && $msg->message_type === 'reply') {
+                              $unreadMessages = $unreadMessages + 1;
+                            }
+                          }
+                          @endphp
+                            <p data-toggle="modal" data-target="#msg{{$flag->id}}">
+                              <a class="btn btn-primary btn-sm msg-thread" data-toggle="tooltip" title="view messages" id="{{$flag->id}}">
+                                  <i class="la la-envelope"></i> 
+                                view message thread 
+                                @if($unreadMessages > 0)
+                                <span class="badge-pill badge-danger notification-num-side la la-envelope" id="unreads{{$flag->id}}">
+                                  {{$unreadMessages}}
+                                </span>
+                                @endif
+                              </a>
+                            </p>
                         </td>
                     </tr>
                 @endforeach
