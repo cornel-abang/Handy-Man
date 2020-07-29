@@ -140,7 +140,7 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-md-6 mr-auto">
-            <h2 class="mb-4">Do you even need a Handiman?</h2>
+            <h2 class="mb-4">Why you need a Handiman?</h2>
             <h4 class="sub-service-text">Well the answer is a <span class="emphasis-black">Resounding Yes</span></h4>
             <p class="mb-4">Even though you can tackle the odd job here and there, it’s unlikely that you’re a pro at everything.<br> When facing the unexpected, don’t be stuck handling it yourself while stressing out the entire household or everyone in the office (including yourself). Hiring an expert handiman can prevent this from happening! Sit back, unwind and enjoy some much-deserved time off while the pros ensure all the angles are covered, saving you from having to worry about touch-ups or constant repair jobs.</p>
             <p><a href="#" class="btn btn-primary">Get a Handiman</a></p>

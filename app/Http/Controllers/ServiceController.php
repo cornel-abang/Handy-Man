@@ -114,7 +114,7 @@ class ServiceController extends Controller
                 //messages of type 'reply' are sent by admin
                 foreach ($msgs as $msg) {
                      if ($msg->status === 'unread' && $msg->message_type === 'reply') {
-                        $unreadMsgsCount = $unreadMsgsCount + 1;
+                        $unreadMsgsCount++;
                     }   
                 }
             }
@@ -177,7 +177,7 @@ class ServiceController extends Controller
         $rules = [
             'category'              => ['required', 'string', 'max:190'],
             //'sub_category' => ['string', 'max:190'],
-            'local_govt'            => 'required',
+            // 'local_govt'            => 'required',
             'street_address'        => ['required', 'string'],
             'description'           => ['string', 'max:500'],
             'visiting_date'         => ['date', 'required'],
@@ -189,9 +189,9 @@ class ServiceController extends Controller
         if ( ! $service){
             return back()->with('error', 'app.something_went_wrong')->withInput($request->input());
         }
-        //$this->notifyUser($service);
+        $this->notifyUser($service);
         return redirect(route('all'))->with('success', '<b>'.ucwords(str_replace('-', ' ', $request->category)).'</b>'.
-            ' - Service request successful! Expect a call from us in no time. Cheers!');
+            ' service request successful! Expect a call from us in no time. Cheers!');
     }
 
     public function saveRequest($request){
@@ -201,7 +201,7 @@ class ServiceController extends Controller
             'user_id'                   => $user->id,
             'state'                     => str_replace('-', ' ', $request->state),
             'category'                  => ucfirst(str_replace('-', ' ', $request->category)),
-            'local_govt'                => str_replace('-', ' ', $request->local_govt),
+            // 'local_govt'                => str_replace('-', ' ', $request->local_govt),
             'street_addr'               => $request->street_address,
             'description'               => $request->description,
             'visiting_date'             => $request->visiting_date,

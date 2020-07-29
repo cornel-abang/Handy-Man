@@ -48,10 +48,10 @@ class PaymentController extends Controller
             if ($payment) {
                 //flash so the helper can pick it up
                 session()->flash('successfull_payment', true);
-                if ($payment_status === 'Percentage'){
-                    // To artisan
-                    $this->genSendJobOrder($payment);
-                }
+                // if ($payment_status === 'Percentage'){
+                //     // To artisan
+                //     $this->genSendJobOrder($payment);
+                // }
                     // To Client
                     $this->genSendReceipt($payment);
             }else{

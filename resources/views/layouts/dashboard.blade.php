@@ -14,12 +14,7 @@
     <link href="{{ asset('assets/landing/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
-
-    <!--DataTable-->
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">  
-    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>
-    
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">    
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">

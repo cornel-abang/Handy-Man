@@ -13,6 +13,10 @@
 
 @section('content')
     <div class="row">
+        <div class="col-md-10 jumbotron">
+            Please note that a service charge of &#8358;1,000 applies for every service request. <br>
+            You can read more on our <a href="#">Terms and Conditions</a>
+        </div>
         <div class="col-md-10">
 
             <form method="post" action="{{route('send-request')}}">
@@ -22,7 +26,7 @@
 
                     <legend><span class="fa fa-tools"></span> Service Type</legend>
 
-                    <div class="form-group row {{ $errors->has('is_premium')? 'has-error':'' }}">
+                    <div class="form-group row">
                         <label for="is_premium" class="col-md-4 control-label">
                              @php
                                 $name = auth()->user()->name;
@@ -80,12 +84,12 @@
                         
                         <div class="col-md-8">
 
-                                <a style="cursor: default;">For now, Handiman is only available in and around the city of Calabar, Cross River State.</a>
+                                <a style="cursor: default;">For now, Handiman is only available in Calabar and Odukpani, Cross River State.</a>
                         </div>
                     </div>
                 </div>
                 <input type="hidden" name="state" value="Cross River State">
-                <div class="form-group row">
+                {{-- <div class="form-group row">
                     <label for="state" class="col-md-4 control-label">Local Government:<span class="mendatory-mark">*</span> </label>
                     <div class="col-md-8">
                         <select name="local_govt" class="form-control {{e_form_invalid_class('local_govt', $errors)}} state_options" id="LGA">
@@ -103,7 +107,7 @@
                         </select>
                         {!! e_form_error('local_govt', $errors) !!}
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="form-group row {{ $errors->has('street_address')? 'has-error':'' }}">
                     <label for="city_name" class="col-sm-4 control-label"> Street: <span class="mendatory-mark">*</span></label>
@@ -178,27 +182,16 @@
                     <div class="col-sm-8">
                         <select class="form-control {{e_form_invalid_class('visiting_time', $errors)}}" id="visiting_time" value="{{ old('visiting_time') }}" name="visiting_time" required="">
                             <option value="08:00AM">08:00AM</option>
-                            <option value="08:30AM">08:30AM</option>
                             <option value="09:00AM">09:00AM</option>
-                            <option value="09:30AM">09:30AM</option>
                             <option value="10:00AM">10:00AM</option>
-                            <option value="10:30AM">10:30AM</option>
                             <option value="11:00AM">11:00AM</option>
-                            <option value="11:30AM">11:30AM</option>
                             <option value="12:00PM">12:00PM</option>
-                            <option value="12:30PM">12:30PM</option>
                             <option value="01:00PM">01:00PM</option>
-                            <option value="01:30PM">01:30PM</option>
                             <option value="02:00PM">02:00PM</option>
-                            <option value="02:30PM">02:30PM</option>
                             <option value="03:00PM">03:00PM</option>
-                            <option value="03:30PM">03:30PM</option>
                             <option value="04:00PM">04:00PM</option>
-                            <option value="04:30PM">04:30PM</option>
                             <option value="05:00PM">05:00PM</option>
-                            <option value="05:30PM">05:00PM</option>
                             <option value="06:00PM">06:00PM</option>
-                            <option value="06:30PM">06:30PM</option>
                         </select>
                         {!! e_form_error('visiting_time', $errors) !!}
                     </div>

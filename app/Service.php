@@ -10,7 +10,7 @@ class Service extends Model
             'user_id',
             'state',
             'category',
-            'local_govt',
+            // 'local_govt',
             'street_addr',
             'description',
             'visiting_date',

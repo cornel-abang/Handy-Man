@@ -62,8 +62,7 @@ Route::group(['middleware'=>'auth:web'], function(){
     Route::group(['prefix'=>'service'], function(){
         Route::get('request', 'ServiceController@requestService')->name('request');
         Route::post('send-request', 'ServiceController@requestServicePost')->name('send-request');
-        Route::get('request-service/{search_term}','ServiceController@requestBySlug')->name('request-service');
-        Route::post('request_service','ServiceController@requestBySlug')->name('request_service');
+        Route::post('request-service','ServiceController@requestBySlug')->name('request-service');
     });
 
     Route::group(['prefix'=>'jobs'], function(){

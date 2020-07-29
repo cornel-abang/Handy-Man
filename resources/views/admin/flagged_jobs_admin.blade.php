@@ -32,7 +32,7 @@
                           $unreadMessages = 0;
                           foreach ($flag->messages as $msg) {
                             if ($msg->status === 'unread' && $msg->message_type === 'msg') {
-                              $unreadMessages = $unreadMessages + 1;
+                              $unreadMessages++;
                             }
                           }
                           @endphp

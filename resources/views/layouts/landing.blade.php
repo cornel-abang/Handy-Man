@@ -101,7 +101,6 @@
       </svg>
 
     </div>
-
     <div class="container">
       <div class="row align-items-center">
         <div class="col-12 hero-text-image">
@@ -112,12 +111,12 @@
               </h1>
               <p class="mb-5" data-aos="fade-right" data-aos-delay="100">Your one-stop shop for all office and household general repairs and maintenance services</p>
               <p data-aos="fade-right" data-aos-delay="200" data-aos-offset="-500">
-                <form action="{{route('request_service')}}" method="post">
+                <form action="{{route('request-service')}}" method="post">
                   @csrf
                   <select name="search_term" class="form-control" required="">
                     <option value="">--Select service category--</option>
                     @foreach($categories as $cat)
-                    <option value="{{$cat->slug}}">{{$cat->category_name}}</option>
+                    <option value="{{$cat->category_slug}}">{{$cat->category_name}}</option>
                     @endforeach
                   </select>
                   <button type="submit" class="btn btn-outline-white">Request</button>
