@@ -94,49 +94,6 @@
     // $(document).load(function(){
     //     $("#completed").modal("show");
     // })
-   
-    /*########################################
-        PAYSTACK PAYMENT GATEWAY INTEGRATION #
-     ########################################
-     $(document).on('click', '.paystack_pay', function(){
-        var amount = $(this).attr('id');
-        var job_id = $(this).attr('title');
-        var handler = PaystackPop.setup({
-            key: 'pk_live_29502dd109b31178219d15782815563bebf478d2',
-            email: page_data.user.email,
-            amount: (amount*100),
-            metadata: {
-                custom_fields: [
-                    {
-                        display_name: "Mobile Number",
-                        variable_name: "mobile_number",
-                        value: phone
-                    }
-                ]
-            },
-            callback: function (response){
-                //After a complete Transaction
-                //window.location.href = page_data.routes.verify_payment;
-                $.ajax({
-                    url: page_data.routes.verify_payment,
-                    type: 'POST',
-                    data: {reference: response.reference, job_id : job_id, _token : page_data.csrf_token},
-                    success: function (data){
-                        $('#payment_success').modal('show');
-                    },
-                    error: function(data){
-                        $('#payment_failure').modal('show');
-                    }
-                })
-            },
-            onClose: function () {
-                //When user closes the payment modal
-                alert('Transaction cancelled');
-            }
-        });
-        //Open paystack payment Modal
-        handler.openIframe();
-     });*/
 
     $(document).on('change', '.country_to_state', function(e){
         e.preventDefault();
