@@ -1,1 +1,1 @@
-Handy Man is an Online Artisan Registration system and marketplace. Handy MAn is meant to enhance the process of hiring an Artisan to carry out certain tasks in the home, office, church, etc. 
+Handiman is an Online plaform for hiring artisans to carry out repair and maintenace tasks in the home or office. The system is designed with fully functional client and admin dashboard area, where all activities from requesting a service to invoice creation, to payments and job monitoring to the very end of the job process, can all be carried out on the system.
