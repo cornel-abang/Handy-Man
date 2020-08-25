@@ -170,9 +170,9 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('search', 'HomeController@search')->name('search');
 Route::get('clear', 'HomeController@clearCache')->name('clear_cache');
 
-Route::get('new_register', 'UserController@register')->name('new_register');
+Route::any('new_register', 'UserController@register')->name('new_register');
 //Route::get('individual_register', 'UserController@register')->name('register');
-Route::post('new-register', 'UserController@registerPost');//->name('individual_register');
+Route::any('new-register', 'UserController@registerPost');//->name('individual_register');
 
 Route::get('employer-register', 'UserController@registerEmployer')->name('register_employer');
 Route::post('employer-register', 'UserController@registerEmployerPost');
