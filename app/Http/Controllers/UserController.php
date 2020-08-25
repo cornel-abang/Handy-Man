@@ -108,10 +108,9 @@ class UserController extends Controller
 
         $this->validate($request, $rules);
 
-        //$user_type = $this->setUserAccountType($data['user_type']);
         $data = $request->input();
         $accountID = $this->generateAccountId();
-        $user = $this->saveUser($data, $user_type, $accountID);
+        $user = $this->saveUser($data, $accountID);
         $this->notifyViaMail($user);
         auth()->guard()->login($user);
         return redirect(route('account'))->with('success', 'Registration successful. Your account ID is: '.$accountID);
@@ -123,15 +122,19 @@ class UserController extends Controller
     
     public function notifyViaMail($user)
     {
-        $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
-        $beautymail->send('emails.new_signup', ['user'=>$user], function($message) use ($user)
-        {
+        try {
+            $beautymail = app()->make(\Snowfire\Beautymail\Beautymail::class);
+            $beautymail->send('emails.new_signup', ['user'=>$user], function($message) use ($user)
+            {
             $message
                 ->from('info@handiman.com','Handiman Servicesss')
                 ->to($user->email, $user->name)
                 ->subject('Welcome to Handiman Services');
-        });
-        return true;
+            });
+            return true;
+        } catch (Exception $e) {
+            session()->flash('Something went wrong! Unable to send welcome mail.');
+        }
     }
 
     public function generateAccountId()
@@ -149,7 +152,7 @@ class UserController extends Controller
         function to add user to db
      */
     
-    public function saveUser(array $data, $user_type, $accountID){
+    public function saveUser(array $data, $accountID){
         
         return User::create([
             'name'          => $data['name'],
