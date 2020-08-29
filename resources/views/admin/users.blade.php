@@ -22,7 +22,7 @@
                             <td>{{$user->phone}}</td>
 
                             <td>
-                                <a href="{{route('users_view', $user->id)}}" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="View profile">
+                                <a href="{{route('view', $user->id)}}" class="btn btn-secondary btn-sm" data-toggle="tooltip" title="View profile">
                                     <i class="la la-eye"></i> 
                                 </a>
 
